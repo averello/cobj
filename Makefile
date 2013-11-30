@@ -4,7 +4,7 @@ CFLAGS_PRIV = -Wall -g3 -pedantic -std=c99 -I${INC} -D_XOPEN_SOURCE=700 -D__PROF
 SHAREDFLAGS=
 SHAREDFLAGS_PRIV=-fPIC -shared $(SHAREDFLAGS)
 LDFLAGS = 
-LDFLAGS_PRIV = -L$(MEMORY_MANAGEMENT_LIB)/lib -lmemorymanagement -Llib -l${COBJ} -lpthread $(LDFLAGS)
+LDFLAGS_PRIV = -Llib -l${COBJ} -L$(MEMORY_MANAGEMENT_LIB)/lib -lmemorymanagement -lpthread $(LDFLAGS)
 
 WLFLAGS=-Wl,-rpath,lib$(COBJ).so.$(COBJMAJORVERSION)
 BIN = bin

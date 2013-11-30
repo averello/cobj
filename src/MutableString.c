@@ -135,13 +135,14 @@ static void MutableString_appendFormat(void *const self, char *format, va_list *
 	va_list copy;
 	va_copy(copy, *app);
 	int totalWritten = vsnprintf(NULL, 0, format, copy);
-	char *text = calloc(totalWritten, sizeof(char)+1);
+	char *text = calloc(totalWritten+1, sizeof(char));
 	if ( text == NULL ) { errno = ENOMEM, va_end(copy); return; }
 	if ( __ensureCapacity(self, selfLength + totalWritten + 1) == -1 ) { errno = ENOMEM, va_end(copy), free(text); return; };
+	selfText = (char *)getStringText(self);
 	
 	vsnprintf(text, totalWritten+1, format, *app);
 	strncat(selfText, text, totalWritten);
-		
+
 	stringSelf->length += totalWritten;
 	
 	free(text), va_end(copy);
@@ -199,7 +200,7 @@ static int MutableString_insertStringAtMutableStringIndex(void *const _self, con
 	char *selfText = (char *)getStringText(self);
 	char *otherText = (char *)getStringText(other);
 	
-	memmove(selfText+(index+otherLength), selfText+index, selfLength-index);
+	memmove(selfText+(index+otherLength), selfText+index, selfLength-(index-otherLength));
 	strncpy(selfText+index, otherText, otherLength);
 	
 	stringSelf->length += otherLength;
@@ -216,7 +217,7 @@ static int MutableString_deleteMutableStringCharactersInRange(void *const _self,
 	size_t selfLength = getStringLength(self);
 	char *selfText = (char *)getStringText(self);
 	
-	memmove(selfText+range.location, selfText+SMaxRange(range), selfLength-range.length);
+	memmove(selfText+range.location, selfText+SMaxRange(range), selfLength-SMaxRange(range)+1);
 	stringSelf->length -= range.length;
 	
 	return -1;
