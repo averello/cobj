@@ -23,6 +23,8 @@
 #include <Object.r>
 #include <new.h>
 #include <StringObject.h>
+#undef retain
+#undef release
 
 
 void * constructor(void * self, va_list * app) {
@@ -70,21 +72,24 @@ void * super_destructor(const void *const class, void * self) {
 
 void * Object_constructor (void * _self, va_list * app) {
 	struct Object *self = _self;
-	pthread_mutex_init(&(self->guardian), NULL);
-	self->retainCount = 1;
+	MEMORY_MANAGEMENT_INITIALIZE(self);
+	memory_management_attributes_set_dealloc_function(self, delete);
+//	pthread_mutex_init(&(self->guardian), NULL);
+//	self->retainCount = 1;
 	return self;
 }
 
 void * Object_destructor (void * _self) {
-	struct Object *self = _self;
+//	struct Object *self = _self;
 	/*
 	 * Normally is not possible that the mutex is locked when this function is called
 	 */
-	if ( pthread_mutex_destroy(&(self->guardian)) != 0 )
-		if	(errno == EBUSY)
-			if ( (pthread_mutex_unlock(&(self->guardian)) != 0) )
-				if ( errno != EINVAL )
-					pthread_mutex_destroy(&(self->guardian));
+//	if ( pthread_mutex_destroy(&(self->guardian)) != 0 )
+//		if	(errno == EBUSY)
+//			if ( (pthread_mutex_unlock(&(self->guardian)) != 0) )
+//				if ( errno != EINVAL )
+//					pthread_mutex_destroy(&(self->guardian));
+//	return _self;
 	return _self;
 }
 
@@ -110,36 +115,39 @@ int Object_hash (const void *const _self) {
 
 void * Object_retain (void * const _self) {
 	struct Object *const self = _self;
-	if ( pthread_mutex_lock(&(self->guardian)) != 0 ) {
-		assert(0);
-	}
-	self->retainCount++;
-	if ( pthread_mutex_unlock(&(self->guardian)) != 0 ) {
-		assert(0);
-	}
+	MEMORY_MANAGEMENT_RETAIN(self);
+//	if ( pthread_mutex_lock(&(self->guardian)) != 0 ) {
+//		assert(0);
+//	}
+//	self->retainCount++;
+//	if ( pthread_mutex_unlock(&(self->guardian)) != 0 ) {
+//		assert(0);
+//	}
 	return self;
 }
 
 void Object_release (void * const _self) {
 	struct Object *const self = _self;
-	if ( pthread_mutex_lock(&(self->guardian)) != 0 ) {
-		assert(0);
-	}
-	self->retainCount--;
-	if ( self->retainCount == 0) {
-		if ( pthread_mutex_unlock(&(self->guardian)) != 0 ) {
-			assert(0);
-		}
-		delete(self);
-	} else
-		if ( pthread_mutex_unlock(&(self->guardian))  != 0 ) {
-			assert(0);
-		}
+	MEMORY_MANAGEMENT_RELEASE(self);
+//	if ( pthread_mutex_lock(&(self->guardian)) != 0 ) {
+//		assert(0);
+//	}
+//	self->retainCount--;
+//	if ( self->retainCount == 0) {
+//		if ( pthread_mutex_unlock(&(self->guardian)) != 0 ) {
+//			assert(0);
+//		}
+//		delete(self);
+//	} else
+//		if ( pthread_mutex_unlock(&(self->guardian))  != 0 ) {
+//			assert(0);
+//		}
 }
 
 unsigned long Object_retainCount (const void * const _self) {
 	const struct Object *const self = _self;
-	return self->retainCount;
+	return MEMORY_MANAGEMENT_GET_RETAIN_COUNT(self);
+//	return self->retainCount;
 }
 
 StringRef Object_copyDescription (const void * const _self) {

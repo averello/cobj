@@ -1,7 +1,11 @@
 CC = gcc
-CFLAGS = -Wall -g3 -pedantic -std=c99 -I${INC} -D_XOPEN_SOURCE=700 -D__PROFILING__=1 -DDEBUG=1
-SHAREDFLAGS=-fPIC -shared
-LDFLAGS = -Llib -l${COBJ} -lpthread 
+CFLAGS = 
+CFLAGS_PRIV = -Wall -g3 -pedantic -std=c99 -I${INC} -D_XOPEN_SOURCE=700 -D__PROFILING__=1 -DDEBUG=1 $(CFLAGS) -I$(MEMORY_MANAGEMENT_LIB)/include
+SHAREDFLAGS=
+SHAREDFLAGS_PRIV=-fPIC -shared $(SHAREDFLAGS)
+LDFLAGS = 
+LDFLAGS_PRIV = -L$(MEMORY_MANAGEMENT_LIB)/lib -lmemorymanagement -Llib -l${COBJ} -lpthread $(LDFLAGS)
+
 WLFLAGS=-Wl,-rpath,lib$(COBJ).so.$(COBJMAJORVERSION)
 BIN = bin
 INC = include
@@ -13,6 +17,8 @@ DOC = doc
 LIB = lib
 TEST = test
 MKDIR = mkdir
+
+MEMORY_MANAGEMENT_LIB=../memorymanagement
 
 COBJ = cobj
 
@@ -48,7 +54,7 @@ all: directories compileall
 # +------------+
 
 COBJSTATIC = ${LIB}/lib${COBJ}.a
-libcobj : directories $(COBJSTATIC)
+libcobj : directories libmemorymanagement $(COBJSTATIC)
 
 COBJMAJORVERSION=0
 COBJMINORVERSION=1
@@ -103,13 +109,13 @@ ${LIB}:
 # +----------------------------+
 
 ${OBJ}/%.o : ${SRC}/%.c
-	$(CC) -c -o $@ $< ${CFLAGS} $(SHAREDFLAGS)
+	$(CC) -c -o $@ $< ${CFLAGS_PRIV} $(SHAREDFLAGS_PRIV)
 
 ${OBJ}/%.o : ${TEST}/%.c
-	$(CC) -c -o $@ $< ${CFLAGS}
+	$(CC) -c -o $@ $< ${CFLAGS_PRIV}
 
 ${BIN}/% : ${OBJ}/%.o
-	${CC} -o $@ $< ${LDFLAGS}
+	${CC} -o $@ $< ${LDFLAGS_PRIV}
 
 
 ${LIB}/lib${COBJ}.a : $(patsubst ${SRC}/%.c,${OBJ}/%.o,$(wildcard ${SRC}/*.c))
@@ -120,14 +126,18 @@ ${LIB}/lib${COBJ}.so : $(COBJSONAME)
 ${LIB}/lib${COBJ}.so.$(COBJMAJORVERSION) : $(COBJREALNAME)
 
 ${LIB}/lib${COBJ}.so.$(COBJMAJORVERSION).$(COBJMINORVERSION).$(COBJRELEASENUMBER) : $(patsubst ${SRC}/%.c,${OBJ}/%.o,$(wildcard ${SRC}/*.c))
-	$(CC) $(CFLAGS) $(SHAREDFLAGS) $(WLFLAGS) -o $@  $? -lc -lpthread
+	$(CC) $(CFLAGS_PRIV) $(SHAREDFLAGS_PRIV) $(WLFLAGS) -o $@  $? -lc -lpthread
 	$(STRIP) $@
 
 
 #${BIN}/${TESTSTRING} : libcobj $(OBJ)/${TESTSTRING}.o 
-#	${CC} -o $@ $< ${LDFLAGS}
+#	${CC} -o $@ $< ${LDFLAGS_PRIV}
+#
 
+libmemorymanagement : $(MEMORY_MANAGEMENT_LIB)/lib/libmemorymanagement
 
+$(MEMORY_MANAGEMENT_LIB)/lib/libmemorymanagement : $(MEMORY_MANAGEMENT_LIB)/lib/libmemorymanagement.a
+	$(MAKE) -C $(MEMORY_MANAGEMENT_LIB) 
 
 # +-------------------+
 # | Target compileall |

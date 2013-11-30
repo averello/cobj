@@ -47,7 +47,7 @@ void * new (const void *const restrict _class, ...) {
 
 void delete (void * self) {
 	if ( self != NULL )
-		free(destructor(self));
+		destructor(self);
 	else
 		errno = EINVAL;
 }

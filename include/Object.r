@@ -10,6 +10,7 @@
 #define CObjects_object_r
 
 #include <pthread.h>
+#include <memory_management/memory_management.h>
 
 /*!
  *  @class Object Object.r
@@ -18,26 +19,25 @@
  *  @details This class contains a pointer to a @ref Class instance, a reference counter, and a @a pthread_mutex_t for internal purposes.
  */
 struct Object {
+	MEMORY_MANAGEMENT_ENABLE();
 	/*!
 	 *  @member class
 	 *  @protected
 	 *  @brief A pointer to a @ref Class describing this instances behaviour.
 	 */
 	const struct Class * class;
-	
 	/*!
 	 *  @member reatainCount
 	 *  @protected
 	 *  @brief The reference counter of this instance.
 	 */
-	unsigned long retainCount;
-	
+	//unsigned long retainCount;
 	/*!
 	 *  @member guardian
 	 *  @protected
 	 *  @brief Used for thread safe reference counter operations.
 	 */
-	pthread_mutex_t guardian;
+	//pthread_mutex_t guardian;
 };
 
 /*!

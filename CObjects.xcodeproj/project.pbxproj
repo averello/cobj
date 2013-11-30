@@ -34,6 +34,7 @@
 		DE7D7E3B1715C22800531D27 /* testMutableDictionary.c in Sources */ = {isa = PBXBuildFile; fileRef = DE05E36F16F0BEDD0079DF5C /* testMutableDictionary.c */; };
 		DE8403B1172B1E2C00C2B093 /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DE8403B7172B1E5D00C2B093 /* testMutableString.c in Sources */ = {isa = PBXBuildFile; fileRef = DE05E37016F0BEDD0079DF5C /* testMutableString.c */; };
+		DE898562184A7401006C371B /* libmemorymanagement.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE89855B184A7160006C371B /* libmemorymanagement.a */; };
 		DEB02E22171B053600BE3F3D /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DEB02E28171B054A00BE3F3D /* testArray.c in Sources */ = {isa = PBXBuildFile; fileRef = DE05E36B16F0BEDD0079DF5C /* testArray.c */; };
 		DEB02E2F171B069B00BE3F3D /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
@@ -76,6 +77,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 5E7A4AFE16C957B200F6D578;
 			remoteInfo = cobj;
+		};
+		DE89855A184A7160006C371B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DE898556184A7160006C371B /* memorymanagement.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DE89853D184A6C6E006C371B;
+			remoteInfo = memorymanagement;
+		};
+		DE89855F184A73FE006C371B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DE898556184A7160006C371B /* memorymanagement.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = DE89853C184A6C6E006C371B;
+			remoteInfo = memorymanagement;
 		};
 		DEB02E1E171B053600BE3F3D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -228,6 +243,7 @@
 		DE7D7E1E1715BFDC00531D27 /* testValue */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testValue; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE7D7E2F1715C20B00531D27 /* testMutableDictionary */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testMutableDictionary; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE8403B6172B1E2C00C2B093 /* testVector copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "testVector copy"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE898556184A7160006C371B /* memorymanagement.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = memorymanagement.xcodeproj; path = ../memorymanagement/memorymanagement.xcodeproj; sourceTree = "<group>"; };
 		DEA9588316F271A5009D3152 /* compilerDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = compilerDefs.h; path = include/compilerDefs.h; sourceTree = SOURCE_ROOT; };
 		DEB02E27171B053600BE3F3D /* testValue copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "testValue copy"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEB02E34171B069B00BE3F3D /* testArray copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "testArray copy"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -246,6 +262,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE898562184A7401006C371B /* libmemorymanagement.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +320,7 @@
 		5E6B26DC16C6AF7800DF96C4 = {
 			isa = PBXGroup;
 			children = (
+				DE898556184A7160006C371B /* memorymanagement.xcodeproj */,
 				5E7A4B1E16C958F300F6D578 /* libc.dylib */,
 				5E6B26E716C6AF7800DF96C4 /* CObjects */,
 				5E6B26E616C6AF7800DF96C4 /* Products */,
@@ -416,6 +434,14 @@
 			name = test;
 			sourceTree = "<group>";
 		};
+		DE898557184A7160006C371B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DE89855B184A7160006C371B /* libmemorymanagement.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -458,6 +484,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DE898560184A73FE006C371B /* PBXTargetDependency */,
 			);
 			name = cobj;
 			productName = cobj;
@@ -578,7 +605,7 @@
 		5E6B26DD16C6AF7800DF96C4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "George Boumis";
 			};
 			buildConfigurationList = 5E6B26E016C6AF7800DF96C4 /* Build configuration list for PBXProject "CObjects" */;
@@ -591,6 +618,12 @@
 			mainGroup = 5E6B26DC16C6AF7800DF96C4;
 			productRefGroup = 5E6B26E616C6AF7800DF96C4 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = DE898557184A7160006C371B /* Products */;
+					ProjectRef = DE898556184A7160006C371B /* memorymanagement.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				5E6B26E416C6AF7800DF96C4 /* CObjects */,
@@ -604,6 +637,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		DE89855B184A7160006C371B /* libmemorymanagement.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libmemorymanagement.a;
+			remoteRef = DE89855A184A7160006C371B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5E6B26E116C6AF7800DF96C4 /* Sources */ = {
@@ -714,6 +757,11 @@
 			target = 5E7A4AFE16C957B200F6D578 /* cobj */;
 			targetProxy = DE8403AD172B1E2C00C2B093 /* PBXContainerItemProxy */;
 		};
+		DE898560184A73FE006C371B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = memorymanagement;
+			targetProxy = DE89855F184A73FE006C371B /* PBXContainerItemProxy */;
+		};
 		DEB02E1D171B053600BE3F3D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5E7A4AFE16C957B200F6D578 /* cobj */;
@@ -731,7 +779,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -753,10 +800,15 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/CObjects/include\"";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/include\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/usr/local/include\"",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 			};
 			name = Debug;
 		};
@@ -764,7 +816,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
@@ -780,9 +831,14 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/CObjects/include\"";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/include\"",
+					"\"$(CONFIGURATION_BUILD_DIR)/usr/local/include\"",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-8";
 			};
 			name = Release;
 		};
@@ -793,7 +849,10 @@
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/include\"",
+				);
 				MACH_O_TYPE = mh_execute;
 				OTHER_CFLAGS = (
 					"-D_XOPEN_SOURCE=700",
@@ -812,7 +871,10 @@
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/include\"",
+				);
 				MACH_O_TYPE = mh_execute;
 				OTHER_CFLAGS = (
 					"-D_XOPEN_SOURCE=700",
@@ -829,7 +891,7 @@
 			buildSettings = {
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				EXECUTABLE_PREFIX = lib;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				MACH_O_TYPE = staticlib;
 				OTHER_CFLAGS = (
 					"-D_XOPEN_SOURCE=700",
@@ -846,7 +908,7 @@
 			buildSettings = {
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				EXECUTABLE_PREFIX = lib;
-				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/include\"";
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				MACH_O_TYPE = staticlib;
 				OTHER_CFLAGS = (
 					"-D_XOPEN_SOURCE=700",

@@ -98,7 +98,7 @@ static void Class_release (void *const _self) {
 }
 
 static const struct Class object [] = {
-	{ { object + 1, 1 },
+	{ { {{0}}, object + 1 },
 		"Object",
 		object,
 		sizeof(struct Object),
@@ -112,7 +112,7 @@ static const struct Class object [] = {
 		Object_release,
 		Object_retainCount,
 	},
-	{ { object + 1, 1 },
+	{ { {{0}}, object + 1 },
 		"Class",
 		object,
 		sizeof(struct Class),
@@ -130,26 +130,6 @@ static const struct Class object [] = {
 
 const void *const Object = (const void * const)(object);
 const void *const Class = (const void * const )(object  + 1);
-
-//static const struct Class _Class = {
-//	{ NULL },
-//	"Class",
-//	NULL,
-//	sizeof(struct Class),
-//	
-//	Object_getClass,
-//	Object_getClassName,
-//	Object_constructor,
-//	Class_destructor,
-//	Object_copy,
-//	Object_equals,
-//	Object_hash,
-//	Object_retain,
-//	Object_release,
-//	Object_retainCount
-//};
-//
-//ClassType Class = & _Class;
 
 
 
