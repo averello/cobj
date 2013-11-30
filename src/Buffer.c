@@ -77,7 +77,7 @@ static void * Buffer_copy (const void * const _self) {
 static int Buffer_equals (const void * const _self, const void *const _other) {
 	const struct Buffer *self = _self;
 	const struct Buffer *other = _other;
-	const struct Class *const _super = (const struct Class *const )super(_self);
+	const struct Classs *const _super = (const struct Classs *const )super(_self);
 	int result = _super->equals(_self, _other);
 	if ( ! result )
 		result = (self->length == other->length) && (memcmp(self->buffer, other->buffer, self->length) == 0);

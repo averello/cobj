@@ -138,7 +138,7 @@ const void * ArrayClass = NULL;
 static int Array_equals (const void *const _self, const void *const _other) {
 	const struct Array *self = _self;
 	const struct Array *other = _other;
-	const struct Class *const _super = (const struct Class *const )super(_self);
+	const struct Classs *const _super = (const struct Classs *const )super(_self);
 	
 	
 	int result = _super->equals(_self, _other);

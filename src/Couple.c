@@ -73,7 +73,7 @@ static void * Couple_copy (const void * const _self) {
 static int Couple_equals (const void * const _self, const void *const _other) {
 	const struct Couple *const self = _self;
 	const struct Couple *const other = _other;
-	const struct Class *const _super = (const struct Class *const )super(_self);
+	const struct Classs *const _super = (const struct Classs *const )super(_self);
 	
 	
 	int result = _super->equals(_self, _other);

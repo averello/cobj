@@ -21,7 +21,7 @@ struct Value {
 };
 
 struct ValueClass {
-	const struct Class isa;
+	const struct Classs isa;
 	void * ( *getValuePointer) (const void *const self);
 	void ( *setValuePointer) (void *const self, const void *const pointer);
 	void ( *setValuePointerCleanup )(const void *const self, void (*cleanup)(void *));

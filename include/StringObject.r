@@ -21,7 +21,7 @@ struct String {
 };
 
 struct StringClass {
-	const struct Class isa;
+	const struct Classs isa;
 	const char * (* getStringText)(const void *const self);
 	size_t (* getStringLength)(const void *const self);
 	

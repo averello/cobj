@@ -71,7 +71,7 @@ static void * WString_copy (const void *const _self) {
 static int WString_equals (const void * const _self, const void *const _other) {
 	const struct String *self = _self;
 	const struct String *other = _other;
-	const struct Class *const _super = superclass(superclass(classOf(_self)));
+	const struct Classs *const _super = superclass(superclass(classOf(_self)));
 	
 	
 	int result = _super->equals(_self, _other);

@@ -25,7 +25,7 @@ struct Object {
 	 *  @protected
 	 *  @brief A pointer to a @ref Class describing this instances behaviour.
 	 */
-	const struct Class * class;
+	const struct Classs * class;
 	/*!
 	 *  @member reatainCount
 	 *  @protected
@@ -110,7 +110,7 @@ typedef unsigned long (* retc) (const void *const self);
  *  @brief The basic structure/class that describes an @ref Class type.
  *  @details The instance of this class is an @ref Object. This class contains the @ref Object structure, the name of the class as a @a C string, a pointer to the super class, the size of an instance of this class. It contains also functions pointers to the class's methods.
  */
-struct Class {
+struct Classs {
 	/*!
 	 *  @member isa
 	 *  @protected
@@ -130,7 +130,7 @@ struct Class {
 	 *  @protected
 	 *  @brief The pointer to the  super class's @ref Class.
 	 */
-	const struct Class * super;
+	const struct Classs * super;
 	
 	/*!
 	 *  @member size

@@ -23,7 +23,7 @@ struct Array {
 };
 
 struct ArrayClass {
-	const struct Class isa;
+	const struct Classs isa;
 	unsigned long (* getArrayCount)(const void * const _self);
 	ObjectRef (* getObjectAtIndex)(const void * const _self, unsigned long index);
 	

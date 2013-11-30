@@ -27,7 +27,7 @@ void * new (const void *const restrict _class, ...) {
 	assert( _class != NULL );
 	
 	/* Get the type */
-	const struct Class *const class = _class;
+	const struct Classs *const class = _class;
 	struct Object * object;
 	va_list ap;
 	

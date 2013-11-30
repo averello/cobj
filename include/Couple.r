@@ -19,7 +19,7 @@ struct Couple {
 };
 
 struct CoupleClass {
-	const struct Class isa;
+	const struct Classs isa;
 	void * ( *getKey ) (const void * const self);
 	void * ( *getValue ) (const void * const self);
 	

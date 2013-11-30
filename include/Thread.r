@@ -24,7 +24,7 @@ struct Thread {
 };
 
 struct ThreadClass {
-	const struct Class isa;
+	const struct Classs isa;
 	void ( *startThread ) (const void *const self);
 	void ( * joinThread ) (const void *const self, void **exit);
 	pthread_t * ( * getPthread ) (const void *const self);

@@ -123,7 +123,7 @@ static void *MutableArray_copy (const void *const _self) {
 
 static int MutableArray_equals (const void *const _self, const void *const other) {
 	const struct Array *const self = _self;
-	const struct Class *const _super = superclass(superclass(classOf(_self)));
+	const struct Classs *const _super = superclass(superclass(classOf(_self)));
 	
 	int result = _super->equals(_self, other);
 	if ( ! result) {

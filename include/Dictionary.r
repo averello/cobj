@@ -21,7 +21,7 @@ struct Dictionary {
 };
 
 struct DictionaryClass {
-	const struct Class isa;
+	const struct Classs isa;
 	ObjectRef ( *objectForKey) (const void *const self, void *const key);
 	ArrayRef ( *getKeysCopy) (const void *const self);
 	ArrayRef ( *getValuesCopy)(const void *const self);

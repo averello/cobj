@@ -136,7 +136,7 @@ static int Vector_equals (const void * const _self, const void *const _other) {
 	const struct Vector *other = _other;
 	const struct Array *arraySelf = _self;
 	const struct Array *arrayOther = _other;
-	const struct Class *const _super = (const struct Class *const )super(_self);
+	const struct Classs *const _super = (const struct Classs *const )super(_self);
 	int result = _super->equals(self, other);
 	if ( ! result )
 		result = (arraySelf->count == arrayOther->count) && ( memcmp(arraySelf->store, arrayOther->store, arraySelf->count * sizeof(void *)) );

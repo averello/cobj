@@ -29,7 +29,7 @@
 
 void * constructor(void * self, va_list * app) {
 	if ( self == NULL ) return errno = EINVAL, NULL;
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	assert(class->constructor != NULL);
 	if ( class->constructor == NULL ) return errno = ENOTSUP, self;
 	return class->constructor(self, app);
@@ -37,7 +37,7 @@ void * constructor(void * self, va_list * app) {
 
 void * destructor(void * self) {
 	if ( self == NULL ) return errno = EINVAL, NULL;
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	assert(class->destructor != NULL);
 	if ( class->destructor == NULL ) return errno = ENOTSUP, self;
 	return class->destructor(self);
@@ -48,7 +48,7 @@ void * super_constructor(const void *const class, void * self, va_list * app) {
 	assert( self != NULL );
 	if ( class == NULL ) return errno = EINVAL, NULL;
 	assert( class != NULL );
-	const struct Class * _superclass = superclass(class);
+	const struct Classs * _superclass = superclass(class);
 	assert(self != NULL && _superclass->constructor != NULL);
 	if ( _superclass->constructor == NULL ) return errno = ENOTSUP, self;
 	return _superclass->constructor(self, app);
@@ -60,7 +60,7 @@ void * super_destructor(const void *const class, void * self) {
 	if ( class == NULL ) return errno = EINVAL, NULL;
 	assert( class != NULL );
 	
-	const struct Class * _superclass = superclass(class);
+	const struct Classs * _superclass = superclass(class);
 	assert(self != NULL && _superclass->destructor != NULL);
 	if ( _superclass->destructor == NULL ) return errno = ENOTSUP, self;
 	return _superclass->destructor(self);
@@ -152,7 +152,7 @@ unsigned long Object_retainCount (const void * const _self) {
 
 StringRef Object_copyDescription (const void * const _self) {
 	const struct Object *const self = _self;
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	StringRef copyDescription = newStringWithFormat(String, "<%s 0x%x retainCount:%ul>", class->class_name, self, retainCount(self), NULL);
 	return copyDescription;
 }
@@ -164,7 +164,7 @@ const char *getClassName(const void *const self) {
 	assert( self != NULL);
 	if ( self == NULL ) return errno = EINVAL, NULL;
 	
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	assert( class != NULL );
 	if ( class == NULL ) return errno = ENOTSUP, NULL;
 	return class->class_name;
@@ -174,7 +174,7 @@ void * copy(const void *const self) {
 	assert( self != NULL);
 	if ( self == NULL ) return errno = EINVAL, NULL;
 	
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	assert(class->copy != NULL);
 	if ( class->copy == NULL ) return errno = ENOTSUP, NULL;
 	
@@ -185,7 +185,7 @@ int equals(const void *const self, const void *const other) {
 	assert( self != NULL);
 	if ( self == NULL ) return errno = EINVAL, 0;
 	
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	assert(class->equals != NULL);
 	if ( class->equals == NULL ) return errno = ENOTSUP, 0;
 	
@@ -196,7 +196,7 @@ int hash (const void *const self) {
 	assert( self != NULL);
 	if ( self == NULL ) return errno = EINVAL, -1;
 	
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	assert(class->hash != NULL);
 	if ( class->hash == NULL ) return errno = ENOTSUP, -1;
 	
@@ -207,7 +207,7 @@ void * retain (void *const self) {
 	assert( self != NULL);
 	if ( self == NULL ) return errno = EINVAL, NULL;
 	
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	assert(class->retain != NULL);
 	if ( class->retain == NULL ) return errno = ENOTSUP, NULL;
 	
@@ -218,7 +218,7 @@ void release (void *const self) {
 	assert( self != NULL);
 	if ( self == NULL ) { errno = EINVAL; return; };
 	
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	assert(class->release != NULL);
 	if ( class->release == NULL ) { errno = ENOTSUP; return; }
 	
@@ -229,7 +229,7 @@ unsigned long retainCount (const void *const self) {
 	assert( self != NULL);
 	if ( self == NULL ) return errno = EINVAL, 0;
 	
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	assert(class->retainCount != NULL);
 	if ( class->retainCount == NULL ) return errno = ENOTSUP, 0;
 	
@@ -243,12 +243,12 @@ int instanceOf (const void * const self, const void *const _class) {
 	assert( _class != NULL);
 	if ( _class == NULL ) return errno = EINVAL, -1;
 	
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	assert(class != NULL);
 	if ( class == NULL ) return errno = EINVAL, -1;
 	
 	/* Get the type */
-	const struct Class *const mclass = _class;
+	const struct Classs *const mclass = _class;
 	return ( strcmp(class->class_name, mclass->class_name) == 0 );
 }
 
@@ -263,7 +263,7 @@ size_t sizeOf(const void *const self) {
 	assert( self != NULL);
 	if ( self == NULL ) return errno = EINVAL, 0;
 	
-	const struct Class *const class = classOf(self);
+	const struct Classs *const class = classOf(self);
 	assert(class != NULL);
 	if ( class == NULL ) return errno = EINVAL -1;
 	
@@ -285,7 +285,7 @@ const void * superclass (const void *const _class) {
 	assert( _class != NULL );
 	if ( _class == NULL ) return errno = EINVAL, NULL;
 	
-	const struct Class * self = _class;
+	const struct Classs * self = _class;
 	assert( self->super != NULL);
 	if ( self->super == NULL ) return errno = EINVAL, NULL;
 	
@@ -296,7 +296,7 @@ const void * super(const void *const _self) {
 	assert( _self != NULL );
 	if ( _self == NULL ) return errno = EINVAL, NULL;
 	
-	const struct Class * self = classOf(_self);
+	const struct Classs * self = classOf(_self);
 	assert( self->super != NULL);
 	if ( self->super == NULL ) return errno = EINVAL, NULL;
 	
@@ -307,7 +307,7 @@ void * copyDescription (const void *const self) {
 	assert(self!=NULL);
 	if ( self == NULL ) return errno = EINVAL, NULL;
 	
-	const struct Class *class = classOf(self);
+	const struct Classs *class = classOf(self);
 	assert(class->copyDescription != NULL);
 	if ( class->copyDescription == NULL ) return errno = ENOTSUP, NULL;
 	

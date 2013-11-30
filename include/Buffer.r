@@ -19,7 +19,7 @@ struct Buffer {
 };
 
 struct BufferClass {
-	const struct Class isa;
+	const struct Classs isa;
 
 	const void * ( * getBufferBytes ) (const void *const self);
 	void ( * getBufferBytesOfLength ) (const void *const self, void *restrict buffer, size_t length);

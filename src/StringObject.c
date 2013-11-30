@@ -99,7 +99,7 @@ static void * String_copy (const void *const _self) {
 static int String_equals (const void * const _self, const void *const _other) {
 	const struct String *self = _self;
 	const struct String *other = _other;
-	const struct Class *const _super = (const struct Class *const )super(_self);
+	const struct Classs *const _super = (const struct Classs *const )super(_self);
 	
 	
 	int result = _super->equals(_self, _other);

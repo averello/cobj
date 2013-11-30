@@ -23,10 +23,10 @@
 
 
 static void * Class_constructor (void * _self, va_list * app) {
-	struct Class * self = _self;
+	struct Classs * self = _self;
 	
 	self->class_name = va_arg( *app, const char *);
-	self->super = va_arg( *app, struct Class *);
+	self->super = va_arg( *app, struct Classs *);
 	self->size = va_arg( *app, size_t);
 	
 	assert(self->super != NULL);
@@ -79,9 +79,9 @@ static void * Class_copy (const void *const _self) {
 }
 
 static int Class_hash (const void *const self) {
-	const struct Class *const class = classOf(self);
+	const struct Classs *const class = classOf(self);
 	assert(class != NULL);
-	const struct Class *const _superclass = superclass(self);
+	const struct Classs *const _superclass = superclass(self);
 	
 	
 	int prime = 31;
@@ -97,8 +97,8 @@ static void * Class_retain (void *const _self) {
 static void Class_release (void *const _self) {
 }
 
-static const struct Class object [] = {
-	{ { {{0}}, object + 1 },
+static const struct Classs object [] = {
+	{ { {{(void *)1, NULL}}, object+1 },
 		"Object",
 		object,
 		sizeof(struct Object),
@@ -112,10 +112,10 @@ static const struct Class object [] = {
 		Object_release,
 		Object_retainCount,
 	},
-	{ { {{0}}, object + 1 },
+	{ { {{(void *)1, NULL}}, object+1 },
 		"Class",
 		object,
-		sizeof(struct Class),
+		sizeof(struct Classs),
 		Class_constructor,
 		Class_destructor,
 		Class_copy,
@@ -129,7 +129,7 @@ static const struct Class object [] = {
 };
 
 const void *const Object = (const void * const)(object);
-const void *const Class = (const void * const )(object  + 1);
+const void *const Class = (const void * const )(object+1);
 
 
 
