@@ -1,0 +1,207 @@
+ANotFound	include/Array.h	20
+Array	src/Array.c	127
+ArrayClass	src/Array.c	128
+ArrayClass_constructor	src/Array.c	/^static void * ArrayClass_constructor (void * _self/
+ArrayRef	include/Array.h	17
+Array_constructor	src/Array.c	/^static void * Array_constructor (void * _self, va_/
+Array_containsObject	src/Array.c	/^static int Array_containsObject(const void * const/
+Array_copy	src/Array.c	/^static void * Array_copy (const void *const _self)/
+Array_description	src/Array.c	/^static StringRef Array_description(const void * co/
+Array_destructor	src/Array.c	/^static void * Array_destructor (void * _self) {$/
+Array_equals	src/Array.c	/^static int Array_equals (const void *const _self, /
+Array_firstObject	src/Array.c	/^static void * Array_firstObject(const void * const/
+Array_getCount	src/Array.c	/^static unsigned long Array_getCount(const void * c/
+Array_getObjectAtIndex	src/Array.c	/^static ObjectRef Array_getObjectAtIndex(const void/
+Array_getStore	src/Array.c	/^static struct _Bucket * Array_getStore(const void /
+Array_indexOfObject	src/Array.c	/^static unsigned long Array_indexOfObject(const voi/
+Array_lastObject	src/Array.c	/^static void * Array_lastObject(const void * const /
+CObjects_Array_h	include/Array.h	10
+CObjects_Dictionary_h	include/Dictionary.h	10
+CObjects_MutableArray_h	include/MutableArray.h	10
+CObjects_String_h	include/StringObject.h	10
+CObjects_WString_h	include/WString.h	10
+CObjects_cobj_h	include/cobj.h	10
+CObjects_minunit_h	test/minunit.h	10
+CObjects_new_h	include/new.h	10
+CObjects_object_h	include/object.h	10
+Class	src/class.c	128
+ClassRef	include/object.h	18
+Class_constructor	src/class.c	/^static void * Class_constructor (void * _self, va_/
+Class_copy	src/class.c	/^static void * Class_copy (const void *const _self)/
+Class_destructor	src/class.c	/^static void * Class_destructor (void * _self) {$/
+Class_hash	src/class.c	/^static unsigned long Class_hash (const void *const/
+Class_release	src/class.c	/^static void Class_release (void *const _self) {$/
+Class_retain	src/class.c	/^static void * Class_retain (void *const _self) {$/
+Dictionary	src/Dictionary.c	131
+DictionaryClass	src/Dictionary.c	132
+DictionaryClass_constructor	src/Dictionary.c	/^static void * DictionaryClass_constructor (void * /
+DictionaryRef	include/Dictionary.h	16
+Dictionary_constructor	src/Dictionary.c	/^static void * Dictionary_constructor (void * _self/
+Dictionary_copy	src/Dictionary.c	/^ObjectRef Dictionary_copy(const void *const _self)/
+Dictionary_destructor	src/Dictionary.c	/^static void * Dictionary_destructor (void * _self)/
+Dictionary_getCount	src/Dictionary.c	/^unsigned long Dictionary_getCount(const void *cons/
+Dictionary_getKeysCopy	src/Dictionary.c	/^ObjectRef Dictionary_getKeysCopy(const void *const/
+Dictionary_getValuesCopy	src/Dictionary.c	/^ObjectRef Dictionary_getValuesCopy(const void *con/
+Dictionary_objectForKey	src/Dictionary.c	/^ObjectRef Dictionary_objectForKey(const void *cons/
+INT_MAX	include/Array.h	20
+MtestArray	test/testArray.c	/^int main ( int argc, char *argv[] ) {$/
+MtestDictionary	test/testDictionary.c	/^int main () {$/
+MtestString	test/testString.c	/^int main(int argc, const char * argv[])$/
+MtestWString	test/testWString.c	/^int main () {$/
+MutableArray	src/MutableArray.c	291
+MutableArrayClass	src/MutableArray.c	292
+MutableArrayClass_constructor	src/MutableArray.c	/^static void * MutableArrayClass_constructor (void /
+MutableArrayRef	include/MutableArray.h	16
+MutableArray_ItemForIndex	src/MutableArray.c	/^static struct _Item * MutableArray_ItemForIndex(co/
+MutableArray_addObject	src/MutableArray.c	/^static void MutableArray_addObject (void *const se/
+MutableArray_constructor	src/MutableArray.c	/^static void * MutableArray_constructor (void * _se/
+MutableArray_containsObject	src/MutableArray.c	/^static int MutableArray_containsObject(const void /
+MutableArray_copy	src/MutableArray.c	/^static void *MutableArray_copy (const void *const /
+MutableArray_destructor	src/MutableArray.c	/^static void * MutableArray_destructor (void * _sel/
+MutableArray_equals	src/MutableArray.c	/^static int MutableArray_equals (const void *const /
+MutableArray_firstObject	src/MutableArray.c	/^static void * MutableArray_firstObject(const void /
+MutableArray_getObjectAtIndex	src/MutableArray.c	/^static ObjectRef MutableArray_getObjectAtIndex(con/
+MutableArray_indexOfObject	src/MutableArray.c	/^static unsigned long MutableArray_indexOfObject(co/
+MutableArray_insertObject	src/MutableArray.c	/^static void MutableArray_insertObject (void *const/
+MutableArray_insertObjectAtIndex	src/MutableArray.c	/^static void MutableArray_insertObjectAtIndex(void /
+MutableArray_lastObject	src/MutableArray.c	/^static void * MutableArray_lastObject(const void */
+MutableArray_removeAllObjects	src/MutableArray.c	/^static void MutableArray_removeAllObjects(void * c/
+MutableArray_removeFirstObject	src/MutableArray.c	/^static void MutableArray_removeFirstObject(void * /
+MutableArray_removeLastObject	src/MutableArray.c	/^static void MutableArray_removeLastObject(void * c/
+MutableArray_removeObject	src/MutableArray.c	/^static void MutableArray_removeObject(void *const /
+MutableArray_removeObjectAtIndex	src/MutableArray.c	/^static void MutableArray_removeObjectAtIndex(void /
+Object	src/class.c	127
+ObjectRef	include/object.h	14
+Object_constructor	src/object.c	/^void * Object_constructor (void * _self, va_list */
+Object_copy	src/object.c	/^void * Object_copy (const void * const _self) {$/
+Object_description	src/object.c	/^StringRef Object_description (const void * const _/
+Object_destructor	src/object.c	/^void * Object_destructor (void * _self) {$/
+Object_equals	src/object.c	/^int Object_equals (const void * const _self, const/
+Object_hash	src/object.c	/^unsigned long Object_hash (const void *const _self/
+Object_release	src/object.c	/^void Object_release (void * const _self) {$/
+Object_retain	src/object.c	/^void * Object_retain (void * const _self) {$/
+Object_retainCount	src/object.c	/^unsigned long Object_retainCount (const void * con/
+SAscending	include/StringObject.h	31
+SComparisonResult	include/StringObject.h	35
+SDescending	include/StringObject.h	33
+SEqualRanges	src/StringObject.c	/^inline int SEqualRanges(SRange range1, SRange rang/
+SLocationInRange	src/StringObject.c	/^inline int SLocationInRange(unsigned long loc, SRa/
+SMakeRange	src/StringObject.c	/^inline SRange SMakeRange(unsigned long loc, unsign/
+SMaxRange	src/StringObject.c	/^inline unsigned long SMaxRange(SRange range) {$/
+SRange	include/StringObject.h	19
+SRange	include/StringObject.h	22
+SSame	include/StringObject.h	32
+SStringComparingOptionCaseInsensitiveSearch	include/StringObject.h	38
+SStringComparingOptionLiteralSearch	include/StringObject.h	39
+SStringComparingOptionLocalizedCompare	include/StringObject.h	40
+SStringComparingOptions	include/StringObject.h	47
+String	src/StringObject.c	161
+StringClass	src/StringObject.c	162
+StringClass_constructor	src/StringObject.c	/^static void * StringClass_constructor (void * _sel/
+StringRef	include/StringObject.h	16
+String_characterAtIndex	src/StringObject.c	/^static int String_characterAtIndex(const void * co/
+String_compare	src/StringObject.c	/^static SComparisonResult String_compare (const voi/
+String_compareWithOptions	src/StringObject.c	/^static const SComparisonResult String_compareWithO/
+String_constructor	src/StringObject.c	/^static void * String_constructor (void * _self, va/
+String_copy	src/StringObject.c	/^static void * String_copy (const void *const _self/
+String_description	src/StringObject.c	/^static StringRef String_description(const void *re/
+String_destructor	src/StringObject.c	/^static void * String_destructor (void * _self) {$/
+String_equals	src/StringObject.c	/^static int String_equals (const void * const _self/
+String_getCharactersInRange	src/StringObject.c	/^static int String_getCharactersInRange(const void /
+String_getLength	src/StringObject.c	/^static size_t String_getLength (const void *const /
+String_getText	src/StringObject.c	/^static const char * String_getText (const void *co/
+String_hash	src/StringObject.c	/^static unsigned long String_hash(const void *const/
+String_newStringByAppendingString	src/StringObject.c	/^static StringRef String_newStringByAppendingString/
+String_newStringWithFormat	src/StringObject.c	/^static StringRef String_newStringWithFormat(const /
+WString	src/WString.c	190
+WStringClass	src/WString.c	191
+WStringClass_constructor	src/WString.c	/^static void * WStringClass_constructor (void * _se/
+WStringRef	include/WString.h	17
+WString_characterAtIndex	src/WString.c	/^static int WString_characterAtIndex(const void * c/
+WString_compare	src/WString.c	/^static SComparisonResult WString_compare (const vo/
+WString_compareWithOptions	src/WString.c	/^static const SComparisonResult WString_compareWith/
+WString_constructor	src/WString.c	/^static void * WString_constructor (void * _self, v/
+WString_copy	src/WString.c	/^static void * WString_copy (const void *const _sel/
+WString_description	src/WString.c	/^static WStringRef WString_description(const void */
+WString_equals	src/WString.c	/^static int WString_equals (const void * const _sel/
+WString_getCharactersInRange	src/WString.c	/^static int WString_getCharactersInRange(const void/
+WString_hash	src/WString.c	/^static unsigned long WString_hash(const void *cons/
+WString_newStringByAppendingString	src/WString.c	/^static WStringRef WString_newStringByAppendingStri/
+WString_newStringWithFormat	src/WString.c	/^static WStringRef WString_newStringWithFormat(cons/
+_XOPEN_SOURCE	src/StringObject.c	9
+_XOPEN_SOURCE	src/class.c	8
+addObject	src/MutableArray.c	/^void addObject(void *const self, const void * cons/
+characterAtIndex	src/StringObject.c	/^int characterAtIndex(const void * const self, void/
+classOf	src/object.c	/^const void * classOf(const void * const _self) {$/
+compare	src/StringObject.c	/^SComparisonResult compare(const void *const self, /
+compareWithOptions	src/StringObject.c	/^SComparisonResult compareWithOptions(const void *c/
+constructor	src/object.c	/^void * constructor(void * _self, va_list * app) {$/
+containsObject	src/Array.c	/^int containsObject(const void * const self, const /
+copy	src/object.c	/^void * copy(const void *const self) {$/
+deallocArray	src/Array.c	/^void deallocArray () {$/
+deallocDictionary	src/Dictionary.c	/^void deallocDictionary() {$/
+deallocMutableArray	src/MutableArray.c	/^void deallocMutableArray () {$/
+deallocString	src/StringObject.c	/^void deallocString() {$/
+deallocWString	src/WString.c	/^void deallocWString() {$/
+delete	src/new.c	/^void delete (void * _self) {$/
+description	src/object.c	/^void * description (const void *const self) {$/
+destructor	src/object.c	/^void * destructor(void * _self) {$/
+equals	src/object.c	/^int equals(const void *const self, const void *con/
+firstObject	src/Array.c	/^void * firstObject(const void * const self) {$/
+getCharactersInRange	src/StringObject.c	/^int getCharactersInRange(const void * const self, /
+getClassName	src/object.c	/^const char *getClassName(const void *const self) {/
+getCount	src/Array.c	/^unsigned long getCount(const void * const self) {$/
+getKeysCopy	src/Dictionary.c	/^ArrayRef getKeysCopy(const void *const self) {$/
+getLength	src/StringObject.c	/^size_t getLength(const void * const self) {$/
+getObjectAtIndex	src/Array.c	/^ObjectRef getObjectAtIndex(const void * const self/
+getStore	src/Array.c	/^void *getStore(const void * const self) {$/
+getText	src/StringObject.c	/^const char *getText(const void * const self) {$/
+getValuesCopy	src/Dictionary.c	/^ArrayRef getValuesCopy(const void *const self) {$/
+getWText	src/WString.c	/^const wchar_t *getWText(const void *const self) {$/
+hash	src/object.c	/^unsigned long hash (const void *const self) {$/
+indexOfObject	src/Array.c	/^unsigned long indexOfObject(const void * const sel/
+initArray	src/Array.c	/^void initArray () {$/
+initDictionary	src/Dictionary.c	/^void initDictionary() {$/
+initMutableArray	src/MutableArray.c	/^void initMutableArray () {$/
+initString	src/StringObject.c	/^void initString() {$/
+initWString	src/WString.c	/^void initWString() {$/
+initializeBuckets	src/MutableArray.c	/^static void initializeBuckets(const struct _Bucket/
+insertObject	src/MutableArray.c	/^void insertObject(void *const self, const void * c/
+insertObjectAtIndex	src/MutableArray.c	/^void insertObjectAtIndex(void *const self, const v/
+instanceOf	src/object.c	/^int instanceOf (const void * const self, const voi/
+isSubclassOf	src/object.c	/^int isSubclassOf (const void *const self, const vo/
+lastObject	src/Array.c	/^void * lastObject(const void * const self) {$/
+length	include/StringObject.h	21
+location	include/StringObject.h	20
+mu_assert	test/minunit.h	/^#define mu_assert(message, test) do { if (!(test))/
+mu_run_test	test/minunit.h	/^#define mu_run_test(test) do { char *message = (ch/
+new	src/new.c	/^void * new (const void *const restrict _class, .../
+newArrayFromMutableArray	src/MutableArray.c	/^ArrayRef newArrayFromMutableArray(const void * con/
+newArrayWithArray	src/MutableArray.c	/^ArrayRef newArrayWithArray(const void * const arra/
+newMutableArrayFromArray	src/MutableArray.c	/^MutableArrayRef newMutableArrayFromArray(const voi/
+newStringByAppendingString	src/StringObject.c	/^StringRef newStringByAppendingString(const void *r/
+newStringWithFormat	src/StringObject.c	/^StringRef newStringWithFormat(const void *const _c/
+object	src/class.c	96
+objectForKey	src/Dictionary.c	/^ObjectRef objectForKey(const void *const self, voi/
+release	src/object.c	/^void release (void *const self) {$/
+removeAllObjects	src/MutableArray.c	/^void removeAllObjects(void *const self) {$/
+removeFirstObject	src/MutableArray.c	/^void removeFirstObject(void *const self) {$/
+removeLastObject	src/MutableArray.c	/^void removeLastObject(void *const self) {$/
+removeObject	src/MutableArray.c	/^void removeObject(void *const self, const void * c/
+removeObjectAtIndex	src/MutableArray.c	/^void removeObjectAtIndex(void *const self, unsigne/
+retain	src/object.c	/^void * retain (void *const self) {$/
+retainCount	src/object.c	/^unsigned long retainCount (const void *const self)/
+setObjectForKey	src/Dictionary.c	/^void setObjectForKey(const void *const self, const/
+sizeOf	src/object.c	/^size_t sizeOf(const void *const self) {$/
+super	src/object.c	/^const void * super(const void *const _self) {$/
+super_constructor	src/object.c	/^void * super_constructor(const void *const class, /
+super_destructor	src/object.c	/^void * super_destructor(const void *const class, v/
+superclass	src/object.c	/^const void * superclass (const void *const _class)/
+tests_failed	test/testArray.c	10
+tests_run	test/testArray.c	9
+voidf	src/Array.c	64
+voidf	src/Dictionary.c	68
+voidf	src/MutableArray.c	67
+voidf	src/StringObject.c	45
+voidf	src/WString.c	43
+voidf	src/class.c	32
