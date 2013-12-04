@@ -15,8 +15,6 @@
 #endif /* DEBUG */
 
 int main () {
-	initDictionary();
-	initString();
 	{
 		const char *sk1 = "Hello", *sv1 = "World", *sk2 = "Hello World", *sv2 = "Goodbye World";
 		StringRef k1 = new(String, sk1);
@@ -62,9 +60,6 @@ int main () {
 
 		release(dico);
 	}
-	
-	deallocString();
-	deallocDictionary();
 	return 0;
 }
 

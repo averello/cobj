@@ -17,7 +17,6 @@
 #include <locale.h>
 
 int main () {
-	initWString();
 	fwide(stdout, 1);
 	wchar_t w1wcs[] = L"𐍆五色沼 (ごしきぬま) και όλα καλά, my fîrst wïdé strìng磐梯 !";
 	WStringRef w1 = new(WString, w1wcs, NULL);
@@ -74,7 +73,5 @@ int main () {
 	
 	release(w1);
 	release(w2);
-	
-	deallocWString();
 	return 0;
 }

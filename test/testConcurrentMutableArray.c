@@ -20,7 +20,7 @@
 typedef void (*voidf)(void);
 
 struct _args {
-	ConcurrentMutableArrayRef *array;
+	ConcurrentMutableArrayRef array;
 	voidf function;
 } Args;
 

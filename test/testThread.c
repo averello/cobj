@@ -21,9 +21,6 @@ void * threadFunction(void *args);
 void * threadFunctionArgument(void *args);
 
 int main () {
-	initThread();
-	initString();
-
 	/* Test creation */
 	{
 		ThreadRef thread = new(Thread, threadFunction, NULL);
@@ -60,9 +57,6 @@ int main () {
 		release(threadString);
 		release(thread);
 	}
-
-	deallocString();
-	deallocThread();
 	return 0;
 }
 

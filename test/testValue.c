@@ -27,8 +27,6 @@ void cleanup(void *pointer) {
 }
 
 int main () {
-//	initValue();
-	
 	typedef int ( *mainFunction) ();
 	/* Test creation and getter */
 	{
@@ -86,8 +84,5 @@ int main () {
 		
 		release(v1);
 	}
-	
-	
-//	deallocValue();
 	return 0;
 }

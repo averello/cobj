@@ -19,8 +19,6 @@
 #include <cobj.h>
 
 int main () {
-	initBuffer();
-
 	/* Testing creation */
 	{
 		char buf[BUFSIZ];
@@ -69,7 +67,5 @@ int main () {
 		
 		release(buffer);
 	}
-	
-	deallocBuffer();
 	return 0;
 }

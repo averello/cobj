@@ -15,9 +15,6 @@
 #endif /* DEBUG */
 
 int main () {
-	initCouple();
-	initString();
-	
 	ObjectRef k1, k2, k3;
 	ObjectRef v1, v2, v3;
 	k1 = new(String, "object 1", NULL);
@@ -84,8 +81,5 @@ int main () {
 	
 	release(k1), release(k2), release(k3);
 	release(v1), release(v2), release(v3);
-	
-	deallocString();
-	deallocCouple();
 	return 0;
 }

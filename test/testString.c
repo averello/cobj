@@ -23,8 +23,6 @@
 
 int main(int argc, const char * argv[])
 {
-	initString();
-	
 	void * string1 = new(String, "my precious string", NULL);
 	StringRef string2 = new(String, "This is 2", NULL);
 	StringRef string3 = new(String, "my precious string", NULL);
@@ -110,7 +108,6 @@ int main(int argc, const char * argv[])
 	release(string4);
 	//*/
 	
-	deallocString();
 	return EXIT_SUCCESS;
 }
 
