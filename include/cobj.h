@@ -27,6 +27,7 @@
 #include <Buffer.h>
 #include <Vector.h>
 #include <MutableString.h>
+#include <WMutableString.h>
 #include <ConcurrentMutableArray.h>
 
 #endif
