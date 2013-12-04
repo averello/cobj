@@ -26,6 +26,37 @@
 
 extern int errno;
 
+inline static char *__wideToCharConverter(const wchar_t *restrict wideContent) {
+	if ( wideContent == NULL ) return errno = EINVAL, (char *)NULL;
+	
+	size_t charContentSize = wcstombs(NULL, wideContent, 0);
+	if ( charContentSize == (size_t)-1 ) return errno = 0, NULL;
+	
+	char *restrict charContent = calloc(charContentSize+1, sizeof(char));
+	if ( charContent == NULL ) return errno = ENOMEM, (char *)NULL;
+	
+	charContentSize = wcstombs(charContent, wideContent, charContentSize);
+	if ( charContentSize == (size_t)-1 ) return free(charContent), errno = 0, (char *)NULL;
+	
+	return charContent;
+}
+
+inline static wchar_t *__charToWideConverter(const char *restrict charContent) {
+	if ( charContent == NULL ) return errno = EINVAL, (wchar_t *)NULL;
+	
+	size_t wideContentSize = mbstowcs(NULL, charContent, 0);
+	if ( wideContentSize == (size_t)-1 ) return errno = 0,  (wchar_t  *)NULL;
+	
+	wchar_t *wideContent = calloc(wideContentSize + 1, sizeof(wchar_t));
+	if ( wideContent == NULL ) return errno = 0,  (wchar_t *)NULL;
+	
+	wideContentSize =mbstowcs(wideContent, charContent, wideContentSize);
+	if ( wideContentSize == (size_t)-1 ) return free(wideContent), errno = 0,  (wchar_t *)NULL;
+	
+	return wideContent;
+}
+
+
 static void * WString_constructor (void * _self, va_list * app) {
 	struct WString *self = super_constructor(String, _self, app);
 	struct String *super = (struct String *)self;
@@ -118,7 +149,7 @@ static WStringRef WString_copyStringByAppendingString(const void *restrict const
 	const struct WString *other = _other;
 	size_t length = getStringLength(self);
 	size_t otherLength = getStringLength(other);
-	size_t newLength = length + otherLength + 1;
+	size_t newLength = length + otherLength + sizeof(wchar_t);
 	
 	wchar_t *buffer = calloc(newLength, sizeof(wchar_t));
 	assert(buffer != NULL);
@@ -133,7 +164,10 @@ static WStringRef WString_copyStringByAppendingString(const void *restrict const
 
 static WStringRef WString_copyDescription(const void *restrict const _self) {
 	const struct WString *self = _self;
-	return new(WString, getWText(self), NULL);
+	char *multibyte = __wideToCharConverter(getWText(self));
+	StringRef description  = new(String, multibyte, NULL);
+	free(multibyte);
+	return description;
 }
 
 static SComparisonResult WString_compare (const void *const self, const void *const other) {
@@ -217,9 +251,11 @@ void initWString() {
 }
 
 void deallocWString() {
-	free((void *)WString);
+	release((void *)WString);
+	release((void *)WStringClass);
+//	free((void *)WString);
+//	free((void *)WStringClass);
 	WString = NULL;
-	free((void *)WStringClass);
 	WStringClass = NULL;
 	deallocString();
 }

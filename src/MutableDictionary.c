@@ -283,9 +283,11 @@ void initMutableDictionary() {
 }
 
 void deallocMutableDictionary() {
-	free((void *)MutableDictionary), MutableDictionary = NULL;
-	free((void *)MutableDictionaryClass), MutableDictionaryClass = NULL;
-	
+//	free((void *)MutableDictionary), MutableDictionary = NULL;
+//	free((void *)MutableDictionaryClass), MutableDictionaryClass = NULL;;
+
+	release((void *)MutableDictionary), MutableDictionary = NULL;
+	release((void *)MutableDictionaryClass), MutableDictionaryClass = NULL;
 	deallocVector();
 	deallocArray();
 	deallocMutableArray();

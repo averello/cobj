@@ -356,8 +356,10 @@ void initVector() {
 }
 
 void deallocVector() {
-	free((void *)Vector), Vector = NULL;
-	free((void *)VectorClass), VectorClass = NULL;
+//	free((void *)Vector), Vector = NULL;
+//	free((void *)VectorClass), VectorClass = NULL;
+	release((void *)Vector), Vector = NULL;
+	release((void *)VectorClass), VectorClass = NULL;
 	deallocMutableArray();
 	deallocArray();
 }

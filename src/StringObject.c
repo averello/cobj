@@ -315,9 +315,11 @@ void initString() {
 }
 
 void deallocString() {
-	free((void *)String);
+//	free((void *)String);
+//	free((void *)StringClass);
+	release((void *)String);
+	release((void *)StringClass);
 	String = NULL;
-	free((void *)StringClass);
 	StringClass = NULL;
 }
 

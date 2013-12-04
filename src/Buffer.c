@@ -130,8 +130,10 @@ void initBuffer() {
 }
 
 void deallocBuffer() {
-	free((void *)Buffer), Buffer = NULL;
-	free((void *)BufferClass), BufferClass = NULL;
+	release((void *)Buffer), Buffer = NULL;
+	release((void *)BufferClass), BufferClass = NULL;
+//	free((void *)Buffer), Buffer = NULL;
+//	free((void *)BufferClass), BufferClass = NULL;
 }
 
 

@@ -266,9 +266,11 @@ void initArray () {
 }
 
 void deallocArray () {
-	free((void*)Array);
+	release((void*)Array);
+	release((void*)ArrayClass);
+//	free((void*)Array);
+//	free((void*)ArrayClass);
 	Array = NULL;
-	free((void*)ArrayClass);
 	ArrayClass = NULL;
 }
 

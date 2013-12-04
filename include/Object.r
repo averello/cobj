@@ -19,7 +19,6 @@
  *  @details This class contains a pointer to a @ref Class instance, a reference counter, and a @a pthread_mutex_t for internal purposes.
  */
 struct Object {
-	MEMORY_MANAGEMENT_ENABLE();
 	/*!
 	 *  @member class
 	 *  @protected

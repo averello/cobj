@@ -33,7 +33,7 @@ void * new (const void *const restrict _class, ...) {
 	
 	if ( class->size <= 0 ) return  NULL;
 	
-	object = calloc(1, class->size);
+	object = MEMORY_MANAGEMENT_ALLOC(class->size);//calloc(1, class->size);
 	assert(object != NULL);
 	if ( object == NULL ) return errno = ENOMEM, NULL;
 	object->class = class;

@@ -78,8 +78,8 @@ int SEqualRanges(SRange range1, SRange range2);
  */
 enum SComparisonResult {
 	SAscending=-1, /*!< When the first object is less than the second */
-	SSame,				/*!< When the first object is equal to the second */
-	SDescending		/*!< When the first object is greater than the second */
+	SSame=0,				/*!< When the first object is equal to the second */
+	SDescending=1		/*!< When the first object is greater than the second */
 };
 /*!
  *  @typedef enum SComparisonResult SComparisonResult;
@@ -92,9 +92,9 @@ typedef enum SComparisonResult SComparisonResult;
  *  @relates String
  */
 enum SStringComparingOptions {
-	SStringComparingOptionCaseInsensitiveSearch =	(1L<<0),	/*!< A case-insensitive search. */ // = 0
-	SStringComparingOptionLiteralSearch =					(1L<<1),	/*!< Exact character-by-character equivalence. */ // = 2
-	SStringComparingOptionLocalizedCompare =			(1L<<2),	/*!< A localized compare */ // = 4
+	SStringComparingOptionCaseInsensitiveSearch =	(1<<0),	/*!< A case-insensitive search. */ // = 0
+	SStringComparingOptionLiteralSearch =					(1<<1),	/*!< Exact character-by-character equivalence. */ // = 2
+	SStringComparingOptionLocalizedCompare =			(1<<2),	/*!< A localized compare */ // = 4
 };
 /*!
  *  @typedef enum SStringComparingOptions SStringComparingOptions;

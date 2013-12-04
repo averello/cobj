@@ -112,8 +112,10 @@ void initThread() {
 }
 
 void deallocThread() {
-	free((void *)Thread), Thread = NULL;
-	free((void *)ThreadClass), ThreadClass = NULL;
+	release((void *)Thread), Thread = NULL;
+	release((void *)ThreadClass), ThreadClass = NULL;
+//	free((void *)Thread), Thread = NULL;
+//	free((void *)ThreadClass), ThreadClass = NULL;
 }
 
 

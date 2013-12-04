@@ -155,8 +155,10 @@ void initCouple() {
 }
 
 void deallocCouple() {
-	free((void *)Couple), Couple = NULL;
-	free((void *)CoupleClass), CoupleClass = NULL;
+	release((void *)Couple), Couple = NULL;
+	release((void *)CoupleClass), CoupleClass = NULL;
+//	free((void *)Couple), Couple = NULL;
+//	free((void *)CoupleClass), CoupleClass = NULL;
 }
 
 

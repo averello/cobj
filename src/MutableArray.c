@@ -375,9 +375,11 @@ void initMutableArray () {
 }
 
 void deallocMutableArray () {
-	free((void *)MutableArray);
+	release((void *)MutableArray);
+	release((void *)MutableArrayClass);
+//	free((void *)MutableArray);
+//	free((void *)MutableArrayClass);
 	MutableArray = NULL;
-	free((void *)MutableArrayClass);
 	MutableArrayClass = NULL;
 	deallocArray();
 }

@@ -155,8 +155,10 @@ void initDictionary() {
 }
 
 void deallocDictionary() {
-	free((void *)Dictionary), Dictionary = NULL;
-	free((void *)DictionaryClass), DictionaryClass = NULL;
+	release((void *)Dictionary), Dictionary = NULL;
+	release((void *)DictionaryClass), DictionaryClass = NULL;
+//	free((void *)Dictionary), Dictionary = NULL;
+//	free((void *)DictionaryClass), DictionaryClass = NULL;
 	deallocArray();
 	deallocMutableArray();
 }

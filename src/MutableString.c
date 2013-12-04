@@ -251,8 +251,10 @@ void initMutableString() {
 }
 
 void deallocMutableString() {
-	free((void *)MutableString), MutableString = NULL;
-	free((void *)MutableStringClass), MutableStringClass = NULL;
+//	free((void *)MutableString), MutableString = NULL;
+//	free((void *)MutableStringClass), MutableStringClass = NULL;
+	release((void *)MutableString), MutableString = NULL;
+	release((void *)MutableStringClass), MutableStringClass = NULL;
 	deallocString();
 }
 
@@ -334,8 +336,4 @@ int deleteMutableStringCharactersInRange(void *const self, SRange range) {
 	return class->deleteMutableStringCharactersInRange(self, range);
 
 }
-
-
-
-
 

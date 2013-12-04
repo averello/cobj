@@ -199,8 +199,10 @@ void initConcurrentMutableArray () {
 }
 
 void deallocConcurrentMutableArray () {
-	free((void *)ConcurrentMutableArray), ConcurrentMutableArray = NULL;
-	free((void *)ConcurrentMutableArrayClass), ConcurrentMutableArrayClass = NULL;
+//	free((void *)ConcurrentMutableArray), ConcurrentMutableArray = NULL;
+//	free((void *)ConcurrentMutableArrayClass), ConcurrentMutableArrayClass = NULL;
+	release((void *)ConcurrentMutableArray), ConcurrentMutableArray = NULL;
+	release((void *)ConcurrentMutableArrayClass), ConcurrentMutableArrayClass = NULL;
 	deallocMutableArray();
 	deallocArray();
 }

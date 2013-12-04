@@ -98,7 +98,7 @@ static void Class_release (void *const _self) {
 }
 
 static const struct Classs object [] = {
-	{ { {{(void *)1, NULL}}, object+1 },
+	{	object+1,
 		"Object",
 		object,
 		sizeof(struct Object),
@@ -112,7 +112,7 @@ static const struct Classs object [] = {
 		Object_release,
 		Object_retainCount,
 	},
-	{ { {{(void *)1, NULL}}, object+1 },
+	{	object+1,
 		"Class",
 		object,
 		sizeof(struct Classs),

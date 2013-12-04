@@ -120,8 +120,10 @@ void initValue() {
 }
 
 void deallocValue() {
-	free((void *)Value), Value = NULL;
-	free((void *)ValueClass), ValueClass = NULL;
+	release((void *)Value), Value = NULL;
+	release((void *)ValueClass), ValueClass = NULL;
+//	free((void *)Value), Value = NULL;
+//	free((void *)ValueClass), ValueClass = NULL;
 }
 
 

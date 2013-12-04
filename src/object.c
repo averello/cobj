@@ -72,10 +72,7 @@ void * super_destructor(const void *const class, void * self) {
 
 void * Object_constructor (void * _self, va_list * app) {
 	struct Object *self = _self;
-	MEMORY_MANAGEMENT_INITIALIZE(self);
-	memory_management_attributes_set_dealloc_function(self, delete);
-//	pthread_mutex_init(&(self->guardian), NULL);
-//	self->retainCount = 1;
+	MEMORY_MANAGEMENT_ATTRIBUTE_SET_DEALLOC_FUNCTION(self, delete);
 	return self;
 }
 
