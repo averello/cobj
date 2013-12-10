@@ -22,7 +22,7 @@ void deallocConcurrentMutableArray () __attribute__ ((destructor));
 /* Synchrinized methods working so far
  copy,
  
- getArrayCount,
+ getCollectionCount,
  getObjectAtIndex,
  
  addObject,

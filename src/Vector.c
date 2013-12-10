@@ -156,7 +156,7 @@ static size_t Vector_getVectorCapacityIncrement(const void *const _self) {
 /* Overrides */
 static void * Vector_getObjectAtIndex(const void * const _self, unsigned long index) {
 	const struct Vector *self = _self;
-	if ( index >= getArrayCount(self) ) return errno = EINVAL, NULL;
+	if ( index >= getCollectionCount(self) ) return errno = EINVAL, NULL;
 	struct _Bucket *store = getStore(self);
 	return (void *)store[index].item;
 }
@@ -191,7 +191,7 @@ static void Vector_insertObjectAtIndex(void *const _self, void *const object, un
 	struct Array *self = _self;
 	errno = 0;
 	
-	if ( index > getArrayCount(self) ) { errno = EINVAL; return; }
+	if ( index > getCollectionCount(self) ) { errno = EINVAL; return; }
 	if ( __ensureCapacity(_self, self->count+1) == -1 ) { errno = ENOMEM; return; }
 	struct _Bucket *store = getStore(_self);
 	memmove(store+index+1, store+index, (self->count - index) * sizeof(struct _Bucket));
@@ -252,7 +252,7 @@ static void Vector_removeFirstObject(void *const self) {
 }
 
 static void Vector_removeLastObject(void *const self) {
-	removeObjectAtIndex(self, getArrayCount(self)-1);
+	removeObjectAtIndex(self, getCollectionCount(self)-1);
 }
 
 static void Vector_removeAllObjects(void *const _self) {
@@ -292,7 +292,7 @@ static void Vector_setVectorCapacityIncrement(void *const _self, size_t capacity
 
 static void Vector_replaceObjectAtIndexWithObject(void *const _self, unsigned long index, void *const other) {
 	struct Vector *self = _self;
-	if ( index > getArrayCount(self) ) return;
+	if ( index > getCollectionCount(self) ) return;
 	
 	struct _Bucket *store = getStore(self);
 	void *old =  (void *)store[index].item;
@@ -337,7 +337,7 @@ void initVector() {
 					 insertObjectAtIndex, Vector_insertObjectAtIndex,
 					 removeObjectAtIndex, Vector_removeObjectAtIndex,
 					 indexOfObject, Vector_indexOfObject,
-					 arrayContainsObject, Vector_arrayContainsObject,
+					 containsObject, Vector_arrayContainsObject,
 					 removeObject, Vector_removeObject,
 					 removeFirstObject, Vector_removeFirstObject,
 					 removeLastObject, Vector_removeLastObject,

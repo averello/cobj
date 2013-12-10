@@ -127,7 +127,7 @@ static int MutableArray_equals (const void *const _self, const void *const other
 	
 	int result = _super->equals(_self, other);
 	if ( ! result) {
-		result = (self->count == getArrayCount(other));
+		result = (self->count == getCollectionCount(other));
 		if ( result ) {
 			unsigned long size = self->count;
 			for (unsigned long i=0; i<size && (result != 0); i++) {
@@ -352,7 +352,7 @@ void initMutableArray () {
 						   firstObject, MutableArray_firstObject,
 						   lastObject, MutableArray_lastObject,
 						   indexOfObject, MutableArray_indexOfObject,
-						   arrayContainsObject, MutableArray_arrayContainsObject,
+						   containsObject, MutableArray_arrayContainsObject,
 						   
 						   /* new */
 						   addObject, MutableArray_addObject,
@@ -448,7 +448,7 @@ void removeObjectAtIndex(void *const self, unsigned long index) {
 
 ArrayRef newArrayFromMutableArray(const void * const mutableArray) {
 	assert( mutableArray != NULL );
-	const unsigned long count = getArrayCount(mutableArray);
+	const unsigned long count = getCollectionCount(mutableArray);
 	struct _Bucket *newBuckets = calloc(count, sizeof(struct _Bucket));
 	
 	for (unsigned long i=0; i<count; i++) {
@@ -466,7 +466,7 @@ ArrayRef newArrayFromMutableArray(const void * const mutableArray) {
 MutableArrayRef newMutableArrayFromArray(const void * const array) {
 	assert( array != NULL );
 	MutableArrayRef mutableArray = new(MutableArray, NULL);
-	const unsigned long count = getArrayCount(array);
+	const unsigned long count = getCollectionCount(array);
 	for (unsigned long i=0; i<count; i++)
 		addObject(mutableArray, getObjectAtIndex(array, i));
 	return mutableArray;
@@ -487,7 +487,7 @@ ArrayRef newArrayWithArray(const void * const array) {
 	return copy(array);
 	/*
 	const struct _Bucket *const buckets = getStore(array);
-	const unsigned long count = getArrayCount(array);
+	const unsigned long count = getCollectionCount(array);
 	struct _Bucket *newBuckets = calloc(count, sizeof(struct _Bucket));
 	
 	__initializeBuckets(buckets, newBuckets, count);

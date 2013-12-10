@@ -13,6 +13,8 @@
 
 #include <compilerDefs.h>
 
+#include <foreach.h>
+
 #include <Object.h>
 #include <new.h>
 #include <StringObject.h>

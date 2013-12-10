@@ -113,38 +113,17 @@ int Object_hash (const void *const _self) {
 void * Object_retain (void * const _self) {
 	struct Object *const self = _self;
 	MEMORY_MANAGEMENT_RETAIN(self);
-//	if ( pthread_mutex_lock(&(self->guardian)) != 0 ) {
-//		assert(0);
-//	}
-//	self->retainCount++;
-//	if ( pthread_mutex_unlock(&(self->guardian)) != 0 ) {
-//		assert(0);
-//	}
 	return self;
 }
 
 void Object_release (void * const _self) {
 	struct Object *const self = _self;
 	MEMORY_MANAGEMENT_RELEASE(self);
-//	if ( pthread_mutex_lock(&(self->guardian)) != 0 ) {
-//		assert(0);
-//	}
-//	self->retainCount--;
-//	if ( self->retainCount == 0) {
-//		if ( pthread_mutex_unlock(&(self->guardian)) != 0 ) {
-//			assert(0);
-//		}
-//		delete(self);
-//	} else
-//		if ( pthread_mutex_unlock(&(self->guardian))  != 0 ) {
-//			assert(0);
-//		}
 }
 
 unsigned long Object_retainCount (const void * const _self) {
 	const struct Object *const self = _self;
 	return MEMORY_MANAGEMENT_GET_RETAIN_COUNT(self);
-//	return self->retainCount;
 }
 
 StringRef Object_copyDescription (const void * const _self) {

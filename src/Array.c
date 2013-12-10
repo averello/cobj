@@ -74,18 +74,10 @@ static void * ArrayClass_constructor (void * _self, va_list *app) {
 		voidf method = va_arg(ap, voidf);
 		if (selector == (voidf) getObjectAtIndex)
 			* (voidf *) & self->getObjectAtIndex = method;
-		else if (selector == (voidf) getArrayCount )
-			* (voidf *) & self->getArrayCount = method;
-		else if (selector == (voidf) arrayContainsObject )
-			* (voidf *) & self->arrayContainsObject = method;
 		else if (selector == (voidf) indexOfObject )
 			* (voidf *) & self->indexOfObject = method;
 		else if (selector == (voidf) getStore )
 			* (voidf *) & self->getStore = method;
-		else if (selector == (voidf) lastObject )
-			* (voidf *) & self->lastObject = method;
-		else if (selector == (voidf) firstObject )
-			* (voidf *) & self->firstObject = method;
 	}
 	va_end(ap);
 	return self;
@@ -93,7 +85,8 @@ static void * ArrayClass_constructor (void * _self, va_list *app) {
 
 static void * Array_copy (const void *const _self) {
 	const struct Array *self = _self;
-	if (getArrayCount(self) ==0 || self->store == NULL)
+//	if (getCollectionCount(self) ==0 || self->store == NULL)
+	if (getCollectionCount(self) ==0 || self->store == NULL)
 		return new(Array, NULL);
 	
 	size_t size = self->count * sizeof(struct _Bucket);
@@ -102,12 +95,12 @@ static void * Array_copy (const void *const _self) {
 	if ( buckets == NULL ) return errno = ENOMEM, NULL;
 	
 	memcpy(buckets, self->store, size);
-	for (unsigned long i=0; i<getArrayCount(self); i++)
+	for (unsigned long i=0; i<getCollectionCount(self); i++)
 		retain((void *)buckets[i].item);
 	
 	struct Array * copyArray = new(Array, NULL);
 	copyArray->store = buckets;
-	copyArray->count = getArrayCount(self);
+	copyArray->count = getCollectionCount(self);
 	return (void *)copyArray;
 }
 
@@ -127,7 +120,7 @@ static ObjectRef Array_getObjectAtIndex(const void * const _self, unsigned long 
 	return NULL;
 }
 
-static unsigned long Array_getArrayCount(const void * const _self) {
+static unsigned long Array_getCollectionCount(const void * const _self) {
 	const struct Array *self = _self;
 	return self->count;
 }
@@ -143,9 +136,9 @@ static int Array_equals (const void *const _self, const void *const _other) {
 	
 	int result = _super->equals(_self, _other);
 	if ( ! result) {
-		result = (getArrayCount(self) == getArrayCount(other));
+		result = (getCollectionCount(self) == getCollectionCount(other));
 		if ( result ) {
-			unsigned long size = getArrayCount(self);
+			unsigned long size = getCollectionCount(self);
 			for (unsigned long i=0; i<size && (result != 0); i++) {
 				ObjectRef item1 = getObjectAtIndex(self, i);
 				ObjectRef item2 = getObjectAtIndex(other, i);
@@ -161,7 +154,7 @@ static int Array_arrayContainsObject(const void * const _self, const void * cons
 	const struct Object *object = _object;
 	
 	int result = 0;
-	unsigned long size = getArrayCount(self);
+	unsigned long size = getCollectionCount(self);
 	for (unsigned long i=0; i<size && (result == 0); i++) {
 		ObjectRef item = getObjectAtIndex(self, i);
 		result = (equals(item, object));
@@ -173,7 +166,7 @@ static unsigned long Array_indexOfObject(const void * const _self, const void * 
 	const struct Array *self = _self;
 	int result = 0;
 	unsigned long index = ANotFound;
-	unsigned long size = getArrayCount(self);
+	unsigned long size = getCollectionCount(self);
 	for (unsigned long i=0; i<size && (result == 0); i++) {
 		ObjectRef item = getObjectAtIndex(self, i);
 		result = (equals(item, _object));
@@ -191,7 +184,7 @@ static StringRef Array_copyDescription(const void * const _self) {
 	StringRef mycopyDescription = newStringWithFormat(String, "<%s {\n", getStringText(supercopyDescription), NULL);
 	release(supercopyDescription);
 	
-	unsigned long count = getArrayCount(self);
+	unsigned long count = getCollectionCount(self);
 	for (unsigned long i=0; i<count; i++) {
 		ObjectRef item = getObjectAtIndex(self, i);
 		StringRef *string = copyDescription(item);
@@ -244,24 +237,57 @@ static void * Array_firstObject(const void * const _self) {
 //	return array;
 //};
 
+#define MIN(a,b) ((a)<(b)?(a):(b))
+
+static unsigned long Array_enumerateWithState(ObjectRef _self, FastEnumerationState *state, ObjectRef *iobuffer, unsigned long length) {
+	const struct Array *const self = _self;
+	unsigned long collectionCount = getCollectionCount(_self);
+	if (state->state == 0) {
+		state->mutationsPointer =(unsigned long *)self;
+		state->extra[0] = collectionCount;
+		state->state = 1;
+	}
+	else
+		if (collectionCount != state->extra[0])
+			return state->mutationsPointer = NULL, 0;
+
+	state->itemsPointer = iobuffer;
+	unsigned long count = 0;
+	unsigned long numberOfIter = MIN(collectionCount, length);
+	for (unsigned long i=(state->extra[1]), j=0; i<numberOfIter; i++, j++, count++)
+		iobuffer[j] = getObjectAtIndex(self, i);
+	if (count!=0)
+		state->extra[1] = count;
+	return count;
+}
+
+#undef MIN
+
 void initArray () {
+	initCollection();
+	
 	if ( ! ArrayClass )
-		ArrayClass = new(Class, "ArrayClass", Class, sizeof(struct ArrayClass), constructor, ArrayClass_constructor, NULL);
+		ArrayClass = new(CollectionClass, "ArrayClass", CollectionClass, sizeof(struct ArrayClass), constructor, ArrayClass_constructor, NULL);
 	if ( ! Array )
-		Array = new(ArrayClass, "Array", Object, sizeof(struct Array),
+		Array = new(ArrayClass, "Array", Collection, sizeof(struct Array),
 					constructor, Array_constructor,
 					destructor, Array_destructor,
+					
+					/* Overrides */
+					getCollectionCount, Array_getCollectionCount,
+					firstObject, Array_firstObject,
+					lastObject, Array_lastObject,
+					containsObject, Array_arrayContainsObject,
+					enumerateWithState, Array_enumerateWithState,
+					
+					/* new */
 					copy, Array_copy,
-					getArrayCount, Array_getArrayCount,
 					getObjectAtIndex,
 					Array_getObjectAtIndex,
 					equals, Array_equals,
-					arrayContainsObject, Array_arrayContainsObject,
 					indexOfObject, Array_indexOfObject,
 					copyDescription, Array_copyDescription,
 					getStore, Array_getStore,
-					firstObject, Array_firstObject,
-					lastObject, Array_lastObject,
 					NULL);
 }
 
@@ -272,6 +298,7 @@ void deallocArray () {
 //	free((void*)ArrayClass);
 	Array = NULL;
 	ArrayClass = NULL;
+	deallocCollection();
 }
 
 void *getStore(const void * const self) {
@@ -292,27 +319,6 @@ ObjectRef getObjectAtIndex(const void * const self, unsigned long index) {
 	return class->getObjectAtIndex(self, index);
 }
 
-unsigned long getArrayCount(const void * const self) {
-	assert(self != NULL);
-	if ( self == NULL ) return errno = EINVAL, 0;
-	const struct ArrayClass *class = classOf(self);
-	assert(class != NULL && class->getArrayCount != NULL);
-	if ( class == NULL || class->getStore == NULL ) return errno = ENOTSUP, 0;
-	return class->getArrayCount(self);
-}
-
-
-int arrayContainsObject(const void * const self, const void * const object) {
-	assert(self != NULL);
-	if ( self == NULL ) return errno = EINVAL, 0;
-	assert(object != NULL);
-	if ( object == NULL ) return errno = EINVAL, 0;
-	const struct ArrayClass *class = classOf(self);
-	assert(class != NULL && class->arrayContainsObject != NULL);
-	if ( class == NULL || class->getStore == NULL ) return errno = ENOTSUP, 0;
-	return class->arrayContainsObject(self, object);
-}
-
 unsigned long indexOfObject(const void * const self, const void * const object) {
 	assert(self != NULL);
 	if ( self == NULL ) return errno = EINVAL, ANotFound;
@@ -322,25 +328,6 @@ unsigned long indexOfObject(const void * const self, const void * const object) 
 	assert(class != NULL && class->indexOfObject != NULL);
 	if ( class == NULL || class->getStore == NULL ) return errno = ENOTSUP, ANotFound;
 	return class->indexOfObject(self, object);
-}
-
-
-void * lastObject(const void * const self) {
-	assert(self != NULL);
-	const struct ArrayClass *class = classOf(self);
-	assert(class != NULL && class->lastObject != NULL);
-	if ( class == NULL || class->getStore == NULL ) return errno = ENOTSUP, NULL;
-	return class->lastObject(self);
-}
-
-void * firstObject(const void * const self) {
-	assert(self != NULL);
-	if ( self == NULL ) return errno = EINVAL, NULL;
-	const struct ArrayClass *class = classOf(self);
-	assert(class != NULL && class->firstObject != NULL);
-	if ( class == NULL || class->getStore == NULL ) return errno = ENOTSUP, NULL;
-	return class->firstObject(self);
-	
 }
 
 

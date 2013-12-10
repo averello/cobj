@@ -120,7 +120,7 @@ int main () {
 			release(value);
 		}
 		PRINTF("String Allocation Time :%f sec\n", (double)(clock()-start)/CLOCKS_PER_SEC);
-		assert( getArrayCount(keys) == getArrayCount(values) && getArrayCount(keys) == PROFILE_SIZE );
+		assert( getCollectionCount(keys) == getCollectionCount(values) && getCollectionCount(keys) == PROFILE_SIZE );
 		
 //		MutableDictionaryPrintfStatistics(dictionary);
 		start = clock();

@@ -110,7 +110,7 @@ int main () {
 		
 		ConcurrentMutableArrayRef cpy = copy(array);
 		assert( cpy != NULL );
-		assert( getArrayCount(cpy) == getArrayCount(array) );
+		assert( getCollectionCount(cpy) == getCollectionCount(array) );
 		
 		release(array), release(cpy);
 	}
@@ -124,7 +124,7 @@ int main () {
 			release(s);
 		}
 		removeObjectAtIndex(array, 0);
-		assert( getArrayCount(array) == 9 );
+		assert( getCollectionCount(array) == 9 );
 		
 		release(array);
 	}
@@ -142,9 +142,9 @@ int main () {
 		for (;size>0;size--) {
 			StringRef s = popObject(array);
 			assert( s != NULL );
-			assert( getArrayCount(array) == size-1 );
+			assert( getCollectionCount(array) == size-1 );
 		}
-		assert( getArrayCount(array) == 0 );
+		assert( getCollectionCount(array) == 0 );
 		
 		release(array);
 	}

@@ -189,7 +189,7 @@ static SComparisonResult String_compareWithOptions (const void *const _self, con
 	else if (options == SStringComparingOptionCaseInsensitiveSearch )
 		result =  strcasecmp(getStringText(self), getStringText(other));
 	else if (options == SStringComparingOptionLocalizedCompare )
-		result = strcoll(getStringText(self), getStringText(other)); // strcasecmp(getStringText(self), getStringText(other));
+		result = strcoll(getStringText(self), getStringText(other));
 	
 	if (result<0)
 		return SAscending;

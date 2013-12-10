@@ -56,7 +56,7 @@ int main () {
 
 		addObject(vector, s1);
 		
-		assert( getArrayCount(vector) == 1);
+		assert( getCollectionCount(vector) == 1);
 
 		assert( getObjectAtIndex(vector, 0) == s1 );
 		assert( getObjectAtIndex(vector, 5) == NULL && errno == EINVAL);
@@ -74,7 +74,7 @@ int main () {
 		
 		addObject(vector, s1);
 		removeAllObjects(vector);
-		assert( getArrayCount(vector) == 0 );
+		assert( getCollectionCount(vector) == 0 );
 		
 		addObject(vector, s1);
 		removeFirstObject(vector);
@@ -85,7 +85,7 @@ int main () {
 		addObject(vector, s1);
 		addObject(vector, s2);
 		
-		assert( getArrayCount(vector) == 4 );
+		assert( getCollectionCount(vector) == 4 );
 		assert( lastObject(vector) == s2 );
 		assert( firstObject(vector) == s1 );
 		
@@ -114,10 +114,10 @@ int main () {
 			release(string);
 		}
 		assert( getVectorCapacity(vector) == 100 );
-		assert( getArrayCount(vector) == 100 );
+		assert( getCollectionCount(vector) == 100 );
 		
 		removeAllObjects(vector);
-		assert( getArrayCount(vector) == 0 );
+		assert( getCollectionCount(vector) == 0 );
 		
 		
 		for (int i=0; i<100; i++) {
@@ -126,7 +126,7 @@ int main () {
 			release(string);
 		}
 		assert( setVectorSize(vector, 15) == 0 );
-		assert( getArrayCount(vector) == 15 );
+		assert( getCollectionCount(vector) == 15 );
 		
 		
 		release(vector);
@@ -142,7 +142,7 @@ int main () {
 			release(string);
 		}
 		assert( getVectorCapacity(vector) == 110 );
-		assert( getArrayCount(vector) == 100 );
+		assert( getCollectionCount(vector) == 100 );
 		
 		release(vector);
 	}
@@ -166,7 +166,7 @@ int main () {
 		SRange range = SMakeRange(5, 4);
 		removeObjectsInRange(vector, range);
 		
-		assert( getArrayCount(vector) == 6 );
+		assert( getCollectionCount(vector) == 6 );
 		assert( strcmp("String 9", getStringText(getObjectAtIndex(vector, 5))) == 0 );
 		
 		release(vector);
@@ -185,7 +185,7 @@ int main () {
 		replaceObjectAtIndexWithObject(vector, 5, string);
 		release(string);
 		
-		assert( getArrayCount(vector) == 10 );
+		assert( getCollectionCount(vector) == 10 );
 		assert( strcmp("String 42", getStringText(getObjectAtIndex(vector, 5))) == 0 );
 		
 		release(vector);

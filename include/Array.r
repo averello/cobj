@@ -11,20 +11,22 @@
 
 #include <Object.h>
 #include <Object.r>
+#include <Collection.h>
+#include <Collection.r>
 
 struct _Bucket {
 	const void *item;
 };
 
 struct Array {
-	const struct Object isa;
+	const struct Collection isa;
 	unsigned long count;
 	const void *store;
 };
 
 struct ArrayClass {
-	const struct Classs isa;
-	unsigned long (* getArrayCount)(const void * const _self);
+	const struct CollectionClass isa;
+	unsigned long (* getCollectionCount)(const void * const _self);
 	ObjectRef (* getObjectAtIndex)(const void * const _self, unsigned long index);
 	
 	int ( *arrayContainsObject) (const void * const self, const void * const object);

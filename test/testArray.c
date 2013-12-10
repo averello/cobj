@@ -27,13 +27,13 @@ int main ( int argc, char *argv[] ) {
 
 	ArrayRef array = new(Array, string1, string2, string3, string4, formatedString, NULL);
 	assert(array != NULL);
-	assert(getArrayCount(array) == 5);
-	for (unsigned long i=0; i<getArrayCount(array); i++)
+	assert(getCollectionCount(array) == 5);
+	for (unsigned long i=0; i<getCollectionCount(array); i++)
 		assert( equals(strings[i], getObjectAtIndex(array, i)) );
 	
 	ArrayRef copyArray = copy(array);
 	assert(copyArray != NULL);
-	assert(getArrayCount(copyArray) == 5);
+	assert(getCollectionCount(copyArray) == 5);
 	assert( equals(array, copyArray) );
 	
 	assert( arrayContainsObject(copyArray, formatedString) );
@@ -41,7 +41,7 @@ int main ( int argc, char *argv[] ) {
 	
 	ArrayRef lolArray = new(Array, NULL);
 	assert(lolArray != NULL);
-	assert(getArrayCount(lolArray) == 0);
+	assert(getCollectionCount(lolArray) == 0);
 	assert( ! equals(copyArray, lolArray) );
 	release(lolArray);
 	
@@ -55,8 +55,8 @@ int main ( int argc, char *argv[] ) {
 	StringRef mutableStrings[3] = { string1, string2, formatedString };
 	MutableArrayRef mutable = new(MutableArray, string1, string2, formatedString, NULL);
 	assert(mutable != NULL);
-	assert(getArrayCount(mutable) == 3);
-	for (unsigned long i=0; i<getArrayCount(mutable); i++)
+	assert(getCollectionCount(mutable) == 3);
+	for (unsigned long i=0; i<getCollectionCount(mutable); i++)
 		assert( equals(mutableStrings[i], getObjectAtIndex(mutable, i)) );
 	
 	MutableArrayRef mutableCopyArray = copy(mutable);
@@ -73,7 +73,7 @@ int main ( int argc, char *argv[] ) {
 	release(string4);
 	//*/
 	
-	for (unsigned long i=0; i<getArrayCount(copyArray); i++)
+	for (unsigned long i=0; i<getCollectionCount(copyArray); i++)
 		assert( equals(strings[i], getObjectAtIndex(copyArray, i)) );
 	release(copyArray);
 		
@@ -81,22 +81,22 @@ int main ( int argc, char *argv[] ) {
 	assert( addRemove != NULL );
 	StringRef s1 = new(String, "s1"), s2 = new(String, "s2"), s3 = new(String, "s3");
 	addObject(addRemove, s1);
-	assert( getArrayCount(addRemove) == 1 );
+	assert( getCollectionCount(addRemove) == 1 );
 	addObject(addRemove, s2);
-	assert( getArrayCount(addRemove) == 2 );
+	assert( getCollectionCount(addRemove) == 2 );
 	addObject(addRemove, s3);
-	assert( getArrayCount(addRemove) == 3 );
+	assert( getCollectionCount(addRemove) == 3 );
 	
 	assert ( equals(s1, getObjectAtIndex(addRemove, 0)) );
 	assert ( equals(s2, getObjectAtIndex(addRemove, 1)) );
 	assert ( equals(s3, getObjectAtIndex(addRemove, 2)) );
 
 	insertObject(addRemove, s1);
-	assert(getArrayCount(addRemove) == 4);
+	assert(getCollectionCount(addRemove) == 4);
 	insertObject(addRemove, s2);
-	assert(getArrayCount(addRemove) == 5);
+	assert(getCollectionCount(addRemove) == 5);
 	insertObject(addRemove, s3);
-	assert(getArrayCount(addRemove) == 6);
+	assert(getCollectionCount(addRemove) == 6);
 	
 	assert ( equals(s3, getObjectAtIndex(addRemove, 0)) );
 	assert ( equals(s2, getObjectAtIndex(addRemove, 1)) );
@@ -109,7 +109,7 @@ int main ( int argc, char *argv[] ) {
 	assert( indexOfObject(addRemove, s2) == 1 );
 	
 	removeAllObjects(addRemove);
-	assert( getArrayCount(addRemove) == 0 );
+	assert( getCollectionCount(addRemove) == 0 );
 	
 	addObject(addRemove, s1);
 	addObject(addRemove, s2);
@@ -134,7 +134,7 @@ int main ( int argc, char *argv[] ) {
 	
 	insertObjectAtIndex(addRemove, s2, 1);
 	assert( lastObject(addRemove) == s2);
-	assert( getArrayCount(addRemove) == 2);
+	assert( getCollectionCount(addRemove) == 2);
 	
 	insertObjectAtIndex(addRemove, s3, 1);
 	assert( indexOfObject(addRemove, s3) == 1);
@@ -160,7 +160,7 @@ int main ( int argc, char *argv[] ) {
 		SRange range = SMakeRange(5, 4);
 		removeObjectsInRange(array, range);
 		
-		assert( getArrayCount(array) == 6 );
+		assert( getCollectionCount(array) == 6 );
 		assert( strcmp("String 9", getStringText(getObjectAtIndex(array, 5))) == 0 );
 		
 		release(array);
@@ -179,7 +179,7 @@ int main ( int argc, char *argv[] ) {
 		replaceObjectAtIndexWithObject(array, 5, string);
 		release(string);
 		
-		assert( getArrayCount(array) == 10 );
+		assert( getCollectionCount(array) == 10 );
 		assert( strcmp("String 42", getStringText(getObjectAtIndex(array, 5))) == 0 );
 		
 		release(array);

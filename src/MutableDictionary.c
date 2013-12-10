@@ -81,7 +81,7 @@ static void * MutableDictionary_constructor (void * _self, va_list * app) {
 			addObject(self->couples, couple), release(couple);
 		}
 	}
-	unsigned long itemsCount = getArrayCount(self->couples);
+	unsigned long itemsCount = getCollectionCount(self->couples);
 	if (itemsCount<=0) {
 		if ( __allocateLevel1(self, __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE) != 0 ) return error = errno, release(self->couples), free(self),  errno = error, NULL;
 		self->size = __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE;
@@ -151,7 +151,7 @@ static void __emptyLevel1(struct MutableDictionary *const self) {
 //}
 
 static CoupleRef __findCoupleInArrayForKey(const struct MutableDictionary *const self, VectorRef array, const void *const key) {
-	unsigned long count = getArrayCount(array);
+	unsigned long count = getCollectionCount(array);
 	CoupleRef couple = NULL;
 	for (unsigned long index = 0; index<count && (couple = getObjectAtIndex(array, index)) && ! equals(getKey(couple), key); index++, couple=NULL);
 	if (couple != NULL)
@@ -188,7 +188,7 @@ static int __addCoupleWithHash(struct MutableDictionary *const self, int hash, C
 
 static int __rebuild(struct MutableDictionary *const self) {
 	((struct Dictionary *)self)->count = 0;
-	unsigned long count = getArrayCount(self->couples);
+	unsigned long count = getCollectionCount(self->couples);
 	CoupleRef couple = NULL;
 	for (unsigned long index = 0; index < count && (couple = getObjectAtIndex(self->couples, index)); index++) {
 		ObjectRef key = getKey(couple);
@@ -330,7 +330,7 @@ void MutableDictionaryPrintfStatistics(const void *const _self) {
 	for (unsigned long i=0; i<self->size; i++) {
 		VectorRef cl = self->level1[i];
 		if ( cl == NULL ) { empty++; continue; }
-		unsigned long count = getArrayCount(cl);
+		unsigned long count = getCollectionCount(cl);
 		medianCollisionListSize += count;
 		if ( count < minCollisionListSize ) minCollisionListSize = count;
 		else if ( count > maxCollisionListSize ) maxCollisionListSize = count;

@@ -24,10 +24,14 @@
 		DE05E3C716F0BF090079DF5C /* Vector.c in Sources */ = {isa = PBXBuildFile; fileRef = DE05E3AA16F0BF090079DF5C /* Vector.c */; };
 		DE05E3C916F0BF090079DF5C /* WString.c in Sources */ = {isa = PBXBuildFile; fileRef = DE05E3AB16F0BF090079DF5C /* WString.c */; };
 		DE05E3CB16F0BF1E0079DF5C /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
+		DE1DC06118568E480007C1DB /* Collection.c in Sources */ = {isa = PBXBuildFile; fileRef = DE1DC06018568E480007C1DB /* Collection.c */; };
 		DE310876172B35F700661007 /* ConcurrentMutableArray.c in Sources */ = {isa = PBXBuildFile; fileRef = DE310875172B35F700661007 /* ConcurrentMutableArray.c */; };
 		DE31087D172B362B00661007 /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DE310884172B364600661007 /* testConcurrentMutableArray.c in Sources */ = {isa = PBXBuildFile; fileRef = DE310883172B364600661007 /* testConcurrentMutableArray.c */; };
 		DE310885172B3EBC00661007 /* ConcurrentMutableArray.c in Sources */ = {isa = PBXBuildFile; fileRef = DE310875172B35F700661007 /* ConcurrentMutableArray.c */; };
+		DE46F527185685F700753047 /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
+		DE46F5281856860700753047 /* testFastEnumeration.c in Sources */ = {isa = PBXBuildFile; fileRef = DE46F516185685BB00753047 /* testFastEnumeration.c */; };
+		DE46F52C1856897200753047 /* Collection.h in Headers */ = {isa = PBXBuildFile; fileRef = DE46F52B1856897200753047 /* Collection.h */; };
 		DE7D7E271715BFF000531D27 /* testValue.c in Sources */ = {isa = PBXBuildFile; fileRef = DE05E37316F0BEDD0079DF5C /* testValue.c */; };
 		DE7D7E2A1715BFFA00531D27 /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DE7D7E3A1715C21A00531D27 /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
@@ -69,6 +73,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = DE14C30E184B7055008D6559;
 			remoteInfo = testMemoryManagement;
+		};
+		DE46F525185685F200753047 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5E6B26DD16C6AF7800DF96C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5E7A4AFE16C957B200F6D578;
+			remoteInfo = cobj;
 		};
 		DE7D7E281715BFF400531D27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -147,6 +158,15 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		DE31087E172B362B00661007 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		DE46F51A185685E800753047 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -280,11 +300,17 @@
 		DE05E3AB16F0BF090079DF5C /* WString.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = WString.c; path = src/WString.c; sourceTree = SOURCE_ROOT; };
 		DE12771F170241AA0076F7C2 /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Object.h; path = include/Object.h; sourceTree = SOURCE_ROOT; };
 		DE127720170241AA0076F7C2 /* Object.r */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.rez; name = Object.r; path = include/Object.r; sourceTree = SOURCE_ROOT; };
+		DE1DC06018568E480007C1DB /* Collection.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = Collection.c; path = src/Collection.c; sourceTree = SOURCE_ROOT; };
 		DE310873172B359F00661007 /* ConcurrentMutableArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ConcurrentMutableArray.h; path = include/ConcurrentMutableArray.h; sourceTree = SOURCE_ROOT; };
 		DE310874172B35E400661007 /* ConcurrentMutableArray.r */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.rez; name = ConcurrentMutableArray.r; path = include/ConcurrentMutableArray.r; sourceTree = SOURCE_ROOT; };
 		DE310875172B35F700661007 /* ConcurrentMutableArray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ConcurrentMutableArray.c; path = src/ConcurrentMutableArray.c; sourceTree = SOURCE_ROOT; };
 		DE310882172B362B00661007 /* testMutableString copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "testMutableString copy"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE310883172B364600661007 /* testConcurrentMutableArray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = testConcurrentMutableArray.c; path = test/testConcurrentMutableArray.c; sourceTree = SOURCE_ROOT; };
+		DE46F51418567C9800753047 /* foreach.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = foreach.h; path = include/foreach.h; sourceTree = SOURCE_ROOT; };
+		DE46F516185685BB00753047 /* testFastEnumeration.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = testFastEnumeration.c; path = test/testFastEnumeration.c; sourceTree = SOURCE_ROOT; };
+		DE46F51C185685E800753047 /* testFastEnumerator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testFastEnumerator; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE46F52B1856897200753047 /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Collection.h; path = include/Collection.h; sourceTree = SOURCE_ROOT; };
+		DE46F52D18568D6900753047 /* Collection.r */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.rez; name = Collection.r; path = include/Collection.r; sourceTree = SOURCE_ROOT; };
 		DE7D7E1E1715BFDC00531D27 /* testValue */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testValue; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE7D7E2F1715C20B00531D27 /* testMutableDictionary */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testMutableDictionary; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE8403B6172B1E2C00C2B093 /* testVector copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "testVector copy"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -322,6 +348,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE31087D172B362B00661007 /* libcobj.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE46F519185685E800753047 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE46F527185685F700753047 /* libcobj.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,6 +441,7 @@
 				DE310882172B362B00661007 /* testMutableString copy */,
 				DE898573184A9FD2006C371B /* testWString */,
 				DE89858F184AA3AB006C371B /* testWString copy */,
+				DE46F51C185685E800753047 /* testFastEnumerator */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -428,6 +463,8 @@
 				DE12771F170241AA0076F7C2 /* Object.h */,
 				DE127720170241AA0076F7C2 /* Object.r */,
 				DEA9588316F271A5009D3152 /* compilerDefs.h */,
+				DE46F52B1856897200753047 /* Collection.h */,
+				DE46F52D18568D6900753047 /* Collection.r */,
 				DE05E38116F0BEF10079DF5C /* Array.h */,
 				DE05E38216F0BEF10079DF5C /* Array.r */,
 				DE05E38316F0BEF10079DF5C /* Buffer.h */,
@@ -458,6 +495,7 @@
 				DE05E39C16F0BEF10079DF5C /* WString.r */,
 				DE89856C184A9967006C371B /* WMutableString.h */,
 				DE89856E184A9A74006C371B /* WMutableString.r */,
+				DE46F51418567C9800753047 /* foreach.h */,
 			);
 			name = include;
 			sourceTree = "<group>";
@@ -465,6 +503,7 @@
 		5E7A4ADC16C956F800F6D578 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				DE1DC06018568E480007C1DB /* Collection.c */,
 				DE05E39D16F0BF090079DF5C /* Array.c */,
 				DE05E39E16F0BF090079DF5C /* Buffer.c */,
 				DE05E39F16F0BF090079DF5C /* class.c */,
@@ -503,6 +542,7 @@
 				DE05E37516F0BEDD0079DF5C /* testWString.c */,
 				DE898590184AA3C3006C371B /* testWMutableString.c */,
 				DE310883172B364600661007 /* testConcurrentMutableArray.c */,
+				DE46F516185685BB00753047 /* testFastEnumeration.c */,
 			);
 			name = test;
 			sourceTree = "<group>";
@@ -523,6 +563,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE46F52C1856897200753047 /* Collection.h in Headers */,
 				DE89856D184A9967006C371B /* WMutableString.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -582,6 +623,24 @@
 			name = testConcurrentMutableArray;
 			productName = testValue;
 			productReference = DE310882172B362B00661007 /* testMutableString copy */;
+			productType = "com.apple.product-type.tool";
+		};
+		DE46F51B185685E800753047 /* testFastEnumerator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE46F522185685E800753047 /* Build configuration list for PBXNativeTarget "testFastEnumerator" */;
+			buildPhases = (
+				DE46F518185685E800753047 /* Sources */,
+				DE46F519185685E800753047 /* Frameworks */,
+				DE46F51A185685E800753047 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DE46F526185685F200753047 /* PBXTargetDependency */,
+			);
+			name = testFastEnumerator;
+			productName = testFastEnumerator;
+			productReference = DE46F51C185685E800753047 /* testFastEnumerator */;
 			productType = "com.apple.product-type.tool";
 		};
 		DE7D7E1D1715BFDC00531D27 /* testValue */ = {
@@ -747,6 +806,7 @@
 				DE310877172B362B00661007 /* testConcurrentMutableArray */,
 				DE898572184A9FD2006C371B /* testWString */,
 				DE898583184AA3AB006C371B /* testWMutableString */,
+				DE46F51B185685E800753047 /* testFastEnumerator */,
 			);
 		};
 /* End PBXProject section */
@@ -785,6 +845,7 @@
 				DE05E3AD16F0BF090079DF5C /* Array.c in Sources */,
 				DE05E3AF16F0BF090079DF5C /* Buffer.c in Sources */,
 				DE05E3B116F0BF090079DF5C /* class.c in Sources */,
+				DE1DC06118568E480007C1DB /* Collection.c in Sources */,
 				DE89856B184A9955006C371B /* WMutableString.c in Sources */,
 				DE05E3B316F0BF090079DF5C /* Couple.c in Sources */,
 				DE05E3B516F0BF090079DF5C /* Dictionary.c in Sources */,
@@ -807,6 +868,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE310884172B364600661007 /* testConcurrentMutableArray.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DE46F518185685E800753047 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE46F5281856860700753047 /* testFastEnumeration.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -878,6 +947,11 @@
 			isa = PBXTargetDependency;
 			target = 5E7A4AFE16C957B200F6D578 /* cobj */;
 			targetProxy = DE310879172B362B00661007 /* PBXContainerItemProxy */;
+		};
+		DE46F526185685F200753047 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5E7A4AFE16C957B200F6D578 /* cobj */;
+			targetProxy = DE46F525185685F200753047 /* PBXContainerItemProxy */;
 		};
 		DE7D7E291715BFF400531D27 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1092,6 +1166,41 @@
 					"-D__PROFILING__=1",
 				);
 				PRODUCT_NAME = "testMutableString copy";
+			};
+			name = Release;
+		};
+		DE46F523185685E800753047 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DE46F524185685E800753047 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -1340,6 +1449,15 @@
 			buildConfigurations = (
 				DE310880172B362B00661007 /* Debug */,
 				DE310881172B362B00661007 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DE46F522185685E800753047 /* Build configuration list for PBXNativeTarget "testFastEnumerator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE46F523185685E800753047 /* Debug */,
+				DE46F524185685E800753047 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

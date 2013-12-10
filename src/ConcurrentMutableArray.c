@@ -56,12 +56,12 @@ static void * ConcurrentMutableArrayClass_constructor (void * _self, va_list *ap
 	return self;
 }
 
-static unsigned long ConcurrentMutableArray_getArrayCount(const void * const _self) {
+static unsigned long ConcurrentMutableArray_getCollectionCount(const void * const _self) {
 	struct ConcurrentMutableArray *self = (struct ConcurrentMutableArray *)_self;
 	const struct ArrayClass *const _superSuper = superclass(superclass(classOf(_self)));
 	
 	pthread_mutex_lock(&(self->protector));
-	unsigned long count = _superSuper->getArrayCount(self);
+	unsigned long count = _superSuper->getCollectionCount(self);
 	pthread_mutex_unlock(&(self->protector));
 	return count;
 }
@@ -73,7 +73,7 @@ static ObjectRef ConcurrentMutableArray_getObjectAtIndex(const void * const _sel
 
 	
 	pthread_mutex_lock(&(self->protector));
-	unsigned long count = _superSuper->getArrayCount(self);
+	unsigned long count = _superSuper->getCollectionCount(self);
 	if ( index > count && index != 0 ) return pthread_mutex_unlock(&(self->protector)), errno = EINVAL, NULL;
 	if ( count == 0 )
 		pthread_cond_wait(&(self->synchronization),&(self->protector));
@@ -89,7 +89,7 @@ static void ConcurrentMutableArray_addObject(void *const _self, void * const obj
 	
 	
 	pthread_mutex_lock(&(self->protector));
-	unsigned long count = _superSuper->getArrayCount(self);
+	unsigned long count = _superSuper->getCollectionCount(self);
 	_super->addObject(self, object);
 	if ( count == 0 )
 		pthread_cond_signal(&(self->synchronization));
@@ -102,7 +102,7 @@ static void ConcurrentMutableArray_insertObject(void *const _self, void * const 
 	const struct MutableArrayClass *const _super = superclass(classOf(_self));
 	
 	pthread_mutex_lock(&(self->protector));
-	unsigned long count = _superSuper->getArrayCount(self);
+	unsigned long count = _superSuper->getCollectionCount(self);
 	_super->insertObject(self, object);
 	if ( count == 0 )
 		pthread_cond_signal(&(self->synchronization));
@@ -115,7 +115,7 @@ static void ConcurrentMutableArray_insertObjectAtIndex(void *const _self, void *
 	const struct MutableArrayClass *const _super = superclass(classOf(_self));
 	
 	pthread_mutex_lock(&(self->protector));
-	unsigned long count = _superSuper->getArrayCount(self);
+	unsigned long count = _superSuper->getCollectionCount(self);
 	_super->insertObjectAtIndex(_self, object, index);
 	if ( count == 0 && index ) { errno = EINVAL; pthread_mutex_unlock(&(self->protector)); return; }
 	if ( count == 0 )
@@ -184,7 +184,7 @@ void initConcurrentMutableArray () {
 									 /* Overrides */
 									 copy, ConcurrentMutableArray_copy,
 									 
-									 getArrayCount, ConcurrentMutableArray_getArrayCount,
+									 getCollectionCount, ConcurrentMutableArray_getCollectionCount,
 									 getObjectAtIndex, ConcurrentMutableArray_getObjectAtIndex,
 									 
 									 addObject, ConcurrentMutableArray_addObject,
