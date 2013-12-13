@@ -9,76 +9,58 @@
 #include <stdio.h>
 #include <cobj.h>
 #include <setjmp.h>
+#include <pthread.h>
+
+void *threadf(void *arg);
+
+struct thread_data {
+	size_t id;
+};
 
 int main () {
+	size_t threads = 10;
+	pthread_t pthreads[threads];
+	struct  thread_data pthreadsData[threads];
+	for (size_t i=0; i<threads; i++) {
+		pthreadsData[i].id = i;
+		pthread_create(&pthreads[i], NULL, threadf, (void *)&pthreadsData[i]);
+	}
+	
+	for (size_t i=0; i<threads; i++)
+		pthread_join(pthreads[i], NULL);
+	return 0;
+}
+
+void *threadf(void *arg) {
+	struct thread_data *data = (struct thread_data *)arg;
 	COTRY {
 		COTRY {
 			puts("ola kala 1");
-			COTHROW(6, "COTestException", "there is no reason");
+			COTHROW((int)data->id, "COTestException", "there is no reason");
 		}
 		COCATCH(5) {
 			COException *exception = COCurrentException();
 			COExceptionLog(exception);
 		}
 		COOTHER {
-			puts("default nested");
+			printf("Some unhandled exception nested by %x\n", (int)pthread_self());
 		}
 		COFINALLY {
-			puts("finally nested");
+			printf("Nested finally by %x\n", (int)pthread_self());
 		}
 		COEND
 	}
 	COCATCH(5) {
-		puts("handled exception");
+		printf("Outher handled exception %x\n", (int)pthread_self());
 		COHANDLE();
 	}
 	COOTHER {
-		puts("default");
+		printf("Outer some unhandled exception by %x\n", (int)pthread_self());
+		COHANDLE();
 	}
 	COFINALLY {
-		puts("finally");
+		printf("Finally by %x\n", (int)pthread_self());
 	}
 	COEND
-	
-	//		struct exception_context_list_item_t econtext;
-	//		COExceptionLink(&econtext);
-	//		int res = setjmp(econtext.context);
-	//		switch(res) {
-	//			case COCODE: {
-	//				{
-	//					struct exception_context_list_item_t econtext2;
-	//					COExceptionLink(&econtext2);
-	//					int res2 = setjmp(econtext2.context);
-	//					switch(res2) {
-	//						case COCODE: {
-	//							puts("ola kala 1");
-	//							CORaise(5);
-	//						}
-	//							break;
-	//						case 5:
-	//							puts("handled exception nested");
-	//
-	//							break;
-	//						default:
-	//							puts("default nested");
-	//							break;
-	//						case COFINALLY:
-	//							puts("finally nested");
-	//					}
-	//					COExceptionUnlink(&econtext2);
-	//				}
-	//			}
-	//			case 5:
-	//				puts("handled exception");
-	//				COHandle(&econtext);
-	//				break;
-	//			default:
-	//				puts("default");
-	//				break;
-	//			case COFINALLY:
-	//				puts("finally");
-	//		}
-	//		COExceptionUnlink(&econtext);
-	//	}
-	return 0;
+	return NULL;
 }
