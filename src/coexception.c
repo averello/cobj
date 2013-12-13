@@ -19,7 +19,7 @@
 #define COHANDLING 1
 #define COHANDLED 2
 
-__thread struct exception_context_t COExceptionThreadContext;
+__thread struct exception_handlers_thread_context_t COExceptionThreadContext;
 
 enum exception_context_list_item_state {
 	ExceptionContextStateCode = COCODETRY,
@@ -28,22 +28,16 @@ enum exception_context_list_item_state {
 	ExceptionContextStateFinally = COFINALLYCASE
 };
 
-struct exception_t {
-	const char *name;
-	const char *reason;
-	int exception;
-};
-
 void COExceptionMainConstructor() __attribute__ ((constructor));
 static void COExceptionDealloc(void *exception);
-static void COExceptionPropagate(struct exception_context_list_item_t *econtext);
+static void COExceptionPropagate(struct exception_handler_context_t *econtext);
 static void COExceptionUnhandledException(COException *) __attribute__((noreturn));
 
 void COExceptionMainConstructor() {
-	memset((struct exception_context_t *)&COExceptionThreadContext, 0, sizeof(COExceptionThreadContext));
+	memset((struct exception_handlers_thread_context_t *)&COExceptionThreadContext, 0, sizeof(COExceptionThreadContext));
 }
 
-void COExceptionLink(struct exception_context_list_item_t *econtext) {
+void COExceptionLink(struct exception_handler_context_t *econtext) {
 	/* Link the exception handler in the current list */
 	COExceptionThreadContext.count++;
 	
@@ -58,7 +52,7 @@ void COExceptionLink(struct exception_context_list_item_t *econtext) {
 }
 
 
-void COExceptionUnlink(struct exception_context_list_item_t *econtext) {
+void COExceptionUnlink(struct exception_handler_context_t *econtext) {
 	/* If no exception occured then call finally */
 	if (econtext->state == ExceptionContextStateCode || econtext->state == ExceptionContextStateHandled) {
 		econtext->state = ExceptionContextStateFinally;
@@ -69,7 +63,7 @@ void COExceptionUnlink(struct exception_context_list_item_t *econtext) {
 		/* If finally already called then propagate */
 		if (econtext->finally == 1) {
 			struct exception_context_list_head_t *list = &(COExceptionThreadContext.list);
-			struct exception_context_list_item_t *item =  list->tail;
+			struct exception_handler_context_t *item =  list->tail;
 			list->tail = item->entry.prev;
 			if (list->tail == NULL)
 				list->head = NULL;
@@ -88,7 +82,7 @@ void COExceptionUnlink(struct exception_context_list_item_t *econtext) {
 		/* Propagate if the exception is not handled */
 		if (econtext->handled == 0) {
 			struct exception_context_list_head_t *list = &(COExceptionThreadContext.list);
-			struct exception_context_list_item_t *item =  list->tail;
+			struct exception_handler_context_t *item =  list->tail;
 			list->tail = item->entry.prev;
 			if (list->tail == NULL)
 				list->head = NULL;
@@ -101,7 +95,7 @@ void COExceptionUnlink(struct exception_context_list_item_t *econtext) {
 			release(econtext->exception);
 			econtext->exception = NULL;
 			struct exception_context_list_head_t *list = &(COExceptionThreadContext.list);
-			struct exception_context_list_item_t *item =  list->tail;
+			struct exception_handler_context_t *item =  list->tail;
 			list->tail = item->entry.prev;
 			if (list->tail == NULL)
 				list->head = NULL;
@@ -110,8 +104,8 @@ void COExceptionUnlink(struct exception_context_list_item_t *econtext) {
 	}
 }
 
-static void COExceptionPropagate(struct exception_context_list_item_t *econtext) {
-	struct exception_context_list_item_t *previous = econtext->entry.prev;//TAILQ_PREV(econtext, exception_context_list_head_t, entry);
+static void COExceptionPropagate(struct exception_handler_context_t *econtext) {
+	struct exception_handler_context_t *previous = econtext->entry.prev;//TAILQ_PREV(econtext, exception_context_list_head_t, entry);
 	if (NULL == previous)
 		COExceptionUnhandledException(econtext->exception);
 	previous->exception = econtext->exception;
@@ -122,7 +116,7 @@ static void COExceptionUnhandledException(COException *exception) {
 	/* Exception with no handler in place */
 	fprintf(stderr, "Terminating due to uncaught exception ");
 	COExceptionLog(exception);
-	int size = 128, nptrs;
+	unsigned int size = 128, nptrs;
 	char **strings;
 	void *stackbuffer[size];
 	nptrs = backtrace(stackbuffer, size);
@@ -138,7 +132,7 @@ static void COExceptionUnhandledException(COException *exception) {
 }
 
 void CORaise(COException *exception) {
-	struct exception_context_list_item_t *econtext = COExceptionThreadContext.list.tail;
+	struct exception_handler_context_t *econtext = COExceptionThreadContext.list.tail;
 //	assert(econtext != NULL);
 	if (econtext == NULL)
 		COExceptionUnhandledException(exception);
@@ -147,7 +141,7 @@ void CORaise(COException *exception) {
 	if (econtext->state == ExceptionContextStateCode) {
 		econtext->state = ExceptionContextStateHandling;
 		econtext->exception = exception;
-		longjmp((int *)econtext->context, exception->exception);
+		longjmp(econtext->context, exception->exception);
 	}
 	else if (econtext->state == ExceptionContextStateHandled) {
 		if (econtext->finally == 0) {
@@ -165,7 +159,7 @@ void CORaise(COException *exception) {
 	assert(0);
 }
 
-void COHandle(struct exception_context_list_item_t *econtext) {
+void COHandle(struct exception_handler_context_t *econtext) {
 	/* Indicates that the excpetion was handled */
 	econtext->state = ExceptionContextStateHandled;
 	econtext->handled = 1;
@@ -186,7 +180,7 @@ const char *COExceptionReason(COException *exception) {
 	return exception->reason;
 }
 
-COException *COExceptionGetCurrent(struct exception_context_list_item_t *econtext) {
+COException *COExceptionGetCurrent(struct exception_handler_context_t *econtext) {
 	assert(econtext != NULL);
 	if (econtext == NULL) return errno = EINVAL, (COException *)NULL;
 	return econtext->exception;

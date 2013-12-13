@@ -43,7 +43,7 @@
 		DE89857F184AA01A006C371B /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DE898589184AA3AB006C371B /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DE898592184AA3D0006C371B /* testWMutableString.c in Sources */ = {isa = PBXBuildFile; fileRef = DE898590184AA3C3006C371B /* testWMutableString.c */; };
-		DEAFA85F185B479C005FA407 /* coexception.c in Sources */ = {isa = PBXBuildFile; fileRef = DEAFA85E185B479C005FA407 /* coexception.c */; };
+		DEAFA85F185B479C005FA407 /* coexception.c in Sources */ = {isa = PBXBuildFile; fileRef = DEAFA85E185B479C005FA407 /* coexception.c */; settings = {COMPILER_FLAGS = "-Wall -Wextra -pendantic"; }; };
 		DEB02E22171B053600BE3F3D /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DEB02E28171B054A00BE3F3D /* testArray.c in Sources */ = {isa = PBXBuildFile; fileRef = DE05E36B16F0BEDD0079DF5C /* testArray.c */; };
 		DEB02E2F171B069B00BE3F3D /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
@@ -56,6 +56,8 @@
 		DEE2F3DA185B527C00408B06 /* testException.c in Sources */ = {isa = PBXBuildFile; fileRef = DEE2F3D9185B527C00408B06 /* testException.c */; };
 		DEE2F3DE185B528200408B06 /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DEE2F3DF185B52A500408B06 /* cobj.h in Headers */ = {isa = PBXBuildFile; fileRef = DE05E38516F0BEF10079DF5C /* cobj.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DEFB710C185BBBA800DC4DD5 /* AutoreleasePool.h in Headers */ = {isa = PBXBuildFile; fileRef = DEFB710B185BBBA800DC4DD5 /* AutoreleasePool.h */; };
+		DEFB710E185BBBBD00DC4DD5 /* AutoreleasePool.c in Sources */ = {isa = PBXBuildFile; fileRef = DEFB710D185BBBBD00DC4DD5 /* AutoreleasePool.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -385,6 +387,9 @@
 		DECAAF32185732BC0018231F /* testDictionary */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testDictionary; sourceTree = BUILT_PRODUCTS_DIR; };
 		DECAAF44185738DE0018231F /* testBuffer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testBuffer; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEE2F3D9185B527C00408B06 /* testException.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = testException.c; path = test/testException.c; sourceTree = SOURCE_ROOT; };
+		DEFB710B185BBBA800DC4DD5 /* AutoreleasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AutoreleasePool.h; path = include/AutoreleasePool.h; sourceTree = SOURCE_ROOT; };
+		DEFB710D185BBBBD00DC4DD5 /* AutoreleasePool.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = AutoreleasePool.c; path = src/AutoreleasePool.c; sourceTree = SOURCE_ROOT; };
+		DEFB710F185BBBC600DC4DD5 /* AutoreleasePool.r */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.rez; name = AutoreleasePool.r; path = include/AutoreleasePool.r; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -586,7 +591,8 @@
 				DE46F51418567C9800753047 /* foreach.h */,
 				DEAFA85C185B3C18005FA407 /* coassert.h */,
 				DEAFA85D185B4159005FA407 /* coexception.h */,
-				DEAFA85E185B479C005FA407 /* coexception.c */,
+				DEFB710B185BBBA800DC4DD5 /* AutoreleasePool.h */,
+				DEFB710F185BBBC600DC4DD5 /* AutoreleasePool.r */,
 			);
 			name = include;
 			sourceTree = "<group>";
@@ -612,6 +618,8 @@
 				DE05E3AB16F0BF090079DF5C /* WString.c */,
 				DE89856A184A9955006C371B /* WMutableString.c */,
 				DE05E3A416F0BF090079DF5C /* MutableString.c */,
+				DEAFA85E185B479C005FA407 /* coexception.c */,
+				DEFB710D185BBBBD00DC4DD5 /* AutoreleasePool.c */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -656,6 +664,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DEE2F3DF185B52A500408B06 /* cobj.h in Headers */,
+				DEFB710C185BBBA800DC4DD5 /* AutoreleasePool.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1000,6 +1009,7 @@
 				DE310885172B3EBC00661007 /* ConcurrentMutableArray.c in Sources */,
 				DE05E3B716F0BF090079DF5C /* MutableArray.c in Sources */,
 				DE05E3B916F0BF090079DF5C /* MutableDictionary.c in Sources */,
+				DEFB710E185BBBBD00DC4DD5 /* AutoreleasePool.c in Sources */,
 				DE05E3BB16F0BF090079DF5C /* MutableString.c in Sources */,
 				DE05E3BD16F0BF090079DF5C /* new.c in Sources */,
 				DE05E3BF16F0BF090079DF5C /* object.c in Sources */,

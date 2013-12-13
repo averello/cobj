@@ -11,6 +11,12 @@
 #include <setjmp.h>
 #include <pthread.h>
 
+struct exception_t ExceptionDivideByZero = {
+	"ExceptionDivideByZero",
+	"You made a division by zero",
+	42
+};
+
 void *threadf(void *arg);
 
 struct thread_data {
@@ -41,7 +47,7 @@ void *threadf(void *arg) {
 		COCATCH(1) {
 			printf("Nested catch by %x\n", (int)pthread_self());
 			COHANDLE();
-			COTHROW(15, "CONestedException", "there is a reason!");
+			CORAISE(&ExceptionDivideByZero);
 		}
 		COOTHER {
 			printf("Some unhandled exception nested by %x\n", (int)pthread_self());
@@ -55,8 +61,9 @@ void *threadf(void *arg) {
 		printf("Outher handled exception %x\n", (int)pthread_self());
 		COHANDLE();
 	}
-	COCATCH(15) {
+	COCATCH(42) {
 		printf("Outer catch by %x\n", (int)pthread_self());
+		COExceptionLog(COCurrentException());
 		COHANDLE();
 	}
 	COOTHER {
