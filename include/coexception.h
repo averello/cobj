@@ -35,8 +35,6 @@ struct exception_context_list_item_t {
 };
 
 
-
-
 extern __thread struct exception_context_t COExceptionThreadContext;
 
 #define COFINALLYCASE -1
@@ -59,14 +57,24 @@ extern __thread struct exception_context_t COExceptionThreadContext;
 	COExceptionUnlink(&econtext); \
 }
 
-#define COTHROW(exception) CORaise(exception)
+#define COTHROW(exception, name, reason) CORaise(COExceptionAllocate(exception, name, reason))
 #define COHANDLE() COHandle(&econtext)
 #define COVALUE() COValue(&econtext)
+#define COCurrentException() COExceptionGetCurrent(&econtext)
 
 void COExceptionLink(struct exception_context_list_item_t *econtext);
 void COExceptionUnlink(struct exception_context_list_item_t *econtext);
-void CORaise(int exception);
+void CORaise(COException *exception);
 void COHandle(struct exception_context_list_item_t *econtext);
-int COValue(struct exception_context_list_item_t *econtext);
+COException *COExceptionAllocate(int exception, const char *name, const char *reason);
+
+/* Public API */
+
+
+COException *COExceptionGetCurrent(struct exception_context_list_item_t *econtext);
+int COExceptionValue(COException *exception);
+const char *COExceptionName(COException *exception);
+const char *COExceptionReason(COException *exception);
+void COExceptionLog(COException *exception);
 
 #endif

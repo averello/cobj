@@ -14,10 +14,11 @@ int main () {
 	COTRY {
 		COTRY {
 			puts("ola kala 1");
-			COTHROW(6);
+			COTHROW(6, "COTestException", "there is no reason");
 		}
 		COCATCH(5) {
-			puts("handled exception nested");
+			COException *exception = COCurrentException();
+			COExceptionLog(exception);
 		}
 		COOTHER {
 			puts("default nested");
