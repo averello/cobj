@@ -15,12 +15,12 @@
 
 typedef struct {
     unsigned long state;
-    ObjectRef *itemsPointer;
+    void **itemsPointer;
     unsigned long *mutationsPointer;
     unsigned long extra[5];
 } FastEnumerationState;
 
-unsigned long enumerateWithState(ObjectRef collection, FastEnumerationState *state, ObjectRef iobuffer[], unsigned long length);
+unsigned long enumerateWithState(const void *const collection, FastEnumerationState *const state, void *iobuffer[], unsigned long length);
 
 #ifndef foreach_start
 #define foreach_start(type,variable,collection) \
