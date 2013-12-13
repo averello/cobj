@@ -17,7 +17,7 @@ struct thread_data {
 	size_t id;
 };
 
-int main () {
+int main () {	
 	size_t threads = 10;
 	pthread_t pthreads[threads];
 	struct  thread_data pthreadsData[threads];
@@ -35,12 +35,13 @@ void *threadf(void *arg) {
 	struct thread_data *data = (struct thread_data *)arg;
 	COTRY {
 		COTRY {
-			puts("ola kala 1");
+			puts("Throw");
 			COTHROW((int)data->id, "COTestException", "there is no reason");
 		}
-		COCATCH(5) {
-			COException *exception = COCurrentException();
-			COExceptionLog(exception);
+		COCATCH(1) {
+			printf("Nested catch by %x\n", (int)pthread_self());
+			COHANDLE();
+			COTHROW(15, "CONestedException", "there is a reason!");
 		}
 		COOTHER {
 			printf("Some unhandled exception nested by %x\n", (int)pthread_self());
@@ -50,16 +51,21 @@ void *threadf(void *arg) {
 		}
 		COEND
 	}
-	COCATCH(5) {
+	COCATCH(1) {
 		printf("Outher handled exception %x\n", (int)pthread_self());
+		COHANDLE();
+	}
+	COCATCH(15) {
+		printf("Outer catch by %x\n", (int)pthread_self());
 		COHANDLE();
 	}
 	COOTHER {
 		printf("Outer some unhandled exception by %x\n", (int)pthread_self());
+		COExceptionLog(COCurrentException());
 		COHANDLE();
 	}
 	COFINALLY {
-		printf("Finally by %x\n", (int)pthread_self());
+		printf("Outer Finally by %x\n", (int)pthread_self());
 	}
 	COEND
 	return NULL;

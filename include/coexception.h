@@ -27,13 +27,13 @@ struct exception_context_list_item_t {
 	int state;
 	int exceptionNumber;
 	int handled;
+	int finally;
 	COException *exception;
 	struct {
 		struct exception_context_list_item_t *next;	/* next element */
 		struct exception_context_list_item_t *prev;	/* previous element */
 	} entry;
 };
-
 
 extern __thread struct exception_context_t COExceptionThreadContext;
 

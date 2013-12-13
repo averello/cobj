@@ -36,6 +36,8 @@ struct exception_t {
 
 void COExceptionMainConstructor() __attribute__ ((constructor));
 static void COExceptionDealloc(void *exception);
+static void COExceptionPropagate(struct exception_context_list_item_t *econtext);
+static void COExceptionUnhandledException(COException *) __attribute__((noreturn));
 
 void COExceptionMainConstructor() {
 	memset((struct exception_context_t *)&COExceptionThreadContext, 0, sizeof(COExceptionThreadContext));
@@ -53,8 +55,6 @@ void COExceptionLink(struct exception_context_list_item_t *econtext) {
 	if (NULL == list->head)
 		list->head = econtext;
 	list->tail = econtext;
-
-//	TAILQ_INSERT_TAIL(&COExceptionThreadContext.list, econtext, entry);
 }
 
 
@@ -66,11 +66,26 @@ void COExceptionUnlink(struct exception_context_list_item_t *econtext) {
 	}
 	/* If handling and the code did not call COHandle() then propagate the exception */
 	else if (econtext->state == ExceptionContextStateHandling) {
-		econtext->state = ExceptionContextStateFinally;
-		longjmp(econtext->context, ExceptionContextStateFinally);
+		/* If finally already called then propagate */
+		if (econtext->finally == 1) {
+			struct exception_context_list_head_t *list = &(COExceptionThreadContext.list);
+			struct exception_context_list_item_t *item =  list->tail;
+			list->tail = item->entry.prev;
+			if (list->tail == NULL)
+				list->head = NULL;
+			COExceptionThreadContext.count--;
+			
+			COExceptionPropagate(econtext);
+		}
+		/* Otherwise call finally first */
+		else {
+			econtext->state = ExceptionContextStateFinally;
+			longjmp(econtext->context, ExceptionContextStateFinally);
+		}
 	}
-	/* If returning from a finally block remove the handler */
+	/* If returning from a finally block */
 	else if (econtext->state == ExceptionContextStateFinally) {
+		/* Propagate if the exception is not handled */
 		if (econtext->handled == 0) {
 			struct exception_context_list_head_t *list = &(COExceptionThreadContext.list);
 			struct exception_context_list_item_t *item =  list->tail;
@@ -79,30 +94,12 @@ void COExceptionUnlink(struct exception_context_list_item_t *econtext) {
 				list->head = NULL;
 			COExceptionThreadContext.count--;
 			
-			struct exception_context_list_item_t *previous = econtext->entry.prev;//TAILQ_PREV(econtext, exception_context_list_head_t, entry);
-			if (NULL == previous) {
-				/* Exception with no handler in place */
-				fprintf(stderr, "Terminating due to uncaught exception ");
-				COExceptionLog(econtext->exception);
-				int size = 128, nptrs;
-				char **strings;
-				void *stackbuffer[size];
-				nptrs = backtrace(stackbuffer, size);
-								
-				strings = backtrace_symbols(stackbuffer, nptrs);
-				if (NULL != strings) {
-					fprintf(stderr, "Backtrace:\n");
-					for (unsigned int i=0; i<nptrs; i++)
-						fprintf(stderr, "\t%s\n", strings[i]);
-					free(strings);
-				}
-				abort();
-			}
-			previous->exception = econtext->exception;
-			longjmp(previous->context, previous->exception->exception);
+			COExceptionPropagate(econtext);
 		}
+		/* Remove the handler */
 		else {
 			release(econtext->exception);
+			econtext->exception = NULL;
 			struct exception_context_list_head_t *list = &(COExceptionThreadContext.list);
 			struct exception_context_list_item_t *item =  list->tail;
 			list->tail = item->entry.prev;
@@ -113,15 +110,57 @@ void COExceptionUnlink(struct exception_context_list_item_t *econtext) {
 	}
 }
 
+static void COExceptionPropagate(struct exception_context_list_item_t *econtext) {
+	struct exception_context_list_item_t *previous = econtext->entry.prev;//TAILQ_PREV(econtext, exception_context_list_head_t, entry);
+	if (NULL == previous)
+		COExceptionUnhandledException(econtext->exception);
+	previous->exception = econtext->exception;
+	longjmp(previous->context, previous->exception->exception);
+}
+
+static void COExceptionUnhandledException(COException *exception) {
+	/* Exception with no handler in place */
+	fprintf(stderr, "Terminating due to uncaught exception ");
+	COExceptionLog(exception);
+	int size = 128, nptrs;
+	char **strings;
+	void *stackbuffer[size];
+	nptrs = backtrace(stackbuffer, size);
+	
+	strings = backtrace_symbols(stackbuffer, nptrs);
+	if (NULL != strings) {
+		fprintf(stderr, "Backtrace:\n");
+		for (unsigned int i=0; i<nptrs; i++)
+			fprintf(stderr, "\t%s\n", strings[i]);
+		free(strings);
+	}
+	abort();
+}
+
 void CORaise(COException *exception) {
 	struct exception_context_list_item_t *econtext = COExceptionThreadContext.list.tail;
-	assert(econtext != NULL);
+//	assert(econtext != NULL);
+	if (econtext == NULL)
+		COExceptionUnhandledException(exception);
 	
 	/* Raises the exception */
 	if (econtext->state == ExceptionContextStateCode) {
 		econtext->state = ExceptionContextStateHandling;
 		econtext->exception = exception;
 		longjmp((int *)econtext->context, exception->exception);
+	}
+	else if (econtext->state == ExceptionContextStateHandled) {
+		if (econtext->finally == 0) {
+			econtext->state = ExceptionContextStateHandling;
+			econtext->finally = 1;
+			release(econtext->exception);
+			econtext->exception = exception;
+			econtext->state = ExceptionContextStateHandling;
+			longjmp(econtext->context, ExceptionContextStateFinally);
+		}
+		else {
+			COExceptionPropagate(econtext);
+		}
 	}
 	assert(0);
 }
