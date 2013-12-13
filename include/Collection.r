@@ -23,7 +23,7 @@ struct CollectionClass {
 	void * (*lastObject)(const void * const self);
 	void * (*firstObject)(const void * const self);
 	int (*containsObject)(const void * const self, const void * const object);
-	unsigned long (*enumerateWithState)(ObjectRef collection, FastEnumerationState *state, ObjectRef iobuffer[], unsigned long length);
+	unsigned long (*enumerateWithState)(const void *const collection, FastEnumerationState *const state, void *iobuffer[], unsigned long length);
 };
 
 #endif

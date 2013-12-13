@@ -19,10 +19,25 @@
 			<key>orderHint</key>
 			<integer>6</integer>
 		</dict>
+		<key>testBuffer.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>14</integer>
+		</dict>
 		<key>testConcurrentMutableArray.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>11</integer>
+		</dict>
+		<key>testDictionary.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>13</integer>
+		</dict>
+		<key>testException.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>15</integer>
 		</dict>
 		<key>testFastEnumerator.xcscheme</key>
 		<dict>
@@ -107,12 +122,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>DEAFA864185B522C005FA407</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>DEB02E1C171B053600BE3F3D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>DEB02E29171B069B00BE3F3D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DECAAF31185732BC0018231F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DECAAF43185738DE0018231F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

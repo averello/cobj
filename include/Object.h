@@ -11,6 +11,9 @@
 #ifndef CObjects_object_h
 #define CObjects_object_h
 
+#undef retain
+#undef release
+
 /*! An @ref Object type. */
 extern const void *const Object;
 /*! An @ref Object reference. */

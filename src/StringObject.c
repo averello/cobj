@@ -348,10 +348,11 @@ StringRef copyStringByAppendingString(const void *restrict const self, const voi
 StringRef newStringWithFormat(const void *const _class, const void *format, ...) {
 	assert(_class != NULL);
 	assert(format != NULL);
+	if (_class == NULL) return  errno = EINVAL, (StringRef)NULL;
 	
 	const struct StringClass *const class = _class;
-	
 	assert(class != NULL && class->newStringWithFormat != NULL);
+	if (class->newStringWithFormat == NULL) return errno = ENOTSUP, (StringRef)NULL;
 	
 	va_list ap;
 	va_start(ap, format);

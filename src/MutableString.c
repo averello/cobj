@@ -129,7 +129,7 @@ static size_t MutableString_getStringLength (const void *const _self) {
 
 static void MutableString_appendFormat(void *const self, char *format, va_list *app) {
 	struct String *stringSelf = self;
-	char *selfText = (char *)getStringText(self);
+	char *selfText = NULL;
 	size_t selfLength = getStringLength(self);
 	
 	va_list copy;

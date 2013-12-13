@@ -41,7 +41,7 @@ int main () {
 		assert( errno == EINVAL );
 		
 		assert( indexOfObject(vector, vector) == ANotFound );
-		assert( ! arrayContainsObject(vector, vector) );
+		assert( ! containsObject(vector, vector) );
 		
 		release(vector);
 	}
@@ -66,7 +66,7 @@ int main () {
 		unsigned long indexOfS1 = indexOfObject(vector, s1);
 		assert( indexOfS1 != ANotFound );
 		assert( indexOfS1 == 0 );
-		assert( arrayContainsObject(vector, s1) );
+		assert( containsObject(vector, s1) );
 		
 		errno = 0;
 		removeObjectAtIndex(vector, 0);

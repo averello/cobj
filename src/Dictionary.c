@@ -90,7 +90,7 @@ static void * DictionaryClass_constructor (void * _self, va_list *app) {
 	return self;
 }
 
-ObjectRef Dictionary_objectForKey(const void *const _self, void *const _key) {
+static ObjectRef Dictionary_objectForKey(const void *const _self, void *const _key) {
 	const struct Dictionary *const self = _self;
 	unsigned long keyhash = hash(_key);
 	unsigned long i;
@@ -100,18 +100,18 @@ ObjectRef Dictionary_objectForKey(const void *const _self, void *const _key) {
 	return NULL;
 }
 
-ObjectRef Dictionary_getKeysCopy(const void *const _self) {
+static ObjectRef Dictionary_getKeysCopy(const void *const _self) {
 	const struct Dictionary *const self = _self;
 	return copy(self->keys);
 }
 
-ObjectRef Dictionary_getValuesCopy(const void *const _self) {
+static ObjectRef Dictionary_getValuesCopy(const void *const _self) {
 	const struct Dictionary *const self = _self;
 	return copy(self->values);
 }
 
 
-ObjectRef Dictionary_copy(const void *const _self) {
+static ObjectRef Dictionary_copy(const void *const _self) {
 	const struct Dictionary *const self = _self;
 	struct Dictionary *newDictionary = new(Dictionary, NULL);
 	if (self->count == 0)
@@ -126,40 +126,71 @@ ObjectRef Dictionary_copy(const void *const _self) {
 	return newDictionary;
 }
 
-unsigned long Dictionary_getCount(const void *const _self) {
+static unsigned long Dictionary_getCount(const void *const _self) {
 	const struct Dictionary *const self = _self;
 	return self->count;
 }
 
+#define MIN(a,b) ((a)<(b)?(a):(b))
+static unsigned long Dictionary_enumerateWithState(const void *const _self, FastEnumerationState *const state, void *iobuffer[], unsigned long length) {
+	
+	const struct Dictionary *const self = _self;
+	unsigned long collectionCount = getCollectionCount(_self);
+	if (state->state == 0) {
+		state->mutationsPointer =(unsigned long *)self;
+		state->extra[0] = collectionCount;
+		state->state = 1;
+	}
+	else
+		if (collectionCount != state->extra[0])
+			return state->mutationsPointer = NULL, 0;
+	
+	state->itemsPointer = iobuffer;
+	ArrayRef allKeys = getKeysCopy(self);
+	unsigned long count = 0;
+	unsigned long numberOfIter = MIN(collectionCount, length);
+	for (unsigned long i=(state->extra[1]), j=0; i<numberOfIter; i++, j++, count++)
+		iobuffer[j] = getObjectAtIndex(allKeys, i);
+	if (count!=0)
+		state->extra[1] = count;
+	release(allKeys);
+	return count;
+}
+#undef MIN
 
 const void *Dictionary = NULL;
 const void *DictionaryClass = NULL;
 
 void initDictionary() {
-	initArray();
 	initMutableArray();
 	
 	if ( ! DictionaryClass )
-		DictionaryClass = new(Class, "DictionaryClass", Class, sizeof(struct DictionaryClass),
+		DictionaryClass = new(CollectionClass, "DictionaryClass", CollectionClass, sizeof(struct DictionaryClass),
 							  constructor, DictionaryClass_constructor,
 							  NULL);
 	if ( ! Dictionary )
-		Dictionary = new(DictionaryClass, "Dictionary", Object, sizeof(struct Dictionary),
+		Dictionary = new(DictionaryClass, "Dictionary", Collection, sizeof(struct Dictionary),
 						 constructor, Dictionary_constructor,
+						 
+						 /* Overrides */
+						 getCollectionCount, Dictionary_getCount,
+						 enumerateWithState, Dictionary_enumerateWithState,
+						 
+						 /* new */
 						 destructor, Dictionary_destructor,
 						 objectForKey, Dictionary_objectForKey,
-//						 getCount, Dictionary_getCount,
 						 getKeysCopy, Dictionary_getKeysCopy,
 						 getValuesCopy, Dictionary_getValuesCopy,
 						 NULL);
 }
 
 void deallocDictionary() {
-	release((void *)Dictionary), Dictionary = NULL;
-	release((void *)DictionaryClass), DictionaryClass = NULL;
+	if (Dictionary)
+		release((void *)Dictionary), Dictionary = NULL;
+	if (DictionaryClass)
+		release((void *)DictionaryClass), DictionaryClass = NULL;
 //	free((void *)Dictionary), Dictionary = NULL;
 //	free((void *)DictionaryClass), DictionaryClass = NULL;
-	deallocArray();
 	deallocMutableArray();
 }
 

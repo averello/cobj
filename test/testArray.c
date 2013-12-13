@@ -36,8 +36,8 @@ int main ( int argc, char *argv[] ) {
 	assert(getCollectionCount(copyArray) == 5);
 	assert( equals(array, copyArray) );
 	
-	assert( arrayContainsObject(copyArray, formatedString) );
-	assert( ! arrayContainsObject(copyArray, concat) );
+	assert( containsObject(copyArray, formatedString) );
+	assert( ! containsObject(copyArray, concat) );
 	
 	ArrayRef lolArray = new(Array, NULL);
 	assert(lolArray != NULL);
@@ -122,13 +122,13 @@ int main ( int argc, char *argv[] ) {
 	assert( indexOfObject(addRemove, s3) == ANotFound );
 	
 	assert( indexOfObject(addRemove, s1) == 0 );
-	assert( arrayContainsObject(addRemove, s1) );
-	assert( ! arrayContainsObject(addRemove, s2) );
+	assert( containsObject(addRemove, s1) );
+	assert( ! containsObject(addRemove, s2) );
 	
 	removeAllObjects(addRemove);
 	
 	insertObjectAtIndex(addRemove, s1, 0);
-	assert( arrayContainsObject(addRemove, s1) );
+	assert( containsObject(addRemove, s1) );
 	assert( firstObject(addRemove) == s1);
 	assert( lastObject(addRemove) == s1);
 	
@@ -140,7 +140,7 @@ int main ( int argc, char *argv[] ) {
 	assert( indexOfObject(addRemove, s3) == 1);
 	
 	removeLastObject(addRemove);
-	assert( ! arrayContainsObject(addRemove, s2) );
+	assert( ! containsObject(addRemove, s2) );
 	
 	release(s1);
 	release(s2);

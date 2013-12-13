@@ -11,6 +11,7 @@
 #include <stdarg.h>
 #include <pthread.h>
 #include <errno.h>
+#include <memory_management/memory_management.h>
 
 #if DEBUG
 #include <assert.h>
@@ -28,7 +29,9 @@
 
 
 void * constructor(void * self, va_list * app) {
+	assert(self != NULL);
 	if ( self == NULL ) return errno = EINVAL, NULL;
+	
 	const struct Classs *class = classOf(self);
 	assert(class->constructor != NULL);
 	if ( class->constructor == NULL ) return errno = ENOTSUP, self;
@@ -36,7 +39,9 @@ void * constructor(void * self, va_list * app) {
 }
 
 void * destructor(void * self) {
+	assert(self != NULL);
 	if ( self == NULL ) return errno = EINVAL, NULL;
+	
 	const struct Classs *class = classOf(self);
 	assert(class->destructor != NULL);
 	if ( class->destructor == NULL ) return errno = ENOTSUP, self;
@@ -44,10 +49,11 @@ void * destructor(void * self) {
 }
 
 void * super_constructor(const void *const class, void * self, va_list * app) {
-	if ( self == NULL ) return errno = EINVAL, NULL;
 	assert( self != NULL );
-	if ( class == NULL ) return errno = EINVAL, NULL;
+	if ( self == NULL ) return errno = EINVAL, NULL;
 	assert( class != NULL );
+	if ( class == NULL ) return errno = EINVAL, NULL;
+	
 	const struct Classs * _superclass = superclass(class);
 	assert(self != NULL && _superclass->constructor != NULL);
 	if ( _superclass->constructor == NULL ) return errno = ENOTSUP, self;
@@ -77,16 +83,6 @@ void * Object_constructor (void * _self, va_list * app) {
 }
 
 void * Object_destructor (void * _self) {
-//	struct Object *self = _self;
-	/*
-	 * Normally is not possible that the mutex is locked when this function is called
-	 */
-//	if ( pthread_mutex_destroy(&(self->guardian)) != 0 )
-//		if	(errno == EBUSY)
-//			if ( (pthread_mutex_unlock(&(self->guardian)) != 0) )
-//				if ( errno != EINVAL )
-//					pthread_mutex_destroy(&(self->guardian));
-//	return _self;
 	return _self;
 }
 
@@ -129,7 +125,7 @@ unsigned long Object_retainCount (const void * const _self) {
 StringRef Object_copyDescription (const void * const _self) {
 	const struct Object *const self = _self;
 	const struct Classs *class = classOf(self);
-	StringRef copyDescription = newStringWithFormat(String, "<%s 0x%x retainCount:%ul>", class->class_name, self, retainCount(self), NULL);
+	StringRef copyDescription = newStringWithFormat(String, "<%s %p retainCount:%ul>", class->class_name, self, retainCount(self), NULL);
 	return copyDescription;
 }
 

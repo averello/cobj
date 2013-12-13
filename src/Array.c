@@ -239,7 +239,7 @@ static void * Array_firstObject(const void * const _self) {
 
 #define MIN(a,b) ((a)<(b)?(a):(b))
 
-static unsigned long Array_enumerateWithState(ObjectRef _self, FastEnumerationState *state, ObjectRef *iobuffer, unsigned long length) {
+static unsigned long Array_enumerateWithState(const void *const _self, FastEnumerationState *const state, void *iobuffer[], unsigned long length) {
 	const struct Array *const self = _self;
 	unsigned long collectionCount = getCollectionCount(_self);
 	if (state->state == 0) {
@@ -250,7 +250,7 @@ static unsigned long Array_enumerateWithState(ObjectRef _self, FastEnumerationSt
 	else
 		if (collectionCount != state->extra[0])
 			return state->mutationsPointer = NULL, 0;
-
+	
 	state->itemsPointer = iobuffer;
 	unsigned long count = 0;
 	unsigned long numberOfIter = MIN(collectionCount, length);
@@ -292,8 +292,10 @@ void initArray () {
 }
 
 void deallocArray () {
-	release((void*)Array);
-	release((void*)ArrayClass);
+	if (Array)
+		release((void*)Array);
+	if (ArrayClass)
+		release((void*)ArrayClass);
 //	free((void*)Array);
 //	free((void*)ArrayClass);
 	Array = NULL;

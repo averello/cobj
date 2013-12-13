@@ -17,6 +17,7 @@
 
 #include <Object.h>
 #include <new.h>
+#include <coexception.h>
 #include <StringObject.h>
 #include <WString.h>
 #include <Array.h>

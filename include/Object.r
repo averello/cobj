@@ -10,7 +10,6 @@
 #define CObjects_object_r
 
 #include <pthread.h>
-#include <memory_management/memory_management.h>
 
 /*!
  *  @class Object Object.r

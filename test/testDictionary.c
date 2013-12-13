@@ -16,7 +16,7 @@
 
 int main () {
 	{
-		const char *sk1 = "Hello", *sv1 = "World", *sk2 = "Hello World", *sv2 = "Goodbye World";
+		const char *sk1 = "Hello1", *sv1 = "World", *sk2 = "Hello2", *sv2 = "Goodbye World";
 		StringRef k1 = new(String, sk1);
 		StringRef v1 = new(String, sv1);
 		StringRef k2 = new(String, sk2);
@@ -48,14 +48,21 @@ int main () {
 			assert( equals(copyKeys, keys) );
 			assert( equals(copyValues, values) );
 			
-			assert( arrayContainsObject(copyKeys, k1) );
-			assert( arrayContainsObject(copyKeys, k2) );
+			assert( containsObject(copyKeys, k1) );
+			assert( containsObject(copyKeys, k2) );
 			
 			release(copyValues);
 			release(copyKeys);
 			
 			release(keys);
 			release(values);
+		}
+		{
+			ArrayRef keys = new(Array, k1, k2, NULL);
+			foreach_start(StringRef, key, dico) {
+				assert(containsObject(keys, key)!=0 && "Does not contain object");
+			} foreach_end()
+			release(keys);
 		}
 
 		release(dico);

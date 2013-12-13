@@ -14,6 +14,7 @@
 #include <stdarg.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <memory_management/memory_management.h>
 
 #if DEBUG
 #include <assert.h>
@@ -23,8 +24,9 @@
 
 /* Creates any Object */
 void * new (const void *const restrict _class, ...) {
-	if ( _class == NULL ) return errno = EINVAL, NULL;
 	assert( _class != NULL );
+	if ( _class == NULL ) return errno = EINVAL, NULL;
+	
 	
 	/* Get the type */
 	const struct Classs *const class = _class;
@@ -33,7 +35,7 @@ void * new (const void *const restrict _class, ...) {
 	
 	if ( class->size <= 0 ) return  NULL;
 	
-	object = MEMORY_MANAGEMENT_ALLOC(class->size);//calloc(1, class->size);
+	object = MEMORY_MANAGEMENT_ALLOC(class->size);
 	assert(object != NULL);
 	if ( object == NULL ) return errno = ENOMEM, NULL;
 	object->class = class;

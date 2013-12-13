@@ -103,8 +103,10 @@ void initCollection() {
 }
 
 void deallocCollection() {
-	release((void*)Collection);
-	release((void*)CollectionClass);
+	if (Collection)
+		release((void*)Collection);
+	if (CollectionClass)
+		release((void*)CollectionClass);
 	Collection = NULL;
 	CollectionClass = NULL;
 }
@@ -146,7 +148,7 @@ void * firstObject(const void * const self) {
 	return class->firstObject(self);
 }
 
-unsigned long enumerateWithState(ObjectRef collection, FastEnumerationState *state, ObjectRef iobuffer[], unsigned long length) {
+unsigned long enumerateWithState(const void *const collection, FastEnumerationState *const state, void *iobuffer[], unsigned long length) {
 	assert(collection != NULL);
 	if (collection == NULL) return 0;
 	assert(state != NULL);

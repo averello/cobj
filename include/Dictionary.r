@@ -11,9 +11,11 @@
 
 #include <cobj.h>
 #include <Object.r>
+#include <Collection.h>
+#include <Collection.r>
 
 struct Dictionary {
-	const struct Object isa;
+	const struct Collection isa;
 	ArrayRef keys;
 	ArrayRef values;
 	unsigned long *hashes;
@@ -21,7 +23,7 @@ struct Dictionary {
 };
 
 struct DictionaryClass {
-	const struct Classs isa;
+	const struct CollectionClass isa;
 	ObjectRef ( *objectForKey) (const void *const self, void *const key);
 	ArrayRef ( *getKeysCopy) (const void *const self);
 	ArrayRef ( *getValuesCopy)(const void *const self);

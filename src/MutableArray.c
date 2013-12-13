@@ -172,6 +172,8 @@ static ObjectRef MutableArray_getObjectAtIndex(const void * const _self, unsigne
 	unsigned long result = 0;
 	struct _Item *it = NULL;
 	for (it = store->tqh_first; it != NULL && result != index ; it = it->items.tqe_next, result++);
+	if (NULL==it)
+		return NULL;
 	return (void *)it->item;
 }
 
@@ -375,8 +377,10 @@ void initMutableArray () {
 }
 
 void deallocMutableArray () {
-	release((void *)MutableArray);
-	release((void *)MutableArrayClass);
+	if (MutableArray)
+		release((void *)MutableArray);
+	if (MutableArrayClass)
+		release((void *)MutableArrayClass);
 //	free((void *)MutableArray);
 //	free((void *)MutableArrayClass);
 	MutableArray = NULL;
