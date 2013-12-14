@@ -163,3 +163,4 @@ doc/Doxyfile.warnings
 *.a
 *.so
 bin/*
+*.xcuserdatad
