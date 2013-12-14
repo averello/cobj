@@ -34,7 +34,7 @@ static void * Class_constructor (void * _self, va_list * app) {
 	memcpy((char *)self  + offset, (char *)(self->super) + offset, sizeOf((void *)self->super) - offset);
 	{
 		typedef void (*voidf) ();
-		voidf selector;
+		voidf selector = NULL;
 		va_list ap;
 		va_copy(ap, *app);
 		
@@ -131,7 +131,7 @@ static const struct Classs object [] = {
 		Class_hash,
 		Object_copyDescription,
 		Class_retain,
-		Class_release,
+		Object_release,
 		Object_retainCount,
 		Class_autorelease,
 	}
