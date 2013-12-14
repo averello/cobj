@@ -51,8 +51,7 @@ struct threadAutoreleasePoolsHeadItem {
 	AutoreleasePoolRef autoreleasePool;
 	TAILQ_ENTRY(threadAutoreleasePoolsHeadItem) entries;
 };
-//__thread
-TAILQ_HEAD(ThreadAutoreleasePoolsHead, threadAutoreleasePoolsHeadItem) ThreadAutoreleasePools;
+__thread TAILQ_HEAD(ThreadAutoreleasePoolsHead, threadAutoreleasePoolsHeadItem) ThreadAutoreleasePools;
 
 static void * AutoreleasePool_constructor(void * _self, va_list * app) {
 	struct AutoreleasePool *self = super_constructor(AutoreleasePool, _self, app);
