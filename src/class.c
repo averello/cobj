@@ -131,7 +131,7 @@ static const struct Classs object [] = {
 		Class_hash,
 		Object_copyDescription,
 		Class_retain,
-		Class_release,
+		Object_release,
 		Object_retainCount,
 		Class_autorelease,
 	}
