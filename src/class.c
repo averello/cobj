@@ -63,6 +63,9 @@ static void * Class_constructor (void * _self, va_list * app) {
 			
 			else if ( selector == (voidf) copyDescription )
 				* (voidf *) & self->copyDescription = method;
+			
+			else if ( selector == (voidf) autorelease )
+				* (voidf *) & self->autorelease = method;
 		}
 		va_end(ap);
 	}
@@ -97,6 +100,10 @@ static void * Class_retain (void *const _self) {
 static void Class_release (void *const _self) {
 }
 
+static void *Class_autorelease (void *const _self) {
+	return NULL;
+}
+
 static const struct Classs object [] = {
 	{	object+1,
 		"Object",
@@ -111,6 +118,7 @@ static const struct Classs object [] = {
 		Object_retain,
 		Object_release,
 		Object_retainCount,
+		Object_autorelease,
 	},
 	{	object+1,
 		"Class",
@@ -125,6 +133,7 @@ static const struct Classs object [] = {
 		Class_retain,
 		Class_release,
 		Object_retainCount,
+		Class_autorelease,
 	}
 };
 

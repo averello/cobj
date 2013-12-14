@@ -58,6 +58,8 @@
 		DEE2F3DF185B52A500408B06 /* cobj.h in Headers */ = {isa = PBXBuildFile; fileRef = DE05E38516F0BEF10079DF5C /* cobj.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DEFB710C185BBBA800DC4DD5 /* AutoreleasePool.h in Headers */ = {isa = PBXBuildFile; fileRef = DEFB710B185BBBA800DC4DD5 /* AutoreleasePool.h */; };
 		DEFB710E185BBBBD00DC4DD5 /* AutoreleasePool.c in Sources */ = {isa = PBXBuildFile; fileRef = DEFB710D185BBBBD00DC4DD5 /* AutoreleasePool.c */; };
+		DEFB7120185BC85D00DC4DD5 /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
+		DEFB7124185BC88700DC4DD5 /* testAutorelease.c in Sources */ = {isa = PBXBuildFile; fileRef = DEFB7123185BC88700DC4DD5 /* testAutorelease.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,6 +169,13 @@
 			remoteInfo = cobj;
 		};
 		DEE2F3DC185B527F00408B06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5E6B26DD16C6AF7800DF96C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5E7A4AFE16C957B200F6D578;
+			remoteInfo = cobj;
+		};
+		DEFB711E185BC85700DC4DD5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E6B26DD16C6AF7800DF96C4 /* Project object */;
 			proxyType = 1;
@@ -294,6 +303,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		DEFB7113185BC84D00DC4DD5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -390,6 +408,8 @@
 		DEFB710B185BBBA800DC4DD5 /* AutoreleasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AutoreleasePool.h; path = include/AutoreleasePool.h; sourceTree = SOURCE_ROOT; };
 		DEFB710D185BBBBD00DC4DD5 /* AutoreleasePool.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = AutoreleasePool.c; path = src/AutoreleasePool.c; sourceTree = SOURCE_ROOT; };
 		DEFB710F185BBBC600DC4DD5 /* AutoreleasePool.r */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.rez; name = AutoreleasePool.r; path = include/AutoreleasePool.r; sourceTree = SOURCE_ROOT; };
+		DEFB7115185BC84D00DC4DD5 /* testAutorelease */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testAutorelease; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEFB7123185BC88700DC4DD5 /* testAutorelease.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = testAutorelease.c; path = test/testAutorelease.c; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -505,6 +525,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DEFB7112185BC84D00DC4DD5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DEFB7120185BC85D00DC4DD5 /* libcobj.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -535,6 +563,7 @@
 				DECAAF32185732BC0018231F /* testDictionary */,
 				DECAAF44185738DE0018231F /* testBuffer */,
 				DEAFA865185B522C005FA407 /* testException */,
+				DEFB7115185BC84D00DC4DD5 /* testAutorelease */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -643,6 +672,7 @@
 				DE310883172B364600661007 /* testConcurrentMutableArray.c */,
 				DE46F516185685BB00753047 /* testFastEnumeration.c */,
 				DEE2F3D9185B527C00408B06 /* testException.c */,
+				DEFB7123185BC88700DC4DD5 /* testAutorelease.c */,
 			);
 			name = test;
 			sourceTree = "<group>";
@@ -923,6 +953,24 @@
 			productReference = DECAAF44185738DE0018231F /* testBuffer */;
 			productType = "com.apple.product-type.tool";
 		};
+		DEFB7114185BC84D00DC4DD5 /* testAutorelease */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DEFB711B185BC84D00DC4DD5 /* Build configuration list for PBXNativeTarget "testAutorelease" */;
+			buildPhases = (
+				DEFB7111185BC84D00DC4DD5 /* Sources */,
+				DEFB7112185BC84D00DC4DD5 /* Frameworks */,
+				DEFB7113185BC84D00DC4DD5 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DEFB711F185BC85700DC4DD5 /* PBXTargetDependency */,
+			);
+			name = testAutorelease;
+			productName = testAutorelease;
+			productReference = DEFB7115185BC84D00DC4DD5 /* testAutorelease */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -964,6 +1012,7 @@
 				DECAAF31185732BC0018231F /* testDictionary */,
 				DECAAF43185738DE0018231F /* testBuffer */,
 				DEAFA864185B522C005FA407 /* testException */,
+				DEFB7114185BC84D00DC4DD5 /* testAutorelease */,
 			);
 		};
 /* End PBXProject section */
@@ -1118,6 +1167,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DEFB7111185BC84D00DC4DD5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DEFB7124185BC88700DC4DD5 /* testAutorelease.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1190,6 +1247,11 @@
 			isa = PBXTargetDependency;
 			target = 5E7A4AFE16C957B200F6D578 /* cobj */;
 			targetProxy = DEE2F3DC185B527F00408B06 /* PBXContainerItemProxy */;
+		};
+		DEFB711F185BC85700DC4DD5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5E7A4AFE16C957B200F6D578 /* cobj */;
+			targetProxy = DEFB711E185BC85700DC4DD5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1717,6 +1779,41 @@
 			};
 			name = Release;
 		};
+		DEFB711C185BC84D00DC4DD5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DEFB711D185BC84D00DC4DD5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1851,6 +1948,15 @@
 			buildConfigurations = (
 				DECAAF4B185738DE0018231F /* Debug */,
 				DECAAF4C185738DE0018231F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DEFB711B185BC84D00DC4DD5 /* Build configuration list for PBXNativeTarget "testAutorelease" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DEFB711C185BC84D00DC4DD5 /* Debug */,
+				DEFB711D185BC84D00DC4DD5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

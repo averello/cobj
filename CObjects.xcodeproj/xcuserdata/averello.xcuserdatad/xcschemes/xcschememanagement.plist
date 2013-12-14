@@ -19,6 +19,11 @@
 			<key>orderHint</key>
 			<integer>6</integer>
 		</dict>
+		<key>testAutorelease.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>16</integer>
+		</dict>
 		<key>testBuffer.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -143,6 +148,11 @@
 			<true/>
 		</dict>
 		<key>DECAAF43185738DE0018231F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DEFB7114185BC84D00DC4DD5</key>
 		<dict>
 			<key>primary</key>
 			<true/>

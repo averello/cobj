@@ -9,12 +9,15 @@
 #ifndef CObjects_AutoreleasePool_h
 #define CObjects_AutoreleasePool_h
 
-/*! A @ref String type. */
+/*! A @ref AutoreleasePool type. */
 extern const void * AutoreleasePool;
 
-/*! A @ref StringClass type */
+/*! A @ref AutoreleasePoolClass type */
 extern const void * AutoreleasePoolClass;
-/*! An @ref String reference. */
+/*! An @ref AutoreleasePool reference. */
 typedef void * AutoreleasePoolRef;
+
+void addAutoreleaseObject(const void *self, const void *object);
+void AutoreleasePoolAddObject(const void *object);
 
 #endif

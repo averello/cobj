@@ -143,6 +143,15 @@ void release (void *const self);
 /*!
  *  @method
  *  @relates Object
+ *  @brief Decrements the receiver’s retain count at the end of the current autorelease pool block.
+ *  @details This method should be called each time a function wants to transfer ownership to the caller.
+ *  @param[in] self the instance of type @ref Object.
+ */
+void *autorelease (void *const self);
+
+/*!
+ *  @method
+ *  @relates Object
  *  @brief A method returning the actual reference count of the receiver.
  *  @param[in] self the instance of type @ref Object.
  *  @return the number of @ref retain calls to this instance.

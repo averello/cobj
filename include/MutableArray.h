@@ -10,6 +10,7 @@
 #define CObjects_MutableArray_h
 
 #include <Array.h>
+#include <StringObject.h>
 
 extern const void * MutableArray;
 extern const void * MutableArrayClass;

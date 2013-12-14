@@ -32,5 +32,6 @@
 #include <MutableString.h>
 #include <WMutableString.h>
 #include <ConcurrentMutableArray.h>
+#include <AutoreleasePool.h>
 
 #endif

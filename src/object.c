@@ -24,6 +24,7 @@
 #include <Object.r>
 #include <new.h>
 #include <StringObject.h>
+#include <AutoreleasePool.h>
 #undef retain
 #undef release
 
@@ -120,6 +121,10 @@ void Object_release (void * const _self) {
 unsigned long Object_retainCount (const void * const _self) {
 	const struct Object *const self = _self;
 	return MEMORY_MANAGEMENT_GET_RETAIN_COUNT(self);
+}
+
+void * Object_autorelease (void * _self) {
+	return _self;
 }
 
 StringRef Object_copyDescription (const void * const _self) {
@@ -286,5 +291,18 @@ void * copyDescription (const void *const self) {
 	return class->copyDescription(self);
 }
 
+
+void *autorelease (void *const self) {
+	AutoreleasePoolAddObject(self);
+	return self;
+//	assert(self!=NULL);
+//	if ( self == NULL ) return errno = EINVAL, NULL;
+//	
+//	const struct Classs *class = classOf(self);
+//	assert(class->autorelease != NULL);
+//	if ( class->autorelease == NULL ) return errno = ENOTSUP, NULL;
+//	
+//	return class->autorelease(self);
+}
 
 

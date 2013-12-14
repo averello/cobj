@@ -102,6 +102,8 @@ typedef void (* rel) (void *const self);
 typedef unsigned long (* retc) (const void *const self);
 
 
+typedef void *(*autor) (void *const self);
+
 /*!
  *  @class Class Object.r
  *  @private
@@ -208,6 +210,13 @@ struct Classs {
 	 *  @brief The function pointer to the @ref retainCount method of this class.
 	 */
 	retc retainCount;
+	
+	/*!
+	 *  @member autorelease
+	 *  @protected
+	 *  @brief The function pointer to the @ref autorelease method of this class.
+	 */
+	autor autorelease;
 };
 
 /*!
@@ -266,6 +275,7 @@ int Object_hash (const void *const _self);
 void * Object_retain (void *const _self);
 void Object_release (void *const _self);
 unsigned long Object_retainCount (const void *const _self);
+void * Object_autorelease (void * _self);
 
 void * Object_copyDescription (const void *const _self);
 
