@@ -86,10 +86,8 @@ static void * AutoreleasePoolClass_constructor(void * _self, va_list * app) {
 
 static void * AutoreleasePool_destructor(void * _self, va_list * app) {
 	struct AutoreleasePool *self = _self;
-	struct AutoreleasePoolListItem *item, *tmp;
-	SLIST_FOREACH_SAFE(item, &self->list, entry, tmp) {
-		if (NULL == item)
-			break;
+	struct AutoreleasePoolListItem *item = NULL;
+	while ( (item = SLIST_FIRST(&self->list))) {
 		SLIST_REMOVE_HEAD(&self->list, entry);
 		release((void *)item->object);
 		MEMORY_MANAGEMENT_RELEASE(item);
@@ -107,15 +105,6 @@ static void * AutoreleasePool_destructor(void * _self, va_list * app) {
 			else
 				release(item->autoreleasePool);
 		}
-		
-//		TAILQ_FOREACH_REVERSE(item, &ThreadAutoreleasePools, ThreadAutoreleasePoolsHead, entries) {
-//			if (item == NULL) break;
-//			TAILQ_REMOVE(&ThreadAutoreleasePools, item, entries);
-//			MEMORY_MANAGEMENT_RELEASE(item);
-//			
-//			if (item->autoreleasePool == self) break;
-//			else release(item->autoreleasePool);
-//		}
 	}
 	return super_destructor(AutoreleasePool, _self);
 }
