@@ -163,4 +163,4 @@ doc/Doxyfile.warnings
 *.a
 *.so
 bin/*
-*.xcuserdatad
+*.xcodeproj/project.xcworkspace/xcuserdata/*.xcuserdatad/*.xcuserstate

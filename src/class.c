@@ -105,7 +105,7 @@ static void *Class_autorelease (void *const _self) {
 }
 
 static const struct Classs object [] = {
-	{	object+1,
+	{	{object+1},
 		"Object",
 		object,
 		sizeof(struct Object),
@@ -120,7 +120,7 @@ static const struct Classs object [] = {
 		Object_retainCount,
 		Object_autorelease,
 	},
-	{	object+1,
+	{	{object+1},
 		"Class",
 		object,
 		sizeof(struct Classs),
