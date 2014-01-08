@@ -12,8 +12,8 @@
 #define COBJ
 
 #include <compilerDefs.h>
-
 #include <foreach.h>
+#include <cobj_main.h>
 
 #include <Object.h>
 #include <new.h>
