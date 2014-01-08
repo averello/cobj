@@ -80,7 +80,7 @@ void COExceptionUnlink(struct exception_handler_context_t *econtext) {
 	/* If returning from a finally block */
 	else if (econtext->state == ExceptionContextStateFinally) {
 		/* Propagate if the exception is not handled */
-		if (econtext->handled == 0) {
+		if (econtext->handled == 0 && econtext->exception != NULL) {
 			struct exception_context_list_head_t *list = &(COExceptionThreadContext.list);
 			struct exception_handler_context_t *item =  list->tail;
 			list->tail = item->entry.prev;
@@ -186,7 +186,7 @@ COException *COExceptionGetCurrent(struct exception_handler_context_t *econtext)
 	return econtext->exception;
 }
 
-COException *COExceptionAllocate(int exceptionNumber, const char *name, const char *reason) {
+COException *COExceptionAllocate(const int exceptionNumber, const char *name, const char *reason) {
 	if (exceptionNumber == COFINALLYCASE) return errno = EINVAL, (COException *)NULL;
 	
 	COException *exception = MEMORY_MANAGEMENT_ALLOC(sizeof(struct exception_t));
@@ -198,7 +198,8 @@ COException *COExceptionAllocate(int exceptionNumber, const char *name, const ch
 		exception->name = strdup(name);
 	if (NULL != reason)
 		exception->reason = strdup(reason);
-	exception->exception = exceptionNumber;
+	int *pExceptionNumber = (int *)&(exception->exception);
+	*pExceptionNumber = exceptionNumber;
 	return exception;
 }
 

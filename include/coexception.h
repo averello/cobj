@@ -50,7 +50,7 @@ typedef struct exception_t COException;
 struct exception_t {
 	const char *name; /*!< the exception's name */
 	const char *reason; /*!< the exception's reason */
-	int exception; /*!< the exception's number */
+	const int exception; /*!< the exception's number */
 };
 
 /*!
@@ -185,7 +185,7 @@ void COExceptionLink(struct exception_handler_context_t *econtext);
 void COExceptionUnlink(struct exception_handler_context_t *econtext);
 void CORaise(COException *exception);
 void COHandle(struct exception_handler_context_t *econtext);
-COException *COExceptionAllocate(int exception, const char *name, const char *reason);
+COException *COExceptionAllocate(const int exception, const char *name, const char *reason);
 
 /* Public API */
 
