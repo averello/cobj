@@ -16,11 +16,8 @@
 #include <errno.h>
 #include <ctype.h>
 
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
+
+#include <coassert.h>
 
 #include <AutoreleasePool.h>
 #include <AutoreleasePool.r>
@@ -32,17 +29,6 @@
 #include <memory_management/memory_management.h>
 #undef release
 #undef retain
-
-
-//#undef TAILQ_HEAD
-//#define TAILQ_HEAD(name, type) \
-//struct name {								\
-//	int init;									  \
-//	unsigned int count;								 \
-//	struct type *tqh_first;	/* first element */			\
-//	struct type **tqh_last;	/* addr of last next element */		\
-//	TRACEBUF							\
-//}
 
 
 extern int errno;
@@ -169,19 +155,17 @@ void deallocAutorelasePool() {
 /* API */
 
 void addAutoreleaseObject(const void *self, const void *object) {
-	assert(self != NULL);
-	if (self == NULL) { errno = EINVAL; return; }
+	COAssertNoNullOrBailOut(self,EINVAL);
 	
 	const struct AutoreleasePoolClass *class = classOf(self);
-	assert(class != NULL && class->addAutoreleaseObject != NULL);
-	if (class == NULL || class->addAutoreleaseObject == NULL) { errno = EINVAL; return; }
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->addAutoreleaseObject,ENOTSUP);
 	class->addAutoreleaseObject(self, object);
 }
 
 
 void AutoreleasePoolAddObject(const void *object) {
-	assert(object != NULL);
-	if (object == NULL) { errno = EINVAL; return; }
+	COAssertNoNullOrBailOut(object,EINVAL);
 	
 	if (ThreadAutoreleasePools.tqh_last == NULL && ThreadAutoreleasePools.tqh_first == NULL)
 		TAILQ_INIT(&ThreadAutoreleasePools);
@@ -194,6 +178,5 @@ void AutoreleasePoolAddObject(const void *object) {
 		struct AutoreleasePool *pool = item->autoreleasePool;
 		addAutoreleaseObject(pool, object);
 	}
-	
 }
 

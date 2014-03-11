@@ -9,6 +9,7 @@
 #ifndef CObjects_compilerDefs_h
 #define CObjects_compilerDefs_h
 
+
 #if ((__GNUC__ * 100) + __GNUC_MINOR__) >= 402
 #define GCC_DIAG_STR(s) #s
 #define GCC_DIAG_JOINSTR(x,y) GCC_DIAG_STR(x ## y)

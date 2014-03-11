@@ -13,12 +13,8 @@
 #include <errno.h>
 #include <memory_management/memory_management.h>
 
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
 
+#include <coassert.h>
 #include <compilerDefs.h>
 #include <Object.h>
 #include <Object.r>
@@ -30,22 +26,19 @@
 
 
 void * constructor(void * self, va_list * app) {
-	assert(self != NULL);
-	if ( self == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	
 	const struct Classs *class = classOf(self);
-	assert(class->constructor != NULL);
-	if ( class->constructor == NULL ) return errno = ENOTSUP, self;
+	COAssertNoNullOrReturn(class,ENOTSUP,NULL);
 	return class->constructor(self, app);
 }
 
 void * destructor(void * self) {
-	assert(self != NULL);
-	if ( self == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	
 	const struct Classs *class = classOf(self);
-	assert(class->destructor != NULL);
-	if ( class->destructor == NULL ) return errno = ENOTSUP, self;
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->destructor,ENOTSUP,NULL);
 	return class->destructor(self);
 }
 

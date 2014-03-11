@@ -14,11 +14,7 @@
 #include <errno.h>
 #include <ctype.h>
 
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
+#include <coassert.h>
 
 #include <Collection.h>
 #include <Collection.r>
@@ -111,52 +107,46 @@ void deallocCollection() {
 	CollectionClass = NULL;
 }
 
-unsigned long getCollectionCount(const void * const self) {
-	assert(self != NULL);
-	if ( self == NULL ) return errno = EINVAL, 0;
+uint64_t getCollectionCount(const void * const self) {
+	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct CollectionClass *class = classOf(self);
-	assert(class != NULL && class->getCollectionCount != NULL);
-	if ( class == NULL || class->getCollectionCount == NULL ) return errno = ENOTSUP, 0;
+	COAssertNoNullOrReturn(class,EINVAL,0);
+	COAssertNoNullOrReturn(class->getCollectionCount,ENOTSUP,0);
 	return class->getCollectionCount(self);
 }
 
 int containsObject(const void * const self, const void * const object) {
-	assert(self != NULL);
-	if ( self == NULL ) return errno = EINVAL, 0;
-	assert(object != NULL);
-	if ( object == NULL ) return errno = EINVAL, 0;
+	COAssertNoNullOrReturn(self,EINVAL,0);
+	COAssertNoNullOrReturn(object,EINVAL,0);
 	const struct CollectionClass *class = classOf(self);
-	assert(class != NULL && class->containsObject != NULL);
-	if ( class == NULL || class->containsObject == NULL ) return errno = ENOTSUP, 0;
+	COAssertNoNullOrReturn(class,EINVAL,0);
+	COAssertNoNullOrReturn(class->containsObject,ENOTSUP,0);
 	return class->containsObject(self, object);
 }
 
 void * lastObject(const void * const self) {
-	assert(self != NULL);
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct CollectionClass *class = classOf(self);
-	assert(class != NULL && class->lastObject != NULL);
-	if ( class == NULL || class->lastObject == NULL ) return errno = ENOTSUP, NULL;
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->lastObject,ENOTSUP,NULL);
 	return class->lastObject(self);
 }
 
 void * firstObject(const void * const self) {
-	assert(self != NULL);
-	if ( self == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct CollectionClass *class = classOf(self);
-	assert(class != NULL && class->firstObject != NULL);
-	if ( class == NULL || class->firstObject == NULL ) return errno = ENOTSUP, NULL;
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->firstObject,ENOTSUP,NULL);
 	return class->firstObject(self);
 }
 
-unsigned long enumerateWithState(const void *const collection, FastEnumerationState *const state, void *iobuffer[], unsigned long length) {
-	assert(collection != NULL);
-	if (collection == NULL) return 0;
-	assert(state != NULL);
-	if (state == NULL) return 0;
+uint64_t enumerateWithState(const void *const collection, FastEnumerationState *const state, void *iobuffer[], uint64_t length) {
+	COAssertNoNullOrReturn(collection,EINVAL,0);
+	COAssertNoNullOrReturn(state,EINVAL,0);
 	
 	const struct CollectionClass *class = classOf(collection);
-	assert(class != NULL && class->enumerateWithState != NULL);
-	if ( class == NULL || class->enumerateWithState == NULL ) return errno = ENOTSUP, 0;
+	COAssertNoNullOrReturn(class,EINVAL,0);
+	COAssertNoNullOrReturn(class->enumerateWithState,ENOTSUP,0);
 	return class->enumerateWithState(collection, state, iobuffer, length);
 }
 

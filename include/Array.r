@@ -13,6 +13,7 @@
 #include <Object.r>
 #include <Collection.h>
 #include <Collection.r>
+#include <stdint.h>
 
 struct _Bucket {
 	const void *item;
@@ -20,7 +21,7 @@ struct _Bucket {
 
 struct Array {
 	const struct Collection isa;
-	unsigned long count;
+	uint64_t count;
 	const void *store;
 };
 

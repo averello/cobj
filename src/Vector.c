@@ -10,11 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
 #include <errno.h>
 
 #include <cobj.h>
@@ -24,19 +19,20 @@
 const void * Vector = NULL;
 const void * VectorClass = NULL;
 
-extern int errno;
 
-static int __grow(struct Vector *const self, ssize_t minCapacity) {
+static int __grow(struct Vector *const self, uint64_t minCapacity) {
 	// overflow-conscious code
 	struct Array *arraySelf = (struct Array *)self;
-	ssize_t oldCapacity = self->capacity;
-	ssize_t newCapacity = oldCapacity + ((self->capacityIncrement > 0) ? self->capacityIncrement : oldCapacity);
-	if ( newCapacity - minCapacity < 0 )
-		newCapacity = minCapacity;
-	if ( newCapacity - LONG_MAX > 0 ) {
-		if ( newCapacity < 0 ) return errno = ENOMEM, -1; /* overflow */
-		newCapacity = LONG_MAX;
+	uint64_t newCapacity = 0;
+	uint64_t oldCapacity = self->capacity;
+	uint64_t increment = ((self->capacityIncrement > 0) ? self->capacityIncrement : oldCapacity);
+	if (UINT64_MAX - oldCapacity < increment ) {
+		newCapacity = UINT64_MAX;
 	}
+	else {
+		newCapacity = oldCapacity + increment;
+	}
+
 	const void *newStore = realloc((void *)arraySelf->store, newCapacity * sizeof(sizeof(struct _Bucket)) );
 	if ( newStore == NULL ) return -1;
 	self->capacity = newCapacity;
@@ -46,7 +42,7 @@ static int __grow(struct Vector *const self, ssize_t minCapacity) {
 	return 0;
 }
 
-static int __shrink(struct Vector *const self, ssize_t minCapacity) {
+static int __shrink(struct Vector *const self, uint64_t minCapacity) {
 	struct Array *arraySelf = (struct Array *)self;
 	ssize_t newCapacity = minCapacity;
 	const void *newStore = realloc((void *)arraySelf->store, newCapacity * sizeof(sizeof(struct _Bucket)) );
@@ -56,11 +52,9 @@ static int __shrink(struct Vector *const self, ssize_t minCapacity) {
 	return 0;
 }
 
-inline static int __ensureCapacity(struct Vector *const self, ssize_t minCapacity) {
+inline static int __ensureCapacity(struct Vector *const self, uint64_t minCapacity) {
 		if (
-			(minCapacity > 0)
-			&&
-			(minCapacity - (ssize_t)self->capacity > 0) )
+			(minCapacity - self->capacity > 0) )
 			return __grow(self, minCapacity);
 	return 0;
 }
@@ -368,30 +362,34 @@ void deallocVector() {
 /* API */
 
 size_t getVectorCapacity(const void *const self) {
-	assert( self != NULL );
+	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct VectorClass *const class = classOf(self);
-	assert( class != NULL && class->getVectorCapacity != NULL );
+	COAssertNoNullOrReturn(class,EINVAL,0);
+	COAssertNoNullOrReturn(class->getVectorCapacity,EINVAL,0);
 	return class->getVectorCapacity(self);
 }
 
 size_t getVectorCapacityIncrement(const void *const self) {
-	assert( self != NULL );
+	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct VectorClass *const class = classOf(self);
-	assert( class != NULL && class->getVectorCapacityIncrement != NULL );
+	COAssertNoNullOrReturn(class,EINVAL,0);
+	COAssertNoNullOrReturn(class->getVectorCapacityIncrement,EINVAL,0);
 	return class->getVectorCapacityIncrement(self);
 }
 
 int setVectorSize(void *const self, size_t size) {
-	assert( self != NULL );
+	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct VectorClass *const class = classOf(self);
-	assert( class != NULL && class->setVectorSize != NULL );
+	COAssertNoNullOrReturn(class,EINVAL,0);
+	COAssertNoNullOrReturn(class->setVectorSize,EINVAL,0);
 	return class->setVectorSize(self, size);
 }
 
 void setVectorCapacityIncrement(void *const self, size_t capacityIncrement) {
-	assert( self != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct VectorClass *const class = classOf(self);
-	assert( class != NULL && class->setVectorCapacityIncrement != NULL );
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->setVectorCapacityIncrement,EINVAL);
 	class->setVectorCapacityIncrement(self, capacityIncrement);
 }
 

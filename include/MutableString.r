@@ -16,7 +16,7 @@
 struct MutableString {
 	const struct String isa;
 	off_t offset;
-	ssize_t capacity;
+	uint64_t capacity;
 };
 
 struct MutableStringClass {

@@ -12,6 +12,9 @@
 #define COBJ
 
 #include <compilerDefs.h>
+#include <coassert.h>
+
+#include <colimits.h>
 
 #include <foreach.h>
 

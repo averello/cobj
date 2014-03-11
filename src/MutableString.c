@@ -12,30 +12,26 @@
 #include <stdarg.h>
 #include <errno.h>
 
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
-
-
 #include <cobj.h>
 #include <MutableString.r>
 
 const void * MutableString = NULL;
 const void * MutableStringClass = NULL;
 
-static int __grow(struct MutableString *const self, ssize_t minCapacity) {
+static int __grow(struct MutableString *const self, uint64_t minCapacity) {
 	// overflow-conscious code
+	// in this function minCapacity is always greater than self->capacity
 	struct String *stringSelf = (struct String *)self;
-	ssize_t newCapacity = self->capacity * 2;
-	if ( newCapacity - minCapacity < 0 )
-		newCapacity = minCapacity;
-	if ( newCapacity < 0 ) {
-		if ( minCapacity < 0 ) return errno = ENOMEM, -1; /* overflow */
-		newCapacity = ULONG_MAX;
+	uint64_t newCapacity = 0;
+	/* if doubling the capacity is impossible due to overflow */
+	if (UINT64_MAX - self->capacity < self->capacity) {
+		/* then use the max value */
+		newCapacity = UINT64_MAX;
 	}
-	
+	else {
+		newCapacity = self->capacity * 2;
+	}
+
 	const void *newText = realloc((void *)stringSelf->text, newCapacity * sizeof(char) );
 	if ( newText == NULL ) return -1;
 	self->capacity = newCapacity;
@@ -43,10 +39,8 @@ static int __grow(struct MutableString *const self, ssize_t minCapacity) {
 	return 0;
 }
 
-inline static int __ensureCapacity(struct MutableString *const self, ssize_t minCapacity) {
-	if ( (minCapacity > 0)
-		&& (minCapacity - self->capacity > 0)
-		)
+inline static int __ensureCapacity(struct MutableString *const self, uint64_t minCapacity) {
+	if ( minCapacity > self->capacity )
 		return __grow(self, minCapacity);
 	return 0;
 }
@@ -137,7 +131,9 @@ static void MutableString_appendFormat(void *const self, char *format, va_list *
 	int totalWritten = vsnprintf(NULL, 0, format, copy);
 	char *text = calloc(totalWritten+1, sizeof(char));
 	if ( text == NULL ) { errno = ENOMEM, va_end(copy); return; }
-	if ( __ensureCapacity(self, selfLength + totalWritten + 1) == -1 ) { errno = ENOMEM, va_end(copy), free(text); return; };
+	if ( __ensureCapacity(self, selfLength + totalWritten + 1) == -1 ) { 
+		errno = ENOMEM, va_end(copy), free(text); return; 
+	};
 	selfText = (char *)getStringText(self);
 	
 	vsnprintf(text, totalWritten+1, format, *app);
@@ -263,26 +259,22 @@ void deallocMutableString() {
 
 
 void appendString(void *const self, const void *const other) {
-	assert( self != NULL );
-	if ( self == NULL ) { errno = EINVAL; return; }
-	assert( other != NULL );
-	if ( other == NULL ) { errno = EINVAL; return; }
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(other,EINVAL);
 	
 	const struct MutableStringClass *const class = classOf(self);
-	assert(class != NULL && class->appendString != NULL);
-	if ( class == NULL || class->appendString == NULL ) { errno = ENOTSUP; return; }
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->appendString,ENOTSUP);
 	class->appendString(self, other);
 }
 
 void appendFormat(void *const self, char *format, ...) {
-	assert( self != NULL );
-	if ( self == NULL ) { errno = EINVAL; return; }
-	assert( format != NULL );
-	if ( format == NULL ) { errno = EINVAL; return; }
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(format,EINVAL);
 	
 	const struct MutableStringClass *const class = classOf(self);
-	assert(class != NULL && class->appendFormat != NULL);
-	if ( class == NULL || class->appendFormat == NULL ) { errno = ENOTSUP; return; }
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->appendFormat,ENOTSUP);
 	
 	va_list ap;
 	va_start(ap, format);
@@ -292,47 +284,40 @@ void appendFormat(void *const self, char *format, ...) {
 
 
 void setString(void *const self, const void *const other) {
-	assert( self != NULL );
-	if ( self == NULL ) { errno = EINVAL; return; }
-	assert( other != NULL );
-	if ( other == NULL ) { errno = EINVAL; return; }
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(other,EINVAL);
 	
 	const struct MutableStringClass *const class = classOf(self);
-	assert(class != NULL && class->setString != NULL);
-	if ( class == NULL || class->setString == NULL ) { errno = ENOTSUP; return; }
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->setString,ENOTSUP);
 	class->setString(self, other);
 }
 
 void setMutableStringLength(void *const self, size_t capacity) {
-	assert( self != NULL );
-	if ( self == NULL ) { errno = EINVAL; return; }
+	COAssertNoNullOrBailOut(self,EINVAL);
 	
 	const struct MutableStringClass *const class = classOf(self);
-	assert(class != NULL && class->setMutableStringLength != NULL);
-	if ( class == NULL || class->setMutableStringLength == NULL ) { errno = ENOTSUP; return; }
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->setMutableStringLength,ENOTSUP);
 	class->setMutableStringLength(self, capacity);
 }
 
 int insertStringAtMutableStringIndex(void *const self, const void *const other, unsigned long index) {
-	assert( self != NULL );
-	if ( self == NULL ) return errno = EINVAL, -1;
-	assert( other != NULL );
-	if ( other == NULL ) return errno = EINVAL, -1;
+	COAssertNoNullOrReturn(self,EINVAL,-1);
+	COAssertNoNullOrReturn(other,EINVAL,-1);
 	
 	const struct MutableStringClass *const class = classOf(self);
-	assert(class != NULL && class->insertStringAtMutableStringIndex != NULL);
-	if ( class == NULL || class->insertStringAtMutableStringIndex == NULL ) return errno = ENOTSUP, -1;
+	COAssertNoNullOrReturn(class,EINVAL,-1);
+	COAssertNoNullOrReturn(class->insertStringAtMutableStringIndex,ENOTSUP,-1);
 	return class->insertStringAtMutableStringIndex(self, other, index);
-
 }
 
 int deleteMutableStringCharactersInRange(void *const self, SRange range) {
-	assert( self != NULL );
-	if ( self == NULL ) return errno = EINVAL, -1;
+	COAssertNoNullOrReturn(self,EINVAL,-1);
 	
 	const struct MutableStringClass *const class = classOf(self);
-	assert(class != NULL && class->deleteMutableStringCharactersInRange != NULL);
-	if ( class == NULL || class->deleteMutableStringCharactersInRange == NULL ) return errno = ENOTSUP, -1;
+	COAssertNoNullOrReturn(class,EINVAL,-1);
+	COAssertNoNullOrReturn(class->deleteMutableStringCharactersInRange,ENOTSUP,-1);
 	return class->deleteMutableStringCharactersInRange(self, range);
 
 }

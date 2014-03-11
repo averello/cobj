@@ -8,15 +8,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
 #include <stdarg.h>
 #include <string.h>
 #include <errno.h>
 
+
+#include <coassert.h>
 #include <new.h>
 #include <Array.h>
 #include <Array.r>
@@ -304,36 +301,28 @@ void deallocArray () {
 }
 
 void *getStore(const void * const self) {
-	assert(self != NULL);
-	if ( self == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct ArrayClass *class = classOf(self);
-	assert(class != NULL && class->getStore != NULL);
-	if ( class == NULL || class->getStore == NULL ) return errno = ENOTSUP, NULL;
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->getStore,ENOTSUP,NULL);
 	return class->getStore(self);
 }
 
 ObjectRef getObjectAtIndex(const void * const self, unsigned long index) {
-	assert(self != NULL);
-	if ( self == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct ArrayClass *class = classOf(self);
-	assert(class != NULL && class->getObjectAtIndex != NULL);
-	if ( class == NULL || class->getStore == NULL ) return errno = ENOTSUP, NULL;
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->getObjectAtIndex,ENOTSUP,NULL);
 	return class->getObjectAtIndex(self, index);
 }
 
 unsigned long indexOfObject(const void * const self, const void * const object) {
-	assert(self != NULL);
-	if ( self == NULL ) return errno = EINVAL, ANotFound;
-	assert(object != NULL);
-	if ( object == NULL ) return errno = EINVAL, ANotFound;
+	COAssertNoNullOrReturn(self,EINVAL,ANotFound);
+	COAssertNoNullOrReturn(object,EINVAL,ANotFound);
 	const struct ArrayClass *class = classOf(self);
-	assert(class != NULL && class->indexOfObject != NULL);
-	if ( class == NULL || class->getStore == NULL ) return errno = ENOTSUP, ANotFound;
+	COAssertNoNullOrReturn(class,EINVAL,ANotFound);
+	COAssertNoNullOrReturn(class->indexOfObject,ENOTSUP,ANotFound);
 	return class->indexOfObject(self, object);
 }
-
-
-
-
 
 

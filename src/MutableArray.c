@@ -11,11 +11,6 @@
 #include <stdarg.h>
 #include <string.h>
 #include <errno.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
 #include <sys/queue.h>
 
 #include <cobj.h>
@@ -327,7 +322,7 @@ static void MutableArray_replaceObjectAtIndexWithObject(void *const _self, unsig
 
 static ObjectRef MutableArray_popObject(void *const _self) {
 	struct Array *const self = _self;
-	if ( self->count <= 0 ) return (ObjectRef)NULL;
+	if ( self->count == 0 ) return (ObjectRef)NULL;
 	ObjectRef o = getObjectAtIndex(self, 0);
 	if ( o != self ) retain(o);
 	removeObjectAtIndex(self, 0);
@@ -392,68 +387,78 @@ void deallocMutableArray () {
 /* */
 
 void addObject(void *const self, void * const object) {
-	assert(self != NULL);
-	assert(object != NULL);
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(object,EINVAL);
 	const struct MutableArrayClass *class = classOf(self);
-	assert(class != NULL && class->addObject != NULL);
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->addObject,ENOTSUP);
 	class->addObject(self, object);
 }
 
 void insertObject(void *const self, void * const object) {
-	assert(self != NULL);
-	assert(object != NULL);
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(object,EINVAL);
 	const struct MutableArrayClass *class = classOf(self);
-	assert(class != NULL && class->insertObject != NULL);
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->insertObject,ENOTSUP);
 	class->insertObject(self, object);
 }
 
 void removeAllObjects(void *const self) {
-	assert(self != NULL);
+	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct MutableArrayClass *class = classOf(self);
-	assert(class != NULL && class->removeAllObjects != NULL);
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->removeAllObjects,ENOTSUP);
 	class->removeAllObjects(self);
 }
 
 void removeLastObject(void *const self) {
-	assert( self != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct MutableArrayClass *class = classOf(self);
-	assert(class != NULL && class->removeLastObject != NULL);
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->removeLastObject,ENOTSUP);
 	class->removeLastObject(self);
 }
 
 void removeFirstObject(void *const self) {
-	assert( self != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct MutableArrayClass *class = classOf(self);
-	assert(class != NULL && class->removeFirstObject != NULL);
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->removeFirstObject,ENOTSUP);
 	class->removeFirstObject(self);
 }
 
 void insertObjectAtIndex(void *const self, void *const object, unsigned long index) {
-	assert( self != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(object,EINVAL);
 	const struct MutableArrayClass *class = classOf(self);
-	assert(class != NULL && class->insertObjectAtIndex != NULL);
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->insertObjectAtIndex,ENOTSUP);
 	class->insertObjectAtIndex(self, object, index);
 }
 
 void removeObject(void *const self, void * const object) {
-	assert( self != NULL );
-	assert( object != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(object,EINVAL);
 	const struct MutableArrayClass *class = classOf(self);
-	assert(class != NULL && class->removeObject != NULL);
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->removeObject,ENOTSUP);
 	class->removeObject(self, object);
 }
 
 void removeObjectAtIndex(void *const self, unsigned long index) {
-	assert( self != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct MutableArrayClass *class = classOf(self);
-	assert(class != NULL && class->removeObjectAtIndex != NULL);
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->removeObjectAtIndex,ENOTSUP);
 	class->removeObjectAtIndex(self, index);
 }
 
 ArrayRef newArrayFromMutableArray(const void * const mutableArray) {
-	assert( mutableArray != NULL );
+	COAssertNoNullOrReturn(mutableArray,EINVAL,NULL);
 	const unsigned long count = getCollectionCount(mutableArray);
 	struct _Bucket *newBuckets = calloc(count, sizeof(struct _Bucket));
+	COAssertNoNullOrReturn(newBuckets,errno,NULL);
 	
 	for (unsigned long i=0; i<count; i++) {
 		ObjectRef item = getObjectAtIndex(mutableArray, i);
@@ -468,8 +473,9 @@ ArrayRef newArrayFromMutableArray(const void * const mutableArray) {
 }
 
 MutableArrayRef newMutableArrayFromArray(const void * const array) {
-	assert( array != NULL );
+	COAssertNoNullOrReturn(array,EINVAL,NULL);
 	MutableArrayRef mutableArray = new(MutableArray, NULL);
+	COAssertNoNullOrReturn(mutableArray,errno,NULL);
 	const unsigned long count = getCollectionCount(array);
 	for (unsigned long i=0; i<count; i++)
 		addObject(mutableArray, getObjectAtIndex(array, i));
@@ -487,7 +493,7 @@ static void __initializeBuckets(const struct _Bucket * oldStore, struct _Bucket 
  */
 
 ArrayRef newArrayWithArray(const void * const array) {
-	assert( array != NULL );
+	COAssertNoNullOrReturn(array,EINVAL,NULL);
 	return copy(array);
 	/*
 	const struct _Bucket *const buckets = getStore(array);
@@ -504,38 +510,30 @@ ArrayRef newArrayWithArray(const void * const array) {
 }
 
 void removeObjectsInRange(void *const self, SRange range) {
-	assert( self != NULL );
-	if ( self == NULL ) return;
+	COAssertNoNullOrBailOut(self,EINVAL);
 	
 	const struct MutableArrayClass *class = classOf(self);
-	assert(class != NULL && class->removeObjectsInRange != NULL);
-	if ( class == NULL || class->removeObjectsInRange == NULL ) return;
-	
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->removeObjectsInRange,ENOTSUP);
 	class->removeObjectsInRange(self, range);
 }
 
 void replaceObjectAtIndexWithObject(void *const self, unsigned long index, void *const other) {
-	assert( self != NULL );
-	if ( self == NULL ) return;
-	
-	assert( other != NULL );
-	if ( other== NULL ) return;
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(other,EINVAL);
 	
 	const struct MutableArrayClass *class = classOf(self);
-	assert(class != NULL && class->removeObjectsInRange != NULL);
-	if ( class == NULL || class->replaceObjectAtIndexWithObject == NULL ) return;
-	
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->replaceObjectAtIndexWithObject,ENOTSUP);
 	class->replaceObjectAtIndexWithObject(self, index, other);
 }
 
 ObjectRef popObject(void *const self) {
-	assert( self != NULL );
-	if ( self == NULL ) return errno = EINVAL, (ObjectRef)NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	
 	const struct MutableArrayClass *class = classOf(self);
-	assert(class != NULL && class->popObject != NULL);
-	if ( class == NULL || class->popObject == NULL ) return errno = ENOSYS, (ObjectRef)NULL;
-	
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->popObject,ENOTSUP,NULL);
 	return class->popObject(self);
 }
 
