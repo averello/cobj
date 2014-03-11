@@ -10,7 +10,7 @@
 #define CObjects_object_r
 
 #include <pthread.h>
-#include <stdint.h>
+#include <coint.h>
 
 /*!
  *  @class Object Object.r
@@ -30,7 +30,7 @@ struct Object {
 	 *  @protected
 	 *  @brief The reference counter of this instance.
 	 */
-	//unsigned long retainCount;
+	//UInteger retainCount;
 	/*!
 	 *  @member guardian
 	 *  @protected
@@ -65,14 +65,14 @@ typedef void * (* cpy) (const void *const self);
  *  @private
  *  @brief The form of an @ref Object's @ref equals method.
  */
-typedef int (* eq) (const void * self, const void * other);
+typedef bool (* eq) (const void * self, const void * other);
 
 /*!
  *  @typedef typedef int (* hsh) (const void *const self)
  *  @private
  *  @brief The form of an @ref Object's @ref hash method.
  */
-typedef int (* hsh) (const void *const self);
+typedef UInteger (* hsh) (const void *const self);
 
 /*!
  *  @typedef typedef void * (* desc) (const void *const self)
@@ -96,11 +96,11 @@ typedef void * (* ret) (void *const self);
 typedef void (* rel) (void *const self);
 
 /*!
- *  @typedef typedef unsigned long (* retc) (const void *const self)
+ *  @typedef typedef UInteger (* retc) (const void *const self)
  *  @private
  *  @brief The form of an @ref Object's @ref retainCount method
  */
-typedef unsigned long (* retc) (const void *const self);
+typedef UInteger (* retc) (const void *const self);
 
 
 typedef void *(*autor) (void *const self);
@@ -138,7 +138,7 @@ struct Classs {
 	 *  @protected
 	 *  @brief The size for this class' instances.
 	 */
-	uint32_t size;
+	UInteger size;
 	
 	/* 
 	 Methods 
@@ -268,14 +268,14 @@ void * destructor(void * self);
 void * Object_constructor (void * _self, va_list * app);
 void * Object_destructor (void * _self);
 void * Object_copy (const void * const _self);
-int Object_equals (const void *const _self, const void *const _other);
+bool Object_equals (const void *const _self, const void *const _other);
 
-int Object_hash (const void *const _self);
+UInteger Object_hash (const void *const _self);
 
 /* Memory management */
 void * Object_retain (void *const _self);
 void Object_release (void *const _self);
-unsigned long Object_retainCount (const void *const _self);
+UInteger Object_retainCount (const void *const _self);
 void * Object_autorelease (void * _self);
 
 void * Object_copyDescription (const void *const _self);

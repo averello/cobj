@@ -20,12 +20,12 @@ const void * Vector = NULL;
 const void * VectorClass = NULL;
 
 
-static int __grow(struct Vector *const self, uint64_t minCapacity) {
+static int __grow(struct Vector *const self, UInteger minCapacity) {
 	// overflow-conscious code
 	struct Array *arraySelf = (struct Array *)self;
-	uint64_t newCapacity = 0;
-	uint64_t oldCapacity = self->capacity;
-	uint64_t increment = ((self->capacityIncrement > 0) ? (uint64_t)self->capacityIncrement : oldCapacity);
+	UInteger newCapacity = 0;
+	UInteger oldCapacity = self->capacity;
+	UInteger increment = ((self->capacityIncrement > 0) ? (UInteger)self->capacityIncrement : oldCapacity);
 	if (UINT64_MAX - oldCapacity < increment ) {
 		newCapacity = UINT64_MAX;
 	}
@@ -42,9 +42,9 @@ static int __grow(struct Vector *const self, uint64_t minCapacity) {
 	return 0;
 }
 
-static int __shrink(struct Vector *const self, uint64_t minCapacity) {
+static int __shrink(struct Vector *const self, UInteger minCapacity) {
 	struct Array *arraySelf = (struct Array *)self;
-	uint64_t newCapacity = minCapacity;
+	UInteger newCapacity = minCapacity;
 	const void *newStore = realloc((void *)arraySelf->store, newCapacity * sizeof(struct _Bucket) );
 	if ( newStore == NULL ) return -1;
 	self->capacity = newCapacity;
@@ -52,7 +52,7 @@ static int __shrink(struct Vector *const self, uint64_t minCapacity) {
 	return 0;
 }
 
-inline static int __ensureCapacity(struct Vector *const self, uint64_t minCapacity) {
+inline static int __ensureCapacity(struct Vector *const self, UInteger minCapacity) {
 		if (
 			(minCapacity - self->capacity > 0) )
 			return __grow(self, minCapacity);
@@ -65,8 +65,8 @@ static void * Vector_constructor (void * _self, va_list * app) {
 	struct Array *arraySelf = (struct Array *)self;
 	
 	int err;
-	uint64_t capacity = va_arg(*app, uint64_t);
-	uint32_t capacityIncrement = va_arg(*app, uint32_t);
+	UInteger capacity = va_arg(*app, UInteger);
+	UInteger capacityIncrement = va_arg(*app, UInteger);
 	
 	
 	if ( capacity == 0)
@@ -119,36 +119,36 @@ static void * Vector_copy (const void * const _self) {
 	struct _Bucket *newVectorStore = getStore(newArrayVector);
 	struct _Bucket *store = getStore(self);
 	
-	for (long i=0; i<arraySelf->count; i++)
+	for (UInteger i=0; i<arraySelf->count; i++)
 		retain((void *)store[i].item), newVectorStore[i].item = store[i].item;
 
 	return newVectorRef;
 }
 
-static int Vector_equals (const void * const _self, const void *const _other) {
+static bool Vector_equals (const void * const _self, const void *const _other) {
 	const struct Vector *self = _self;
 	const struct Vector *other = _other;
 	const struct Array *arraySelf = _self;
 	const struct Array *arrayOther = _other;
 	const struct Classs *const _super = (const struct Classs *const )super(_self);
-	int result = _super->equals(self, other);
+	bool result = _super->equals(self, other);
 	if ( ! result )
 		result = (arraySelf->count == arrayOther->count) && ( memcmp(arraySelf->store, arrayOther->store, arraySelf->count * sizeof(void *)) );
 	return result;
 }
 
-static uint64_t Vector_getVectorCapacity(const void *const _self) {
+static UInteger Vector_getVectorCapacity(const void *const _self) {
 	const struct Vector *self = _self;
 	return self->capacity;
 }
 
-static uint32_t Vector_getVectorCapacityIncrement(const void *const _self) {
+static UInteger Vector_getVectorCapacityIncrement(const void *const _self) {
 	const struct Vector *self = _self;
 	return self->capacityIncrement;
 }
 
 /* Overrides */
-static void * Vector_getObjectAtIndex(const void * const _self, unsigned long index) {
+static void * Vector_getObjectAtIndex(const void * const _self, UInteger index) {
 	const struct Vector *self = _self;
 	if ( index >= getCollectionCount(self) ) return errno = EINVAL, NULL;
 	struct _Bucket *store = getStore(self);
@@ -181,7 +181,7 @@ static void Vector_addObject(void *const _self, void * const object) {
 static void Vector_insertObject(void *const self, void * const object) {
 	insertObjectAtIndex(self, object, 0);
 }
-static void Vector_insertObjectAtIndex(void *const _self, void *const object, unsigned long index) {
+static void Vector_insertObjectAtIndex(void *const _self, void *const object, UInteger index) {
 	struct Array *self = _self;
 	errno = 0;
 	
@@ -195,7 +195,7 @@ static void Vector_insertObjectAtIndex(void *const _self, void *const object, un
 	self->count++;
 }
 
-static void Vector_removeObjectAtIndex(void *const _self, unsigned long index) {
+static void Vector_removeObjectAtIndex(void *const _self, UInteger index) {
 	struct Array *self = _self;
 	errno = 0;
 	
@@ -205,7 +205,7 @@ static void Vector_removeObjectAtIndex(void *const _self, unsigned long index) {
 	release((void *)store[index].item);
 	store[index].item = NULL;
 	
-	long numMoved = self->count - index - 1;
+	UInteger numMoved = self->count - index - 1;
 	if ( numMoved > 0 ) {
 		memmove(store + index, store + index + 1, numMoved * sizeof(struct _Bucket));
 //		memset(store+index + numMoved, 0, numMoved * sizeof(struct _Bucket));
@@ -213,12 +213,12 @@ static void Vector_removeObjectAtIndex(void *const _self, unsigned long index) {
 	self->count--;
 }
 
-static unsigned long Vector_indexOfObject(const void * const _self, const void * const object) {
+static UInteger Vector_indexOfObject(const void * const _self, const void * const object) {
 	const struct Array *self = _self;
 	int result = 0;
-	unsigned long index = CONotFound;
-	unsigned long size = self->count;
-	for (unsigned long i=0; i<size && (result == 0); i++) {
+	UInteger index = NotFound;
+	UInteger size = self->count;
+	for (UInteger i=0; i<size && (result == 0); i++) {
 		ObjectRef item = getObjectAtIndex(self, i);
 		result = (equals(item, object));
 		if (result)
@@ -227,14 +227,14 @@ static unsigned long Vector_indexOfObject(const void * const _self, const void *
 	return index;
 }
 
-static int Vector_arrayContainsObject(const void * const self, const void * const object) {
-	return (indexOfObject(self, object) != CONotFound);
+static bool Vector_arrayContainsObject(const void * const self, const void * const object) {
+	return (indexOfObject(self, object) != NotFound);
 }
 
 static void Vector_removeObject(void *const self, const void * const object) {
 	errno = 0;
-	unsigned long index = indexOfObject(self, object);
-	if ( index != CONotFound )
+	UInteger index = indexOfObject(self, object);
+	if ( index != NotFound )
 		removeObjectAtIndex(self, index);
 	else
 		errno = EINVAL;
@@ -251,9 +251,9 @@ static void Vector_removeLastObject(void *const self) {
 
 static void Vector_removeAllObjects(void *const _self) {
 	struct Array *self = _self;
-	unsigned long count = self->count;
+	UInteger count = self->count;
 	struct _Bucket *store = getStore(_self);
-	for (unsigned long i=0; i<count; i++)
+	for (UInteger i=0; i<count; i++)
 		if (store[i].item != self)
 			release((void *)store[i].item);
 	self->count = 0;
@@ -261,7 +261,7 @@ static void Vector_removeAllObjects(void *const _self) {
 /* End of Overrides */
 
 
-static int Vector_setVectorSize (void *const _self, uint64_t size) {
+static bool Vector_setVectorSize (void *const _self, UInteger size) {
 	struct Vector *self = _self;
 	struct Array *arraySelf = _self;
 	/* If the size is the same do nothing */
@@ -272,11 +272,11 @@ static int Vector_setVectorSize (void *const _self, uint64_t size) {
 		return __ensureCapacity(self, size);
 	else { /* If the new size is smaller, then shrink */
 		struct _Bucket *store = getStore(_self);
-		uint64_t count = arraySelf->count;
+		UInteger count = arraySelf->count;
 		if (size>=count) return 0;
 
 		/* release objets greater thant the new size*/
-		for (uint64_t i = size; i<count; i++, arraySelf->count-- )
+		for (UInteger i = size; i<count; i++, arraySelf->count-- )
 			release((void *)store[i].item);
 		
 		return __shrink(self, size);
@@ -284,12 +284,12 @@ static int Vector_setVectorSize (void *const _self, uint64_t size) {
 	return 0;
 }
 
-static void Vector_setVectorCapacityIncrement(void *const _self, uint32_t capacityIncrement) {
+static void Vector_setVectorCapacityIncrement(void *const _self, UInteger capacityIncrement) {
 	struct Vector *self = _self;
 	self->capacityIncrement = capacityIncrement;
 }
 
-static void Vector_replaceObjectAtIndexWithObject(void *const _self, unsigned long index, void *const other) {
+static void Vector_replaceObjectAtIndexWithObject(void *const _self, UInteger index, void *const other) {
 	struct Vector *self = _self;
 	if ( index > getCollectionCount(self) ) return;
 	
@@ -366,7 +366,7 @@ void deallocVector() {
 
 /* API */
 
-uint64_t getVectorCapacity(const void *const self) {
+UInteger getVectorCapacity(const void *const self) {
 	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct VectorClass *const class = classOf(self);
 	COAssertNoNullOrReturn(class,EINVAL,0);
@@ -374,7 +374,7 @@ uint64_t getVectorCapacity(const void *const self) {
 	return class->getVectorCapacity(self);
 }
 
-uint32_t getVectorCapacityIncrement(const void *const self) {
+UInteger getVectorCapacityIncrement(const void *const self) {
 	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct VectorClass *const class = classOf(self);
 	COAssertNoNullOrReturn(class,EINVAL,0);
@@ -382,7 +382,7 @@ uint32_t getVectorCapacityIncrement(const void *const self) {
 	return class->getVectorCapacityIncrement(self);
 }
 
-int setVectorSize(void *const self, uint64_t size) {
+bool setVectorSize(void *const self, UInteger size) {
 	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct VectorClass *const class = classOf(self);
 	COAssertNoNullOrReturn(class,EINVAL,0);
@@ -390,7 +390,7 @@ int setVectorSize(void *const self, uint64_t size) {
 	return class->setVectorSize(self, size);
 }
 
-void setVectorCapacityIncrement(void *const self, uint32_t capacityIncrement) {
+void setVectorCapacityIncrement(void *const self, UInteger capacityIncrement) {
 	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct VectorClass *const class = classOf(self);
 	COAssertNoNullOrBailOut(class,EINVAL);

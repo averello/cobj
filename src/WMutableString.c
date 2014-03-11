@@ -22,11 +22,11 @@
 
 extern int errno;
 
-static int __grow(struct WMutableString *const self, uint64_t minCapacity) {
+static int __grow(struct WMutableString *const self, UInteger minCapacity) {
 	// overflow-conscious code
 	// in this function minCapacity is always greater than self->capacity
 	struct String *stringSelf = (struct String *)self;
-	uint64_t newCapacity = 0;
+	UInteger newCapacity = 0;
 	/* if doubling the capacity is impossible due to overflow */
 	if (UINT64_MAX - self->capacity < self->capacity) {
 		/* then use the max value */
@@ -43,7 +43,7 @@ static int __grow(struct WMutableString *const self, uint64_t minCapacity) {
 	return 0;
 }
 
-inline static int __ensureCapacity(struct WMutableString *const self, uint64_t minCapacity) {
+inline static int __ensureCapacity(struct WMutableString *const self, UInteger minCapacity) {
 	if ( minCapacity > self->capacity )
 		return __grow(self, minCapacity);
 	return 0;
@@ -97,8 +97,8 @@ static void * WMutableString_constructor (void * _self, va_list * app) {
 	assert(super->text != NULL);
 	if (super->text == NULL) return free(self), NULL;
 	super->length = wcslen(super->text);
-	size_t charContentSize = wcstombs(NULL, text, 0);
-	self->capacity = (uint64_t)charContentSize;
+	UInteger charContentSize = wcstombs(NULL, text, 0);
+	self->capacity = (UInteger)charContentSize;
 	return self;
 }
 
@@ -122,7 +122,7 @@ static void * WMutableString_copy (const void *const _self) {
 	return _copy;
 }
 
-static int WMutableString_equals (const void * const _self, const void *const _other) {
+static bool WMutableString_equals (const void * const _self, const void *const _other) {
 	const struct String *self = _self;
 	const struct String *other = _other;
 	const struct Classs *const _super = superclass(superclass(classOf(_self)));
@@ -134,13 +134,13 @@ static int WMutableString_equals (const void * const _self, const void *const _o
 	return result;
 }
 
-static int WMutableString_hash(const void *const _self) {
+static UInteger WMutableString_hash(const void *const _self) {
 	const struct String *self = _self;
 	if (self->_hash == 0) {
-		int hash = 0;
+		UInteger hash = 0;
 		const wchar_t *restrict text = getWText(self);
-		for(long i = 0; i < self->length; text++, i++)
-			hash = (*text) + (hash << 6) + (hash << 16) - hash;
+		for(UInteger i = 0; i < self->length; text++, i++)
+			hash = (UInteger)(*text) + (hash << 6) + (hash << 16) - hash;
 		((struct String *)self)->_hash = hash;
 	}
 	return self->_hash;
@@ -155,9 +155,9 @@ static WMutableStringRef WMutableString_newStringWithFormat(const void *const _c
 	
 	int totalWritten = vswprintf(buffer, BUFSIZ, format, *ap);
 	if (totalWritten>= BUFSIZ) {
-		wchar_t *newBuffer = calloc(totalWritten+1, sizeof(wchar_t));
+		wchar_t *newBuffer = calloc((UInteger)totalWritten+1, sizeof(wchar_t));
 		assert(newBuffer != NULL);
-		vswprintf(newBuffer, totalWritten+1, format, copy);
+		vswprintf(newBuffer, (UInteger)totalWritten+1, format, copy);
 		newString = new(_class, newBuffer, NULL);
 		free(newBuffer);
 	}
@@ -170,9 +170,9 @@ static WMutableStringRef WMutableString_newStringWithFormat(const void *const _c
 static WMutableStringRef WMutableString_copyStringByAppendingString(const void *restrict const _self, const void *restrict const _other) {
 	const struct WString *self = _self;
 	const struct WString *other = _other;
-	size_t length = getStringLength(self);
-	size_t otherLength = getStringLength(other);
-	size_t newLength = length + otherLength + sizeof(wchar_t);
+	UInteger length = getStringLength(self);
+	UInteger otherLength = getStringLength(other);
+	UInteger newLength = length + otherLength + sizeof(wchar_t);
 	
 	wchar_t *buffer = calloc(newLength, sizeof(wchar_t));
 	assert(buffer != NULL);
@@ -216,7 +216,7 @@ static SComparisonResult WMutableString_compareWithOptions (const void *const _s
 		return result;
 }
 
-static int WMutableString_characterAtIndex(const void * const _self, void *const character, unsigned long index) {
+static int WMutableString_characterAtIndex(const void * const _self, void *const character, UInteger index) {
 	const struct String *self = _self;
 	const wchar_t *text = getWText(self);
 	int result = 0;
@@ -230,11 +230,11 @@ static int WMutableString_characterAtIndex(const void * const _self, void *const
 	return result;
 }
 
-static int WMutableString_getCharactersInRange(const void * const _self, void *const restrict buffer, CORange range) {
+static int WMutableString_getCharactersInRange(const void * const _self, void *const restrict buffer, Range range) {
 	const struct String *self = _self;
 	int result = 0;
-	unsigned long maxRange = COMaxRange(range);
-	size_t length = getStringLength(self);
+	UInteger maxRange = MaxRange(range);
+	UInteger length = getStringLength(self);
 	const wchar_t *text = getWText(self);
 	if ( maxRange < length && buffer != NULL ) {
 		text = text + range.location;
@@ -254,8 +254,8 @@ static void WMutableString_appendString(void *const _self, const void *const _ot
 	struct WMutableString *self = _self;
 	struct String *stringSelf = _self;
 	
-	size_t selfLength = getStringLength(self);
-	size_t otherLength = getStringLength(_other);
+	UInteger selfLength = getStringLength(self);
+	UInteger otherLength = getStringLength(_other);
 	
 	if (isSubclassOf(_other, WString) || isSubclassOf(_other, WMutableString)) {
 		const wchar_t *otherText = getWText(_other);
@@ -268,7 +268,7 @@ static void WMutableString_appendString(void *const _self, const void *const _ot
 	}
 	else {
 		const char *otherText = getStringText(_other);
-		ssize_t size = mbstowcs(NULL, otherText, 0);
+		UInteger size = mbstowcs(NULL, otherText, 0);
 		if ( __ensureCapacity(self, selfLength + size + sizeof(wchar_t)) == -1 ) { errno = ENOMEM; return; };
 		wchar_t *selfText = (wchar_t *)getStringText(self);
 		wchar_t *otherT = __charToWideConverter(otherText);
@@ -277,13 +277,6 @@ static void WMutableString_appendString(void *const _self, const void *const _ot
 		free(otherT);
 	}
 }
-
-//void appendString(void *const self, const void *const other);
-//void appendFormat(void *const self, char *format, ...);
-//void setString(void *const self, const void *const other);
-//void setMutableStringLength(void *const self, size_t capacity);
-//int insertStringAtMutableStringIndex(void *const self, const void *const other, unsigned long index);
-//int deleteMutableStringCharactersInRange(void *const self, CORange range);
 
 const void * WMutableString = NULL;
 const void * WMutableStringClass = NULL;

@@ -29,7 +29,7 @@ int main () {
 	assert( wcscmp(getWText(w2), L"hello και καλά, 𐍆五色沼 (ごしきぬま) και όλα καλά, my fîrst wïdé strìng磐梯 !") == 0 );
 	{
 		wchar_t buffer;
-		for (unsigned long i=0; i<getStringLength(w1); i++) {
+		for (UInteger i=0; i<getStringLength(w1); i++) {
 			characterAtIndex(w1, &buffer, i);
 			assert( w1wcs[i] == buffer );
 		}
@@ -37,7 +37,7 @@ int main () {
 	{
 		wchar_t buffer[9];
 		wmemset(buffer, L'\0', 9);
-		getCharactersInRange(w2, buffer, COMakeRange(6, 8));
+		getCharactersInRange(w2, buffer, MakeRange(6, 8));
 		assert( wcscmp(buffer, L"και καλά") == 0 );
 	}
 	
@@ -59,12 +59,12 @@ int main () {
 	}
 	
 	{
-		unsigned long h1 = hash(w1);
-		unsigned long h2 = hash(w2);
+		UInteger h1 = hash(w1);
+		UInteger h2 = hash(w2);
 		WStringRef w1Copy = copy(w1);
 		WStringRef w2Copy = copy(w2);
-		unsigned long h1copy = hash(w1Copy);
-		unsigned long h2copy = hash(w2Copy);
+		UInteger h1copy = hash(w1Copy);
+		UInteger h2copy = hash(w2Copy);
 		assert( h1copy == h1 );
 		assert( h2copy == h2 );
 		release(w1Copy);

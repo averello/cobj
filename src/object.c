@@ -81,18 +81,18 @@ void * Object_copy (const void * const _self) {
 	return new(Object);
 }
 
-int Object_equals (const void * const _self, const void *const _other) {
+bool Object_equals (const void * const _self, const void *const _other) {
 	const struct Object *const self = _self;
 	const struct Object *const other = _other;
-	return (self == other);
+	return (bool)(self == other);
 }
 
 //GCC_DIAG_ON(no-pointer-to-int-cast)
-int Object_hash (const void *const _self) {
+UInteger Object_hash (const void *const _self) {
 	const struct Object *const self = _self;
-	int prime = 31;
-	int result = 1;
-	result = prime * result + (int)self;
+	UInteger prime = 31;
+	UInteger result = 1;
+	result = prime * result + (UInteger)self;
 	return result;
 }
 //GCC_DIAG_OFF(no-pointer-to-int-cast)
@@ -108,7 +108,7 @@ void Object_release (void * const _self) {
 	MEMORY_MANAGEMENT_RELEASE(self);
 }
 
-unsigned long Object_retainCount (const void * const _self) {
+UInteger Object_retainCount (const void * const _self) {
 	const struct Object *const self = _self;
 	return MEMORY_MANAGEMENT_GET_RETAIN_COUNT(self);
 }
@@ -145,7 +145,7 @@ void * copy(const void *const self) {
 	return class->copy(self);
 }
 
-int equals(const void *const self, const void *const other) {
+bool equals(const void *const self, const void *const other) {
 	COAssertNoNullOrReturn(self,EINVAL,-1);
 	
 	const struct Classs *class = classOf(self);
@@ -155,12 +155,12 @@ int equals(const void *const self, const void *const other) {
 	return class->equals(self, other);
 }
 
-int hash (const void *const self) {
-	COAssertNoNullOrReturn(self,EINVAL,-1);
+UInteger hash (const void *const self) {
+	COAssertNoNullOrReturn(self,EINVAL,0);
 	
 	const struct Classs *class = classOf(self);
-	COAssertNoNullOrReturn(class,EINVAL,-1);
-	COAssertNoNullOrReturn(class->hash,ENOTSUP,-1);
+	COAssertNoNullOrReturn(class,EINVAL,0);
+	COAssertNoNullOrReturn(class->hash,ENOTSUP,0);
 	
 	return class->hash(self);
 }
@@ -185,7 +185,7 @@ void release (void *const self) {
 	class->release(self);
 }
 
-unsigned long retainCount (const void *const self) {
+UInteger retainCount (const void *const self) {
 	COAssertNoNullOrReturn(self,EINVAL,0);
 	
 	const struct Classs *class = classOf(self);
@@ -195,7 +195,7 @@ unsigned long retainCount (const void *const self) {
 	return class->retainCount(self);
 }
 
-int instanceOf (const void * const self, const void *const _class) {
+bool instanceOf (const void * const self, const void *const _class) {
 	COAssertNoNullOrReturn(self,EINVAL,-1);
 	COAssertNoNullOrReturn(_class,EINVAL,-1);
 	
@@ -207,14 +207,14 @@ int instanceOf (const void * const self, const void *const _class) {
 	return ( strcmp(class->class_name, mclass->class_name) == 0 );
 }
 
-int isSubclassOf (const void *const self, const void * const _class) {
-	int result = instanceOf(self, _class);
-	if ( result == 0)
+bool isSubclassOf (const void *const self, const void * const _class) {
+	bool result = instanceOf(self, _class);
+	if ( !result )
 		result = isSubclassOf(superclass(self), _class);
 	return result;
 }
 
-uint32_t sizeOf(const void *const self) {
+UInteger sizeOf(const void *const self) {
 	COAssertNoNullOrReturn(self,EINVAL,0);
 	
 	const struct Classs *const class = classOf(self);

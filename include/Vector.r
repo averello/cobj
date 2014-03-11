@@ -15,16 +15,16 @@
 
 struct Vector {
 	const struct MutableArray isa;
-	uint32_t capacityIncrement;
-	uint64_t capacity;
+	UInteger capacityIncrement;
+	UInteger capacity;
 };
 
 struct VectorClass {
 	const struct MutableArrayClass isa;
-	uint64_t ( * getVectorCapacity ) (const void *const self);
-	uint32_t ( * getVectorCapacityIncrement ) (const void *const self);
-	int ( * setVectorSize ) (void *const self, uint64_t size);
-	void ( * setVectorCapacityIncrement )(void *const self, uint32_t capacityIncrement);
+	UInteger ( * getVectorCapacity ) (const void *const self);
+	UInteger ( * getVectorCapacityIncrement ) (const void *const self);
+	bool ( * setVectorSize ) (void *const self, UInteger size);
+	void ( * setVectorCapacityIncrement )(void *const self, UInteger capacityIncrement);
 };
 
 #endif

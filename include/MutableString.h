@@ -19,11 +19,11 @@ void deallocMutableString() __attribute__ ((destructor));
 void appendString(void *const self, const void *const other);
 void appendFormat(void *const self, char *format, ...);
 void setString(void *const self, const void *const other);
-void setMutableStringLength(void *const self, size_t capacity);
-int insertStringAtMutableStringIndex(void *const self, const void *const other, unsigned long index);
-int deleteMutableStringCharactersInRange(void *const self, CORange range);
+void setMutableStringLength(void *const self, UInteger capacity);
+int insertStringAtMutableStringIndex(void *const self, const void *const other, UInteger index);
+int deleteMutableStringCharactersInRange(void *const self, Range range);
 
-//int replaceCharactersInRangeWithString(void *const self, CORange range, const void *const other);
-//int replaceOccurencesOfStringWithStringOptionsAndRange(void *const self, const void *const other, CORange range, SStringComparingOptions options);
+//int replaceCharactersInRangeWithString(void *const self, Range range, const void *const other);
+//int replaceOccurencesOfStringWithStringOptionsAndRange(void *const self, const void *const other, Range range, SStringComparingOptions options);
 
 #endif

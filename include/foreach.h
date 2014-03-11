@@ -14,13 +14,13 @@
 #include <string.h>
 
 typedef struct {
-    uint64_t state;
+    UInteger state;
     void **itemsPointer;
-    uint64_t *mutationsPointer;
-    uint64_t extra[5];
+    UInteger *mutationsPointer;
+    UInteger extra[5];
 } FastEnumerationState;
 
-uint64_t enumerateWithState(const void *const collection, FastEnumerationState *const state, void *iobuffer[], uint64_t length);
+UInteger enumerateWithState(const void *const collection, FastEnumerationState *const state, void *iobuffer[], UInteger length);
 
 #ifndef foreach_start
 #define foreach_start(type,variable,collection) \
@@ -30,8 +30,8 @@ uint64_t enumerateWithState(const void *const collection, FastEnumerationState *
 	ObjectRef ___buffer[16];\
 	memset(&___buffer, 0, sizeof(___buffer));\
 	int ___firstLoop = 1;\
-	int64_t ___mutationsPointerValue;\
-	uint64_t ___count;\
+	UInteger ___mutationsPointerValue;\
+	UInteger ___count;\
 	while ((___count = enumerateWithState((collection), &___state, ___buffer, 16))) {\
 		if (!___firstLoop && ___mutationsPointerValue != *___state.mutationsPointer) {\
 			assert(0 && "Object mutated while iterating");\
@@ -39,7 +39,7 @@ uint64_t enumerateWithState(const void *const collection, FastEnumerationState *
 		___firstLoop = 0;\
 		___mutationsPointerValue = *___state.mutationsPointer;\
 		type variable;\
-		for (uint64_t ___index=0; ___index<___count; ___index++) {\
+		for (UInteger ___index=0; ___index<___count; ___index++) {\
 			variable = ___state.itemsPointer[___index];
 
 #define foreach_end() }}}

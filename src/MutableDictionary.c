@@ -15,7 +15,11 @@
 #include <MutableDictionary.r>
 
 #ifndef __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE
+#if __LP64__
+#define __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE 2L
+#else
 #define __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE 2
+#endif
 #endif /* __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE */
 
 #ifndef __MUTABLE_DICTIONARY_DEFAULT_LOAD_FACTOR
@@ -26,14 +30,14 @@
 const void * MutableDictionary = NULL;
 const void * MutableDictionaryClass = NULL;
 
-static int __allocateLevel1(struct MutableDictionary *const self, unsigned long size);
+static int __allocateLevel1(struct MutableDictionary *const self, UInteger size);
 //static void __setObjectForKey(struct MutableDictionary *const self, void *const object, const void *const key);
 static int __rebuild(struct MutableDictionary *const self);
-static int __addCoupleWithHash(struct MutableDictionary *const self, int hash, CoupleRef couple);
+static int __addCoupleWithHash(struct MutableDictionary *const self, UInteger hash, CoupleRef couple);
 static void __emptyLevel1(struct MutableDictionary *const self);
 static CoupleRef __findCoupleInArrayForKey(const struct MutableDictionary *const self, VectorRef array, const void *const key);
-inline static unsigned int __hash(int h) {
-#define triple_shift(n,s) (int)((unsigned int)(n) >> (s))
+inline static UInteger __hash(UInteger h) {
+#define triple_shift(n,s) ((n) >> (s))
 	// This function ensures that hashCodes that differ only by
 	// constant multiples at each bit position have a bounded
 	// number of collisions (approximately 8 at default load factor).
@@ -44,10 +48,10 @@ inline static unsigned int __hash(int h) {
 #undef triple_shift
 }
 
-//inline static unsigned long __deduceSize(unsigned long count, float loadFactor) {
-//	unsigned long size = 0;
-//	unsigned long potentialSize = (unsigned long) ((float)count / loadFactor);
-//	unsigned long basicSize = potentialSize / __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE;
+//inline static UInteger __deduceSize(UInteger count, float loadFactor) {
+//	UInteger size = 0;
+//	UInteger potentialSize = (UInteger) ((float)count / loadFactor);
+//	UInteger basicSize = potentialSize / __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE;
 //	size = basicSize * 10;
 //	if ( (potentialSize % __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE) != 0 ) size *= 2;
 //	return ((size <= 10) ? 10 : size);
@@ -75,7 +79,7 @@ static void * MutableDictionary_constructor (void * _self, va_list * app) {
 			addObject(self->couples, couple), release(couple);
 		}
 	}
-	unsigned long itemsCount = getCollectionCount(self->couples);
+	UInteger itemsCount = getCollectionCount(self->couples);
 	if (itemsCount<=0) {
 		if ( __allocateLevel1(self, __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE) != 0 ) return error = errno, release(self->couples), free(self),  errno = error, NULL;
 		self->size = __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE;
@@ -83,9 +87,9 @@ static void * MutableDictionary_constructor (void * _self, va_list * app) {
 	}
 	
 	/* Deduce size */
-//	unsigned long size = __deduceSize(itemsCount, self->loadFactor);
-	unsigned long size = __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE;
-	while ( (int)(size * self->loadFactor) < itemsCount ) size *= 2;
+//	UInteger size = __deduceSize(itemsCount, self->loadFactor);
+	UInteger size = __MUTABLE_DICTIONARY_LEVEL1_INITIAL_SIZE;
+	while ( (UInteger)(size * self->loadFactor) < itemsCount ) size *= 2;
 	self->size = size;
 	if ( __allocateLevel1(self, size) != 0 ) return error = errno, release(self->couples), free(self),  errno = error, NULL;
 	
@@ -121,7 +125,7 @@ static void * MutableDictionaryClass_constructor (void * _self, va_list *app) {
 
 
 
-static int __allocateLevel1(struct MutableDictionary *const self, unsigned long size) {
+static int __allocateLevel1(struct MutableDictionary *const self, UInteger size) {
 	if (self->level1 != NULL)
 		__emptyLevel1(self);
 	self->level1 = calloc(size, sizeof(void *));
@@ -131,8 +135,8 @@ static int __allocateLevel1(struct MutableDictionary *const self, unsigned long 
 }
 
 static void __emptyLevel1(struct MutableDictionary *const self) {
-	unsigned long count = self->size;
-	for (unsigned long i=0; i<count; i++) {
+	UInteger count = self->size;
+	for (UInteger i=0; i<count; i++) {
 		VectorRef collisionList = self->level1[i];
 		if (collisionList) release(collisionList), self->level1[i] = NULL;
 	}
@@ -145,17 +149,17 @@ static void __emptyLevel1(struct MutableDictionary *const self) {
 //}
 
 static CoupleRef __findCoupleInArrayForKey(const struct MutableDictionary *const self, VectorRef array, const void *const key) {
-	unsigned long count = getCollectionCount(array);
+	UInteger count = getCollectionCount(array);
 	CoupleRef couple = NULL;
-	for (unsigned long index = 0; index<count && (couple = getObjectAtIndex(array, index)) && ! equals(getKey(couple), key); index++, couple=NULL);
+	for (UInteger index = 0; index<count && (couple = getObjectAtIndex(array, index)) && ! equals(getKey(couple), key); index++, couple=NULL);
 	if (couple != NULL)
 		return couple;
 	return NULL;
 }
 
 
-static int __addCoupleWithHash(struct MutableDictionary *const self, int hash, CoupleRef couple) {
-	unsigned int index = __hash(hash) % (int)self->size;
+static int __addCoupleWithHash(struct MutableDictionary *const self, UInteger hash, CoupleRef couple) {
+	UInteger index = __hash(hash) % self->size;
 	VectorRef collisionList = self->level1[index];
 	if ( collisionList == NULL) {
 //		collisionList = new(MutableArray, NULL);
@@ -182,11 +186,11 @@ static int __addCoupleWithHash(struct MutableDictionary *const self, int hash, C
 
 static int __rebuild(struct MutableDictionary *const self) {
 	((struct Dictionary *)self)->count = 0;
-	unsigned long count = getCollectionCount(self->couples);
+	UInteger count = getCollectionCount(self->couples);
 	CoupleRef couple = NULL;
-	for (unsigned long index = 0; index < count && (couple = getObjectAtIndex(self->couples, index)); index++) {
+	for (UInteger index = 0; index < count && (couple = getObjectAtIndex(self->couples, index)); index++) {
 		ObjectRef key = getKey(couple);
-		int h = hash(key);
+		UInteger h = hash(key);
 		if ( __addCoupleWithHash(self, h, couple) != 0 ) return -1;
 //		((struct Dictionary *)self)->count++;
 	}
@@ -196,8 +200,8 @@ static int __rebuild(struct MutableDictionary *const self) {
 static void MutableDictionary_setObjectForKey(void *const _self, void *const object, void *const key) {
 	struct MutableDictionary *const self = _self;
 	CoupleRef couple = new(Couple, key, object, NULL);;
-//	unsigned long newSize = __deduceSize(((struct Dictionary *)self)->count+1, self->loadFactor);
-	if ( (int)(self->size * self->loadFactor) < ((struct Dictionary *)self)->count+1 ) {
+//	UInteger newSize = __deduceSize(((struct Dictionary *)self)->count+1, self->loadFactor);
+	if ( (UInteger)(self->size * self->loadFactor) < ((struct Dictionary *)self)->count+1 ) {
 		
 		__allocateLevel1(self, self->size * 2);
 		self->size *= 2;
@@ -205,15 +209,15 @@ static void MutableDictionary_setObjectForKey(void *const _self, void *const obj
 	}
 //	insertObject(self->couples, couple);
 	addObject(self->couples, couple);
-	int h = hash(key);
+	UInteger h = hash(key);
 	__addCoupleWithHash(self, h, couple);
 	release(couple);
 }
 
 static ObjectRef MutableDictionary_objectForKey(const void *const _self, void *const key) {
 	const struct MutableDictionary *const self = _self;
-	int h = hash(key);
-	unsigned int index = __hash(h) % (int)self->size;
+	UInteger h = hash(key);
+	UInteger index = __hash(h) % self->size;
 	VectorRef collisionList = self->level1[index];
 	if ( collisionList == NULL ) return NULL;
 	
@@ -237,8 +241,8 @@ static void MutableDictionary_setMutableDictionaryLoadFactor(void *const _self, 
 
 static void MutableDictionary_removeObjectForKey(void *const _self, void *const key) {
 	struct MutableDictionary *const self = _self;
-	int h = hash(key);
-	unsigned int index = __hash(h) % (int)self->size;
+	UInteger h = hash(key);
+	UInteger index = __hash(h) % self->size;
 	VectorRef collisionList = self->level1[index];
 	if ( collisionList == NULL ) return;
 	
@@ -321,13 +325,13 @@ void removeObjectForKey(void *const self, void *const key) {
 void MutableDictionaryPrintfStatistics(const void *const _self) {
 	assert( _self != NULL );
 	const struct MutableDictionary *self = _self;
-	unsigned long empty = 0, minCollisionListSize = INT_MAX, maxCollisionListSize = 0, medianCollisionListSize = 0;
-	unsigned long count = ((struct Dictionary *)self)->count;
+	UInteger empty = 0, minCollisionListSize = INT_MAX, maxCollisionListSize = 0, medianCollisionListSize = 0;
+	UInteger count = ((struct Dictionary *)self)->count;
 
-	for (unsigned long i=0; i<self->size; i++) {
+	for (UInteger i=0; i<self->size; i++) {
 		VectorRef cl = self->level1[i];
 		if ( cl == NULL ) { empty++; continue; }
-		unsigned long count = getCollectionCount(cl);
+		UInteger count = getCollectionCount(cl);
 		medianCollisionListSize += count;
 		if ( count < minCollisionListSize ) minCollisionListSize = count;
 		else if ( count > maxCollisionListSize ) maxCollisionListSize = count;

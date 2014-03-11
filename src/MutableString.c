@@ -18,15 +18,15 @@
 const void * MutableString = NULL;
 const void * MutableStringClass = NULL;
 
-static int __grow(struct MutableString *const self, uint64_t minCapacity) {
+static int __grow(struct MutableString *const self, UInteger minCapacity) {
 	// overflow-conscious code
 	// in this function minCapacity is always greater than self->capacity
 	struct String *stringSelf = (struct String *)self;
-	uint64_t newCapacity = 0;
+	UInteger newCapacity = 0;
 	/* if doubling the capacity is impossible due to overflow */
-	if (UINT64_MAX - self->capacity < self->capacity) {
+	if (UIntegerMax - self->capacity < self->capacity) {
 		/* then use the max value */
-		newCapacity = UINT64_MAX;
+		newCapacity = UIntegerMax;
 	}
 	else {
 		newCapacity = self->capacity * 2;
@@ -39,7 +39,7 @@ static int __grow(struct MutableString *const self, uint64_t minCapacity) {
 	return 0;
 }
 
-inline static int __ensureCapacity(struct MutableString *const self, uint64_t minCapacity) {
+inline static int __ensureCapacity(struct MutableString *const self, UInteger minCapacity) {
 	if ( minCapacity > self->capacity )
 		return __grow(self, minCapacity);
 	return 0;
@@ -91,7 +91,7 @@ static void * MutableString_copy (const void * const _self) {
 	return new(MutableString, getStringText(self), NULL);
 }
 
-static int MutableString_equals (const void * const _self, const void *const _other) {
+static bool MutableString_equals (const void * const _self, const void *const _other) {
 	const struct String *self = _self;
 	const struct String *other = _other;
 	int result = ( _self == _other );
@@ -106,8 +106,8 @@ static void MutableString_appendString(void *const _self, const void *const _oth
 	const struct MutableString *other = _other;
 	const char *otherText = getStringText(other);
 	
-	size_t selfLength = getStringLength(self);
-	size_t otherLength = getStringLength(other);
+	UInteger selfLength = getStringLength(self);
+	UInteger otherLength = getStringLength(other);
 	
 	if ( __ensureCapacity(self, selfLength + otherLength + 1) == -1 ) { errno = ENOMEM; return; };
 	
@@ -116,7 +116,7 @@ static void MutableString_appendString(void *const _self, const void *const _oth
 	stringSelf->length += otherLength;
 }
 
-static size_t MutableString_getStringLength (const void *const _self) {
+static UInteger MutableString_getStringLength (const void *const _self) {
 	const struct String *self = _self;
 	return self->length;
 }
@@ -124,14 +124,14 @@ static size_t MutableString_getStringLength (const void *const _self) {
 static void MutableString_appendFormat(void *const self, char *format, va_list *app) {
 	struct String *stringSelf = self;
 	char *selfText = NULL;
-	size_t selfLength = getStringLength(self);
+	UInteger selfLength = getStringLength(self);
 	
 	va_list copy;
 	va_copy(copy, *app);
 	int totalWritten = vsnprintf(NULL, 0, format, copy);
-	char *text = calloc(totalWritten+1, sizeof(char));
+	char *text = calloc((UInteger)totalWritten+1, sizeof(char));
 	if ( text == NULL ) { errno = ENOMEM, va_end(copy); return; }
-	if ( __ensureCapacity(self, selfLength + totalWritten + 1) == -1 ) { 
+	if ( __ensureCapacity(self, selfLength + (UInteger)totalWritten + 1) == -1 ) {
 		errno = ENOMEM, va_end(copy), free(text); return; 
 	};
 	selfText = (char *)getStringText(self);
@@ -139,7 +139,7 @@ static void MutableString_appendFormat(void *const self, char *format, va_list *
 	vsnprintf(text, totalWritten+1, format, *app);
 	strncat(selfText, text, totalWritten);
 
-	stringSelf->length += totalWritten;
+	stringSelf->length += (UInteger)totalWritten;
 	
 	free(text), va_end(copy);
 }
@@ -154,17 +154,17 @@ static void MutableString_setString(void *const _self, const void *const other) 
 	free((char *)getStringText(self)), stringSelf->text = NULL;
 	stringSelf->text = text;
 	
-	size_t otherLength = getStringLength(other);
+	UInteger otherLength = getStringLength(other);
 	stringSelf->length = otherLength;
 	self->capacity = otherLength + 1;
 	self->offset = 0;
 }
 
-static void MutableString_setMutableStringLength(void *const _self, size_t capacity) {
+static void MutableString_setMutableStringLength(void *const _self, UInteger capacity) {
 	struct MutableString *self = _self;
 	struct String *stringSelf = _self;
 	
-	size_t selfCapacity = self->capacity;
+	UInteger selfCapacity = self->capacity;
 	if ( selfCapacity < capacity ) {
 		if ( __ensureCapacity(self, capacity+1) == -1 ) { errno = ENOMEM; return; };
 		memset(((char*)stringSelf->text)+selfCapacity, '\0', capacity+1 - selfCapacity);
@@ -181,12 +181,12 @@ static void MutableString_setMutableStringLength(void *const _self, size_t capac
 	self->capacity = capacity+1;
 }
 
-static int MutableString_insertStringAtMutableStringIndex(void *const _self, const void *const other, unsigned long index) {
+static int MutableString_insertStringAtMutableStringIndex(void *const _self, const void *const other, UInteger index) {
 	struct MutableString *self = _self;
 	struct String *stringSelf = _self;
 	
-	size_t selfLength = getStringLength(self);
-	size_t otherLength = getStringLength(other);
+	UInteger selfLength = getStringLength(self);
+	UInteger otherLength = getStringLength(other);
 	
 	if ( index > selfLength ) return errno = EINVAL, -1;
 	if ( index == selfLength ) return appendString(self, other), 0;
@@ -204,16 +204,16 @@ static int MutableString_insertStringAtMutableStringIndex(void *const _self, con
 	return 0;
 }
 
-static int MutableString_deleteMutableStringCharactersInRange(void *const _self, CORange range) {
+static int MutableString_deleteMutableStringCharactersInRange(void *const _self, Range range) {
 	struct MutableString *self = _self;
 	struct String *stringSelf = _self;
 	
-	if ( COMaxRange(range) > stringSelf->length ) return errno = EINVAL, -1;
+	if ( MaxRange(range) > stringSelf->length ) return errno = EINVAL, -1;
 	
-	size_t selfLength = getStringLength(self);
+	UInteger selfLength = getStringLength(self);
 	char *selfText = (char *)getStringText(self);
 	
-	memmove(selfText+range.location, selfText+COMaxRange(range), selfLength-COMaxRange(range)+1);
+	memmove(selfText+range.location, selfText+MaxRange(range), selfLength-MaxRange(range)+1);
 	stringSelf->length -= range.length;
 	
 	return -1;
@@ -293,7 +293,7 @@ void setString(void *const self, const void *const other) {
 	class->setString(self, other);
 }
 
-void setMutableStringLength(void *const self, size_t capacity) {
+void setMutableStringLength(void *const self, UInteger capacity) {
 	COAssertNoNullOrBailOut(self,EINVAL);
 	
 	const struct MutableStringClass *const class = classOf(self);
@@ -302,7 +302,7 @@ void setMutableStringLength(void *const self, size_t capacity) {
 	class->setMutableStringLength(self, capacity);
 }
 
-int insertStringAtMutableStringIndex(void *const self, const void *const other, unsigned long index) {
+int insertStringAtMutableStringIndex(void *const self, const void *const other, UInteger index) {
 	COAssertNoNullOrReturn(self,EINVAL,-1);
 	COAssertNoNullOrReturn(other,EINVAL,-1);
 	
@@ -312,7 +312,7 @@ int insertStringAtMutableStringIndex(void *const self, const void *const other, 
 	return class->insertStringAtMutableStringIndex(self, other, index);
 }
 
-int deleteMutableStringCharactersInRange(void *const self, CORange range) {
+int deleteMutableStringCharactersInRange(void *const self, Range range) {
 	COAssertNoNullOrReturn(self,EINVAL,-1);
 	
 	const struct MutableStringClass *const class = classOf(self);

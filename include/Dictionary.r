@@ -18,8 +18,8 @@ struct Dictionary {
 	const struct Collection isa;
 	ArrayRef keys;
 	ArrayRef values;
-	unsigned long *hashes;
-	unsigned long count;
+	UInteger *hashes;
+	UInteger count;
 };
 
 struct DictionaryClass {
@@ -27,7 +27,7 @@ struct DictionaryClass {
 	ObjectRef ( *objectForKey) (const void *const self, void *const key);
 	ArrayRef ( *getKeysCopy) (const void *const self);
 	ArrayRef ( *getValuesCopy)(const void *const self);
-//	unsigned long ( *getCount)(const void *const self);
+//	UInteger ( *getCount)(const void *const self);
 };
 
 

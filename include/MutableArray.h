@@ -25,17 +25,17 @@ MutableArrayRef newMutableArrayFromArray(const void * const array);
 
 void addObject(void *const self, void * const object);
 void insertObject(void *const self, void * const object);
-void insertObjectAtIndex(void *const self, void *const object, unsigned long index);
+void insertObjectAtIndex(void *const self, void *const object, UInteger index);
 
 void removeObject(void *const self, void * const object);
-void removeObjectAtIndex(void *const self, unsigned long index);
-void removeObjectsInRange(void *const self, CORange range);
+void removeObjectAtIndex(void *const self, UInteger index);
+void removeObjectsInRange(void *const self, Range range);
 
 void removeFirstObject(void *const self);
 void removeLastObject(void *const self);
 void removeAllObjects(void *const self);
 
-void replaceObjectAtIndexWithObject(void *const self, unsigned long index, void *const other);
+void replaceObjectAtIndexWithObject(void *const self, UInteger index, void *const other);
 
 ObjectRef popObject(void *const self);
 

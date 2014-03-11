@@ -61,13 +61,13 @@ int main () {
 		ValueRef v1 = new(Value, mainP, NULL);
 		ValueRef v2 = new(Value, mainP, NULL);
 		
-		int h1 = hash(v1);
-		int h2 = hash(v2);
+		UInteger h1 = hash(v1);
+		UInteger h2 = hash(v2);
 		
 		assert( h1 == h2 );
 		
-		mainFunction main2P = main2;
-		setValuePointer(v2, main2P);
+		const mainFunction main2P = main2;
+		setValuePointer(v2, (const void *)main2P);
 		
 		h1 = hash(v1);
 		h2 = hash(v2);

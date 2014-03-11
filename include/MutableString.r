@@ -16,7 +16,7 @@
 struct MutableString {
 	const struct String isa;
 	off_t offset;
-	uint64_t capacity;
+	UInteger capacity;
 };
 
 struct MutableStringClass {
@@ -24,10 +24,10 @@ struct MutableStringClass {
 	void ( * appendString ) (void *const self, const void *const other);
 	void ( * appendFormat ) (void *const self, char *format, va_list *app);
 	void ( * setString ) (void *const self, const void *const other);
-	void ( * setMutableStringLength ) (void *const self, size_t capacity);
+	void ( * setMutableStringLength ) (void *const self, UInteger capacity);
 	
-	int ( * insertStringAtMutableStringIndex ) (void *const self, const void *const other, unsigned long index);
-	int ( * deleteMutableStringCharactersInRange ) (void *const self, CORange range);
+	int ( * insertStringAtMutableStringIndex ) (void *const self, const void *const other, UInteger index);
+	int ( * deleteMutableStringCharactersInRange ) (void *const self, Range range);
 
 };
 

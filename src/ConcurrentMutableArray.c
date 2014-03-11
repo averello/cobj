@@ -16,6 +16,8 @@
 
 #include <cobj.h>
 #include <new.h>
+#include <Collection.h>
+#include <Collection.r>
 #include <ConcurrentMutableArray.h>
 #include <ConcurrentMutableArray.r>
 
@@ -50,24 +52,24 @@ static void * ConcurrentMutableArrayClass_constructor (void * _self, va_list *ap
 	return self;
 }
 
-static unsigned long ConcurrentMutableArray_getCollectionCount(const void * const _self) {
+static UInteger ConcurrentMutableArray_getCollectionCount(const void * const _self) {
 	struct ConcurrentMutableArray *self = (struct ConcurrentMutableArray *)_self;
-	const struct ArrayClass *const _superSuper = superclass(superclass(classOf(_self)));
+	const struct CollectionClass *const _superSuper = superclass(superclass(superclass(classOf(_self))));
 	
 	pthread_mutex_lock(&(self->protector));
-	unsigned long count = _superSuper->getCollectionCount(self);
+	UInteger count = _superSuper->getCollectionCount(self);
 	pthread_mutex_unlock(&(self->protector));
 	return count;
 }
 
-static ObjectRef ConcurrentMutableArray_getObjectAtIndex(const void * const _self, unsigned long index) {
+static ObjectRef ConcurrentMutableArray_getObjectAtIndex(const void * const _self, UInteger index) {
 	struct ConcurrentMutableArray *self = (struct ConcurrentMutableArray *)_self;
-	const struct ArrayClass *const _superSuper = superclass(superclass(classOf(_self)));
+	const struct CollectionClass *const _superSuper = superclass(superclass(superclass(classOf(_self))));
 	const struct ArrayClass *const _super = superclass(classOf(_self));
 
 	
 	pthread_mutex_lock(&(self->protector));
-	unsigned long count = _superSuper->getCollectionCount(self);
+	UInteger count = _superSuper->getCollectionCount(self);
 	if ( index > count && index != 0 ) return pthread_mutex_unlock(&(self->protector)), errno = EINVAL, NULL;
 	if ( count == 0 )
 		pthread_cond_wait(&(self->synchronization),&(self->protector));
@@ -78,12 +80,12 @@ static ObjectRef ConcurrentMutableArray_getObjectAtIndex(const void * const _sel
 
 static void ConcurrentMutableArray_addObject(void *const _self, void * const object) {
 	struct ConcurrentMutableArray *self = _self;
-	const struct ArrayClass *const _superSuper = superclass(superclass(classOf(_self)));
+	const struct CollectionClass *const _superSuper = superclass(superclass(superclass(classOf(_self))));
 	const struct MutableArrayClass *const _super = superclass(classOf(_self));
 	
 	
 	pthread_mutex_lock(&(self->protector));
-	unsigned long count = _superSuper->getCollectionCount(self);
+	UInteger count = _superSuper->getCollectionCount(self);
 	_super->addObject(self, object);
 	if ( count == 0 )
 		pthread_cond_signal(&(self->synchronization));
@@ -92,24 +94,24 @@ static void ConcurrentMutableArray_addObject(void *const _self, void * const obj
 
 static void ConcurrentMutableArray_insertObject(void *const _self, void * const object) {
 	struct ConcurrentMutableArray *self = _self;
-	const struct ArrayClass *const _superSuper = superclass(superclass(classOf(_self)));
+	const struct CollectionClass *const _superSuper = superclass(superclass(superclass(classOf(_self))));
 	const struct MutableArrayClass *const _super = superclass(classOf(_self));
 	
 	pthread_mutex_lock(&(self->protector));
-	unsigned long count = _superSuper->getCollectionCount(self);
+	UInteger count = _superSuper->getCollectionCount(self);
 	_super->insertObject(self, object);
 	if ( count == 0 )
 		pthread_cond_signal(&(self->synchronization));
 	pthread_mutex_unlock(&(self->protector));
 }
 
-static void ConcurrentMutableArray_insertObjectAtIndex(void *const _self, void *const object, unsigned long index) {
+static void ConcurrentMutableArray_insertObjectAtIndex(void *const _self, void *const object, UInteger index) {
 	struct ConcurrentMutableArray *self = _self;
-	const struct ArrayClass *const _superSuper = superclass(superclass(classOf(_self)));
+	const struct CollectionClass *const _superSuper = superclass(superclass(superclass(classOf(_self))));
 	const struct MutableArrayClass *const _super = superclass(classOf(_self));
 	
 	pthread_mutex_lock(&(self->protector));
-	unsigned long count = _superSuper->getCollectionCount(self);
+	UInteger count = _superSuper->getCollectionCount(self);
 	_super->insertObjectAtIndex(_self, object, index);
 	if ( count == 0 && index ) { errno = EINVAL; pthread_mutex_unlock(&(self->protector)); return; }
 	if ( count == 0 )
@@ -129,14 +131,14 @@ static void *ConcurrentMutableArray_copy(const void *const _self) {
 	
 	struct Array * copyArray = new(MutableArray, NULL);
 	ObjectRef item = NULL;
-	unsigned long count = arraySelf->count;
-	for (unsigned long i=0;  i<count && (item = _superSuper->getObjectAtIndex(self, i)) ; i++)
+	UInteger count = arraySelf->count;
+	for (UInteger i=0;  i<count && (item = _superSuper->getObjectAtIndex(self, i)) ; i++)
 		_super->addObject(copyArray, item);
 	pthread_mutex_unlock(&(self->protector));
 	return (void *)copyArray;
 }
 
-static void ConcurrentMutableArray_removeObjectAtIndex(void *const _self, unsigned long index) {
+static void ConcurrentMutableArray_removeObjectAtIndex(void *const _self, UInteger index) {
 	struct ConcurrentMutableArray *self = _self;
 	const struct MutableArrayClass *const _super = superclass(classOf(_self));
 	
@@ -204,19 +206,19 @@ void deallocConcurrentMutableArray () {
 /* */
 
 int arrayContainsObject(const void * const self, const void * const object);
-unsigned long indexOfObject(const void * const self, const void * const object);
+UInteger indexOfObject(const void * const self, const void * const object);
 
 void * lastObject(const void * const self);
 void * firstObject(const void * const self);
 
 void removeObject(void *const self, void * const object);
-void removeObjectsInRange(void *const self, CORange range);
+void removeObjectsInRange(void *const self, Range range);
 
 void removeFirstObject(void *const self);
 void removeLastObject(void *const self);
 void removeAllObjects(void *const self);
 
-void replaceObjectAtIndexWithObject(void *const self, unsigned long index, void *const other);
+void replaceObjectAtIndexWithObject(void *const self, UInteger index, void *const other);
 
 
 

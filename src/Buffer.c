@@ -23,7 +23,7 @@ static void * Buffer_constructor (void * _self, va_list * app) {
 	void *buffer = va_arg(*app, void *);
 	if ( buffer == NULL ) return free(self), NULL;
 	
-	size_t length = va_arg(*app, size_t);
+	UInteger length = va_arg(*app, UInteger);
 	if ( length == 0 ) return free(self), NULL;
 	
 	self->buffer = calloc(1, length);
@@ -68,7 +68,7 @@ static void * Buffer_copy (const void * const _self) {
 	return new(Buffer, getBufferBytes(self), getBufferLength(self), NULL);
 }
 
-static int Buffer_equals (const void * const _self, const void *const _other) {
+static bool Buffer_equals (const void * const _self, const void *const _other) {
 	const struct Buffer *self = _self;
 	const struct Buffer *other = _other;
 	const struct Classs *const _super = (const struct Classs *const )super(_self);
@@ -83,21 +83,21 @@ static const void * Buffer_getBufferBytes (const void *const _self) {
 	return self->buffer;
 }
 
-static void Buffer_getBufferBytesOfLength (const void *const _self, void *restrict buffer, size_t length) {
+static void Buffer_getBufferBytesOfLength (const void *const _self, void *restrict buffer, UInteger length) {
 	const struct Buffer *self = _self;
 	if (buffer == NULL) return;
 	if ( length > self->length ) length = self->length;
 	memcpy(buffer, self->buffer, length);
 }
 
-static void Buffer_getBufferBytesInRange (const void *const _self, void *restrict buffer, CORange range) {
+static void Buffer_getBufferBytesInRange (const void *const _self, void *restrict buffer, Range range) {
 	const struct Buffer *self = _self;
 	if (buffer == NULL) return;
 	if ( range.location >= self->length || range.length > self->length ) return;
 	memcpy(buffer, ((char *)self->buffer) + range.location, range.length);
 }
 
-static size_t Buffer_getBufferLength (const void *const _self) {
+static UInteger Buffer_getBufferLength (const void *const _self) {
 	const struct Buffer *self = _self;
 	return self->length;
 }
@@ -142,7 +142,7 @@ const void *getBufferBytes(const void *const self) {
 	return class->getBufferBytes(self);
 }
 
-void getBufferBytesOfLength(const void *const self, void *restrict buffer, size_t length) {
+void getBufferBytesOfLength(const void *const self, void *restrict buffer, UInteger length) {
 	COAssertNoNullOrBailOut(self,EINVAL);
 	COAssertNoNullOrBailOut(buffer,EINVAL);
 	const struct BufferClass *const class = classOf(self);
@@ -151,7 +151,7 @@ void getBufferBytesOfLength(const void *const self, void *restrict buffer, size_
 	class->getBufferBytesOfLength(self, buffer, length);
 }
 
-void getBufferBytesInRange(const void *const self, void *restrict buffer, CORange range) {
+void getBufferBytesInRange(const void *const self, void *restrict buffer, Range range) {
 	COAssertNoNullOrBailOut(self,EINVAL);
 	COAssertNoNullOrBailOut(buffer,EINVAL);
 	const struct BufferClass *const class = classOf(self);
@@ -160,7 +160,7 @@ void getBufferBytesInRange(const void *const self, void *restrict buffer, CORang
 	class->getBufferBytesInRange(self, buffer, range);
 }
 
-size_t getBufferLength(const void *const self) {
+UInteger getBufferLength(const void *const self) {
 	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct BufferClass *const class = classOf(self);
 	COAssertNoNullOrReturn(class,EINVAL,0);

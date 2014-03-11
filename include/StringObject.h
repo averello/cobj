@@ -12,7 +12,8 @@
 #define CObjects_String_h
 
 #include <Object.h>
-#include <stdint.h>
+#include <coint.h>
+#include <corange.h>
 
 /*! A @ref String type. */
 extern const void * String;
@@ -21,56 +22,6 @@ extern const void * String;
 extern const void * StringClass;
 /*! An @ref String reference. */
 typedef void * StringRef;
-
-/*!
- *  @struct CORange StringObject.h
- *  @relates String
- *  @brief A structure describing a range.
- *  @details This structure is used by @ref String instances to describe portions of a string or substrings.
- */
-typedef struct CORange {
-    uint64_t location; /*!< The start location of the range */
-    uint64_t length;	/*!< The length of the range begining from @a location */
-} CORange;
-
-/*!
- *  @fn CORange COMakeRange(uint64_t loc, uint64_t len)
- *  @brief A helper function to create CORange structures.
- *  @relates String
- *  @param[in] location the starting location of the range.
- *  @param[in] length the length of the range.
- *  @returns a new @ref CORange with the specified attributes.
- */
-CORange COMakeRange(uint64_t location, uint64_t length);
-
-/*!
- *  @fn uint64_t COMaxRange(CORange range)
- *  @brief A helper function that returns the end of the range (location + length).
- *  @relates String
- *  @param[in] range the range.
- *  @returns the max range (range.location + range.length).
- */
-uint64_t COMaxRange(CORange range);
-
-/*!
- *  @fn int COLocationInRange(uint64_t location, CORange range)
- *  @brief A helper function indiqating if the given location is in the given range.
- *  @relates String
- *  @param[in] location the location.
- *  @param[in] range the range.
- *  @returns a @a C boolean.
- */
-int COLocationInRange(uint64_t location, CORange range);
-
-/*!
- *  @fn int COEqualRanges(CORange range1, CORange range2)
- *  @brief A helper function indiqating if two given ranges are equal.
- *  @relates String
- *  @param[in] range1 the first range.
- *  @param[in] range2 the second range.
- *  @returns a @a C boolean.
- */
-int COEqualRanges(CORange range1, CORange range2);
 
 /*!
  *  @enum SComparisonResult
@@ -147,7 +98,7 @@ const char *getStringText(const void *const self);
  *  @param[in] self the @ref String (or a subclass) instace.
  *  @returns the number of characters in the receiver.
  */
-uint64_t getStringLength(const void *const self);
+UInteger getStringLength(const void *const self);
 
 /*!
  *  @method
@@ -158,7 +109,7 @@ uint64_t getStringLength(const void *const self);
  *  @param[in] index the index of the character to retrieve. The index must not be outside the bounds of the receiver.
  *  @returns 0 on completion. If index lies outside the bounds of the receiver then -1 is returned and @a errno is positioned to @a EINVAL.
  */
-int characterAtIndex(const void *const self, void *const character, uint64_t index);
+int characterAtIndex(const void *const self, void *const character, UInteger index);
 
 /*!
  *  @method
@@ -170,7 +121,7 @@ int characterAtIndex(const void *const self, void *const character, uint64_t ind
  *  @param[in] range the range of characters to retrieve. The range must not exceed the bounds of the receiver.
  *  @returns 0 on completion. If range lies outside the bounds of the receiver then -1 is returned and @a errno is positioned to @a EINVAL.
  */
-int getCharactersInRange(const void *const self, void *const restrict buffer, CORange range);
+int getCharactersInRange(const void *const self, void *const restrict buffer, Range range);
 
 /*!
  *  @method

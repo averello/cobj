@@ -15,16 +15,16 @@
 struct Buffer {
 	const struct Object isa;
 	const void * buffer;
-	size_t length;
+	UInteger length;
 };
 
 struct BufferClass {
 	const struct Classs isa;
 
 	const void * ( * getBufferBytes ) (const void *const self);
-	void ( * getBufferBytesOfLength ) (const void *const self, void *restrict buffer, size_t length);
-	void ( * getBufferBytesInRange ) (const void *const self, void *restrict buffer, CORange range);
-	size_t ( * getBufferLength ) (const void *const self);
+	void ( * getBufferBytesOfLength ) (const void *const self, void *restrict buffer, UInteger length);
+	void ( * getBufferBytesInRange ) (const void *const self, void *restrict buffer, Range range);
+	UInteger ( * getBufferLength ) (const void *const self);
 };
 
 #endif

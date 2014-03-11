@@ -57,12 +57,12 @@ static void * Collection_destructor (void * _self) {
 	return self;
 }
 
-static uint64_t Collection_getCollectionCount(const void * const self) {
+static UInteger Collection_getCollectionCount(const void * const self) {
 	return 0;
 }
 
-static int Collection_containsObject(const void * const self, const void * const object) {
-	return 0;
+static bool Collection_containsObject(const void * const self, const void * const object) {
+	return NO;
 }
 
 static void * Collection_lastObject(const void * const self) {
@@ -73,7 +73,7 @@ static void * Collection_firstObject(const void * const self) {
 	return NULL;
 }
 
-static unsigned long Collection_enumerateWithState(ObjectRef collection, FastEnumerationState *state, ObjectRef iobuffer[], unsigned long length) {
+static UInteger Collection_enumerateWithState(ObjectRef collection, FastEnumerationState *state, ObjectRef iobuffer[], UInteger length) {
 	return 0;
 }
 
@@ -107,7 +107,7 @@ void deallocCollection() {
 	CollectionClass = NULL;
 }
 
-uint64_t getCollectionCount(const void * const self) {
+UInteger getCollectionCount(const void * const self) {
 	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct CollectionClass *class = classOf(self);
 	COAssertNoNullOrReturn(class,EINVAL,0);
@@ -115,7 +115,7 @@ uint64_t getCollectionCount(const void * const self) {
 	return class->getCollectionCount(self);
 }
 
-int containsObject(const void * const self, const void * const object) {
+bool containsObject(const void * const self, const void * const object) {
 	COAssertNoNullOrReturn(self,EINVAL,0);
 	COAssertNoNullOrReturn(object,EINVAL,0);
 	const struct CollectionClass *class = classOf(self);
@@ -140,7 +140,7 @@ void * firstObject(const void * const self) {
 	return class->firstObject(self);
 }
 
-uint64_t enumerateWithState(const void *const collection, FastEnumerationState *const state, void *iobuffer[], uint64_t length) {
+UInteger enumerateWithState(const void *const collection, FastEnumerationState *const state, void *iobuffer[], UInteger length) {
 	COAssertNoNullOrReturn(collection,EINVAL,0);
 	COAssertNoNullOrReturn(state,EINVAL,0);
 	

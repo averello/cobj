@@ -15,7 +15,9 @@
 #include <coassert.h>
 #include <errno.h>
 
+#include <coint.h>
 #include <colimits.h>
+#include <corange.h>
 
 #include <foreach.h>
 #include <cobj_main.h>

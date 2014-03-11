@@ -117,7 +117,7 @@ static void COExceptionUnhandledException(COException *exception) {
 	/* Exception with no handler in place */
 	fprintf(stderr, "Terminating due to uncaught exception ");
 	COExceptionLog(exception);
-	unsigned int size = 128, nptrs;
+	int size = 128, nptrs;
 	char **strings;
 	void *stackbuffer[size];
 	nptrs = backtrace(stackbuffer, size);
@@ -125,7 +125,7 @@ static void COExceptionUnhandledException(COException *exception) {
 	strings = backtrace_symbols(stackbuffer, nptrs);
 	if (NULL != strings) {
 		fprintf(stderr, "Backtrace:\n");
-		for (unsigned int i=0; i<nptrs; i++)
+		for (int i=0; i<nptrs; i++)
 			fprintf(stderr, "\t%s\n", strings[i]);
 		free(strings);
 	}

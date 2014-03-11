@@ -69,7 +69,7 @@ static void * Value_copy (const void * const _self) {
 	return new(Value, getValuePointer(self), NULL);
 }
 
-static int Value_equals (const void * const _self, const void *const _other) {
+static bool Value_equals (const void * const _self, const void *const _other) {
 	const struct Value *self = _self;
 	const struct Value *other = _other;
 	const struct Classs *const _super = (const struct Classs *const )super(_self);

@@ -21,22 +21,22 @@ struct _Bucket {
 
 struct Array {
 	const struct Collection isa;
-	uint64_t count;
+	UInteger count;
 	const void *store;
 };
 
 struct ArrayClass {
 	const struct CollectionClass isa;
-	uint64_t (* getCollectionCount)(const void * const _self);
-	ObjectRef (* getObjectAtIndex)(const void * const _self, unsigned long index);
+//	UInteger (* getCollectionCount)(const void * const _self);
+	ObjectRef (* getObjectAtIndex)(const void * const _self, UInteger index);
 	
-	int ( *arrayContainsObject) (const void * const self, const void * const object);
-	uint64_t (* indexOfObject) (const void * const self, const void * const object);
+//	int ( *arrayContainsObject) (const void * const self, const void * const object);
+	UInteger (* indexOfObject) (const void * const self, const void * const object);
 //	ArrayRef (* newArrayWithItems) (const void * const _class, va_list *ap);
 	void * ( * getStore) (const void * const self);
 	
-	void * (* lastObject) (const void * const self);
-	void * (* firstObject) (const void * const self);
+//	void * (* lastObject) (const void * const self);
+//	void * (* firstObject) (const void * const self);
 };
 
 void *getStore(const void * const self);

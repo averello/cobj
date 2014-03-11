@@ -40,7 +40,7 @@ int main () {
 		removeObjectAtIndex(vector, 1);
 		assert( errno == EINVAL );
 		
-		assert( indexOfObject(vector, vector) == CONotFound );
+		assert( indexOfObject(vector, vector) == NotFound );
 		assert( ! containsObject(vector, vector) );
 		
 		release(vector);
@@ -63,8 +63,8 @@ int main () {
 		assert( firstObject(vector) == s1 );
 		assert( lastObject(vector) == s1 );
 		
-		unsigned long indexOfS1 = indexOfObject(vector, s1);
-		assert( indexOfS1 != CONotFound );
+		UInteger indexOfS1 = indexOfObject(vector, s1);
+		assert( indexOfS1 != NotFound );
 		assert( indexOfS1 == 0 );
 		assert( containsObject(vector, s1) );
 		
@@ -78,7 +78,7 @@ int main () {
 		
 		addObject(vector, s1);
 		removeFirstObject(vector);
-		assert( indexOfObject(vector, s1) == CONotFound );
+		assert( indexOfObject(vector, s1) == NotFound );
 		
 		addObject(vector, s1);
 		addObject(vector, s2);
@@ -163,7 +163,7 @@ int main () {
 			release(string);
 		}
 		
-		CORange range = COMakeRange(5, 4);
+		Range range = MakeRange(5, 4);
 		removeObjectsInRange(vector, range);
 		
 		assert( getCollectionCount(vector) == 6 );

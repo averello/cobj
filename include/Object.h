@@ -14,7 +14,7 @@
 #undef retain
 #undef release
 
-#include <stdint.h>
+#include <coint.h>
 
 /*! An @ref Object type. */
 extern const void *const Object;
@@ -41,9 +41,9 @@ const void * superclass (const void * self);
  *  @relates Object
  *  @brief A method that returns the class's size (in bytes) of the receiver
  *  @param[in] self the instance of type @ref Object.
- *  @return the size (in bytes) as an size_t type.
+ *  @return the size (in bytes) as an UInteger type.
  */
-uint32_t sizeOf(const void * self);
+UInteger sizeOf(const void * self);
 
 /*! 
  *  @method
@@ -62,7 +62,7 @@ const void * classOf(const void * self);
  *  @param[in] class the @ref Class to test with.
  *  @return a @a C boolean.
  */
-int instanceOf (const void * self, const void * class);
+bool instanceOf (const void * self, const void * class);
 
 /*!
  *  @method
@@ -72,7 +72,7 @@ int instanceOf (const void * self, const void * class);
  *  @param[in] class the @ref Class to test with.
  *  @return a @a C boolean.
  */
-int isSubclassOf (const void * self, const void * class);
+bool isSubclassOf (const void * self, const void * class);
 
 /*!
  *  @method
@@ -100,7 +100,7 @@ void * copy(const void *const self);
  *  @param[in] self the instance of type @ref Object.
  *  @return a @a C boolean.
  */
-int equals(const void * self, const void *const other);
+bool equals(const void * self, const void *const other);
 
 /*!
  *  @method
@@ -109,7 +109,7 @@ int equals(const void * self, const void *const other);
  *  @param[in] self the instance of type @ref Object.
  *  @return the hash code of the given instance.
  */
-int hash (const void *const self);
+UInteger hash (const void *const self);
 
 /*!
  *  @method
@@ -158,7 +158,7 @@ void *autorelease (void *const self);
  *  @param[in] self the instance of type @ref Object.
  *  @return the number of @ref retain calls to this instance.
  */
-unsigned long retainCount (const void *const self);
+UInteger retainCount (const void *const self);
 
 #endif
 

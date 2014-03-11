@@ -110,7 +110,7 @@ int main () {
 	
 		srand(13);
 		clock_t start = clock();
-		for (unsigned long i=0; i<PROFILE_SIZE; i++) {
+		for (UInteger i=0; i<PROFILE_SIZE; i++) {
 			int random = rand();
 			StringRef key = newStringWithFormat(String, "key[%d]", random, NULL);
 			StringRef value = newStringWithFormat(String, "value {[%d]}", random, NULL);
@@ -124,7 +124,7 @@ int main () {
 		
 //		MutableDictionaryPrintfStatistics(dictionary);
 		start = clock();
-		for (unsigned long i=0; i<PROFILE_SIZE; i++) {
+		for (UInteger i=0; i<PROFILE_SIZE; i++) {
 			StringRef key = getObjectAtIndex(keys, i);
 			StringRef value = getObjectAtIndex(values, i);
 			setObjectForKey(dictionary, value, key);
@@ -133,14 +133,14 @@ int main () {
 		MutableDictionaryPrintfStatistics(dictionary);
 		
 		start = clock();
-		for (unsigned long i=0; i<PROFILE_SIZE; i++) {
+		for (UInteger i=0; i<PROFILE_SIZE; i++) {
 			StringRef key = getObjectAtIndex(keys, i);
 			assert( objectForKey(dictionary, key) != NULL );
 		}
 		PRINTF("MutableDictionary objectForKey Time :%f sec\n", (double)(clock()-start)/CLOCKS_PER_SEC);
 		
 		start = clock();
-		for (unsigned long i=0; i<PROFILE_SIZE; i++) {
+		for (UInteger i=0; i<PROFILE_SIZE; i++) {
 			StringRef key = getObjectAtIndex(keys, i);
 			removeObjectForKey(dictionary, key);
 			assert( objectForKey(dictionary, key) == NULL );

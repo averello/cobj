@@ -17,6 +17,7 @@
 #include <ctype.h>
 
 #include <coassert.h>
+#include <corange.h>
 
 #include <StringObject.h>
 #include <StringObject.r>
@@ -92,19 +93,19 @@ static void * String_copy (const void *const _self) {
 	return _copy;
 }
 
-static int String_equals (const void * const _self, const void *const _other) {
+static bool String_equals (const void * const _self, const void *const _other) {
 	const struct String *self = _self;
 	const struct String *other = _other;
 	const struct Classs *const _super = (const struct Classs *const )super(_self);
 	
 	
-	int result = _super->equals(_self, _other);
+	bool result = _super->equals(_self, _other);
 	if ( ! result && (getStringLength(self) == getStringLength(other)) && self->text && other->text)
 		result = (strcmp(self->text, other->text) == 0);
 	return result;
 }
 
-static int String_hash(const void *const _self) {
+static UInteger String_hash(const void *const _self) {
 	const struct String *self = _self;
 	if (self->_hash == 0) {
 //		int h = self->_hash;
@@ -117,10 +118,10 @@ static int String_hash(const void *const _self) {
 //			((struct String *)self)->_hash = h;
 //        }
 		
-		int hash = 0;
+		UInteger hash = 0;
 		const char *restrict text = getStringText(self);
-		for(long i = 0; i < self->length; text++, i++)
-			hash =  (*text) + (hash << 6) + (hash << 16) - hash;
+		for(UInteger i = 0; i < self->length; text++, i++)
+			hash =  (UInteger)(*text) + (hash << 6) + (hash << 16) - hash;
 		((struct String *)self)->_hash = hash;
 	}
 	return self->_hash;
@@ -136,7 +137,7 @@ static StringRef String_newStringWithFormat(const void *const _class, const char
 	
 	int totalWritten = vsnprintf(buffer, BUFSIZ, format, *ap);
 	if (totalWritten>= BUFSIZ) {
-		char *newBuffer = calloc(totalWritten+1, sizeof(char));
+		char *newBuffer = calloc((UInteger)totalWritten+1, sizeof(char));
 		assert(newBuffer != NULL);
 		vsnprintf(newBuffer, totalWritten+1, format, copy);
 		newString = new(_class, newBuffer, NULL);
@@ -167,7 +168,7 @@ static const char * String_getStringText (const void *const _self) {
 	return self->text;
 }
 
-static size_t String_getStringLength (const void *const _self) {
+static UInteger String_getStringLength (const void *const _self) {
 	const struct String *self = _self;
 	return self->length;
 }
@@ -195,7 +196,7 @@ static SComparisonResult String_compareWithOptions (const void *const _self, con
 		return result;
 }
 
-static int String_characterAtIndex(const void * const _self, void *const character, unsigned long index) {
+static int String_characterAtIndex(const void * const _self, void *const character, UInteger index) {
 	const struct String *self = _self;
 	int result = 0;
 	if ( index < getStringLength(self)  && character != NULL )
@@ -207,11 +208,11 @@ static int String_characterAtIndex(const void * const _self, void *const charact
 	return result;
 }
 
-static int String_getCharactersInRange(const void * const _self, void *const restrict buffer, CORange range) {
+static int String_getCharactersInRange(const void * const _self, void *const restrict buffer, Range range) {
 	const struct String *self = _self;
 	int result = 0;
-	uint64_t maxRange = COMaxRange(range);
-	uint64_t length = getStringLength(self);
+	UInteger maxRange = MaxRange(range);
+	UInteger length = getStringLength(self);
 	const char *text = getStringText(self);
 	if ( maxRange < length && buffer != NULL ) {
 		text = text + range.location;
@@ -228,46 +229,26 @@ static int String_getCharactersInRange(const void * const _self, void *const res
 
 /* API */
 
-inline uint64_t COMaxRange(CORange range) {
-	return (range.location + range.length);
-}
-
-inline CORange COMakeRange(uint64_t location, uint64_t length) {
-    CORange range;
-    range.location = location;
-    range.length = length;
-    return range;
-}
-
-inline int COLocationInRange(uint64_t location, CORange range) {
-    return (location - range.location < range.length);
-}
-
-inline int COEqualRanges(CORange range1, CORange range2) {
-    return (range1.location == range2.location
-			&& range1.length == range2.length);
-}
-
-static inline void __ltrim(const char *restrict s, CORange *restrict ioRange) {
+static inline void __ltrim(const char *restrict s, Range *restrict ioRange) {
 	if (ioRange->length==0) return;
 	
-	size_t i=0;
+	UInteger i=0;
 	while(i < ioRange->length && isspace( s[i++] ) );
 	ioRange->location += --i;
 }
 
-static inline void __rtrim(const char *restrict s, CORange *restrict ioRange) {
+static inline void __rtrim(const char *restrict s, Range *restrict ioRange) {
 	if (ioRange->length == 0) return;
 	
-	ssize_t i = ioRange->length;
+	UInteger i = ioRange->length;
 	while(i > ioRange->location && isspace(s[--i]) );
 	ioRange->length -= ++i;
 }
 
-static inline void __trim(const char *restrict s, CORange *restrict ioRange) { __ltrim(s, ioRange), __rtrim(s, ioRange); }
+static inline void __trim(const char *restrict s, Range *restrict ioRange) { __ltrim(s, ioRange), __rtrim(s, ioRange); }
 
 static StringRef String_copyStringByTrimmingSpaces(const void *const self) {
-	CORange range = COMakeRange(0, getStringLength(self));
+	Range range = MakeRange(0, getStringLength(self));
 	const char *text = getStringText(self);
 	if ( text == NULL ) return NULL;
 	
@@ -327,7 +308,7 @@ const char *getStringText(const void * const self) {
 	return class->getStringText(self);
 }
 
-uint64_t getStringLength(const void * const self) {
+UInteger getStringLength(const void * const self) {
 	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct StringClass *class = classOf(self);
 	COAssertNoNullOrReturn(class,EINVAL,0);
@@ -383,7 +364,7 @@ SComparisonResult compareWithOptions(const void *const self, const void *const o
 }
 
 
-int characterAtIndex(const void * const self, void *const character, uint64_t index) {
+int characterAtIndex(const void * const self, void *const character, UInteger index) {
 	COAssertNoNullOrReturn(self,EINVAL,-1);
 	const struct StringClass *const class = classOf(self);
 	COAssertNoNullOrReturn(class,EINVAL,-1);
@@ -393,7 +374,7 @@ int characterAtIndex(const void * const self, void *const character, uint64_t in
 
 
 
-int getCharactersInRange(const void * const self, void *const restrict buffer, CORange range) {
+int getCharactersInRange(const void * const self, void *const restrict buffer, Range range) {
 	COAssertNoNullOrReturn(self,EINVAL,-1);
 	COAssertNoNullOrReturn(buffer,EINVAL,-1);
 	const struct StringClass *const class = classOf(self);

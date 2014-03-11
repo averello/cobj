@@ -59,7 +59,7 @@ static void * Thread_copy (const void * const _self) {
 	return NULL;
 }
 
-static int Thread_equals (const void * const _self, const void *const _other) {
+static bool Thread_equals (const void * const _self, const void *const _other) {
 	const struct Thread *self = _self;
 	const struct Thread *other = _other;
 	const struct Classs *const _super = (const struct Classs *const )super(_self);

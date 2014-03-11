@@ -106,7 +106,7 @@ int main () {
 		MutableStringRef mString = new(MutableString, "string text, nice world", NULL);
 		size_t length = getStringLength(mString);
 		
-		deleteMutableStringCharactersInRange(mString, COMakeRange(7, 6));
+		deleteMutableStringCharactersInRange(mString, MakeRange(7, 6));
 		assert( getStringText(mString) != NULL );
 		assert( getStringLength(mString) == (length - 6) );
 		assert( strcmp(getStringText(mString), "string nice world") == 0 );

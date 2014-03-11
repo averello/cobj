@@ -17,8 +17,8 @@ void initBuffer() __attribute__ ((constructor));
 void deallocBuffer() __attribute__ ((destructor));
 
 const void *getBufferBytes(const void *const self);
-void getBufferBytesOfLength(const void *const self, void *restrict buffer, size_t length);
-void getBufferBytesInRange(const void *const self, void *restrict buffer, CORange range);
-size_t getBufferLength(const void *const self);
+void getBufferBytesOfLength(const void *const self, void *restrict buffer, UInteger length);
+void getBufferBytesInRange(const void *const self, void *restrict buffer, Range range);
+UInteger getBufferLength(const void *const self);
 
 #endif

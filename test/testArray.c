@@ -28,7 +28,7 @@ int main ( int argc, char *argv[] ) {
 	ArrayRef array = new(Array, string1, string2, string3, string4, formatedString, NULL);
 	assert(array != NULL);
 	assert(getCollectionCount(array) == 5);
-	for (unsigned long i=0; i<getCollectionCount(array); i++)
+	for (UInteger i=0; i<getCollectionCount(array); i++)
 		assert( equals(strings[i], getObjectAtIndex(array, i)) );
 	
 	ArrayRef copyArray = copy(array);
@@ -56,7 +56,7 @@ int main ( int argc, char *argv[] ) {
 	MutableArrayRef mutable = new(MutableArray, string1, string2, formatedString, NULL);
 	assert(mutable != NULL);
 	assert(getCollectionCount(mutable) == 3);
-	for (unsigned long i=0; i<getCollectionCount(mutable); i++)
+	for (UInteger i=0; i<getCollectionCount(mutable); i++)
 		assert( equals(mutableStrings[i], getObjectAtIndex(mutable, i)) );
 	
 	MutableArrayRef mutableCopyArray = copy(mutable);
@@ -73,7 +73,7 @@ int main ( int argc, char *argv[] ) {
 	release(string4);
 	//*/
 	
-	for (unsigned long i=0; i<getCollectionCount(copyArray); i++)
+	for (UInteger i=0; i<getCollectionCount(copyArray); i++)
 		assert( equals(strings[i], getObjectAtIndex(copyArray, i)) );
 	release(copyArray);
 		
@@ -117,9 +117,9 @@ int main ( int argc, char *argv[] ) {
 	
 	removeObjectAtIndex(addRemove, 1);
 	
-	assert( indexOfObject(addRemove, s2) == CONotFound );
+	assert( indexOfObject(addRemove, s2) == NotFound );
 	removeObject(addRemove, s3);
-	assert( indexOfObject(addRemove, s3) == CONotFound );
+	assert( indexOfObject(addRemove, s3) == NotFound );
 	
 	assert( indexOfObject(addRemove, s1) == 0 );
 	assert( containsObject(addRemove, s1) );
@@ -157,7 +157,7 @@ int main ( int argc, char *argv[] ) {
 			release(string);
 		}
 		
-		CORange range = COMakeRange(5, 4);
+		Range range = MakeRange(5, 4);
 		removeObjectsInRange(array, range);
 		
 		assert( getCollectionCount(array) == 6 );

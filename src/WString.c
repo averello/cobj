@@ -93,25 +93,25 @@ static void * WString_copy (const void *const _self) {
 	return _copy;
 }
 
-static int WString_equals (const void * const _self, const void *const _other) {
+static bool WString_equals (const void * const _self, const void *const _other) {
 	const struct String *self = _self;
 	const struct String *other = _other;
 	const struct Classs *const _super = superclass(superclass(classOf(_self)));
 	
 	
-	int result = _super->equals(_self, _other);
+	bool result = _super->equals(_self, _other);
 	if ( ! result && (getStringLength(self) == getStringLength(other)) && self->text && other->text)
 		result = (wcscmp(self->text, other->text) == 0);
 	return result;
 }
 
-static int WString_hash(const void *const _self) {
+static UInteger WString_hash(const void *const _self) {
 	const struct String *self = _self;
 	if (self->_hash == 0) {
-		int hash = 0;
+		UInteger hash = 0;
 		const wchar_t *restrict text = getWText(self);
-		for(long i = 0; i < self->length; text++, i++)
-			hash = (*text) + (hash << 6) + (hash << 16) - hash;
+		for(UInteger i = 0; i < self->length; text++, i++)
+			hash = (UInteger)(*text) + (hash << 6) + (hash << 16) - hash;
 		((struct String *)self)->_hash = hash;
 	}
 	return self->_hash;
@@ -126,9 +126,9 @@ static WStringRef WString_newStringWithFormat(const void *const _class, const wc
 	
 	int totalWritten = vswprintf(buffer, BUFSIZ, format, *ap);
 	if (totalWritten>= BUFSIZ) {
-		wchar_t *newBuffer = calloc(totalWritten+1, sizeof(wchar_t));
+		wchar_t *newBuffer = calloc((UInteger)totalWritten+1, sizeof(wchar_t));
 		assert(newBuffer != NULL);
-		vswprintf(newBuffer, totalWritten+1, format, copy);
+		vswprintf(newBuffer, (UInteger)totalWritten+1, format, copy);
 		newString = new(_class, newBuffer, NULL);
 		free(newBuffer);
 	}
@@ -141,9 +141,9 @@ static WStringRef WString_newStringWithFormat(const void *const _class, const wc
 static WStringRef WString_copyStringByAppendingString(const void *restrict const _self, const void *restrict const _other) {
 	const struct WString *self = _self;
 	const struct WString *other = _other;
-	size_t length = getStringLength(self);
-	size_t otherLength = getStringLength(other);
-	size_t newLength = length + otherLength + sizeof(wchar_t);
+	UInteger length = getStringLength(self);
+	UInteger otherLength = getStringLength(other);
+	UInteger newLength = length + otherLength + sizeof(wchar_t);
 	
 	wchar_t *buffer = calloc(newLength, sizeof(wchar_t));
 	assert(buffer != NULL);
@@ -187,7 +187,7 @@ static SComparisonResult WString_compareWithOptions (const void *const _self, co
 		return result;
 }
 
-static int WString_characterAtIndex(const void * const _self, void *const character, unsigned long index) {
+static int WString_characterAtIndex(const void * const _self, void *const character, UInteger index) {
 	const struct String *self = _self;
 	const wchar_t *text = getWText(self);
 	int result = 0;
@@ -201,11 +201,11 @@ static int WString_characterAtIndex(const void * const _self, void *const charac
 	return result;
 }
 
-static int WString_getCharactersInRange(const void * const _self, void *const restrict buffer, CORange range) {
+static int WString_getCharactersInRange(const void * const _self, void *const restrict buffer, Range range) {
 	const struct String *self = _self;
 	int result = 0;
-	unsigned long maxRange = COMaxRange(range);
-	size_t length = getStringLength(self);
+	UInteger maxRange = MaxRange(range);
+	UInteger length = getStringLength(self);
 	const wchar_t *text = getWText(self);
 	if ( maxRange < length && buffer != NULL ) {
 		text = text + range.location;

@@ -25,7 +25,7 @@ static void * MutableArray_constructor (void * _self, va_list * app) {
 	void *item = NULL;
 	va_list ap;
 	va_copy(ap, *app);
-	unsigned long itemsCount = 0;
+	UInteger itemsCount = 0;
 	while ( (item = va_arg(ap, void *)) )
 		itemsCount++;
 	va_end(ap);
@@ -110,22 +110,22 @@ static void *MutableArray_copy (const void *const _self) {
 	
 	struct Array * copyArray = new(MutableArray, NULL);
 	ObjectRef item = NULL;
-	unsigned long count = arraySelf->count;
-	for (unsigned long i=0;  i<count && (item = getObjectAtIndex(self, i)) ; i++)
+	UInteger count = arraySelf->count;
+	for (UInteger i=0;  i<count && (item = getObjectAtIndex(self, i)) ; i++)
 		addObject(copyArray, item);
 	return (void *)copyArray;
 }
 
-static int MutableArray_equals (const void *const _self, const void *const other) {
+static bool MutableArray_equals (const void *const _self, const void *const other) {
 	const struct Array *const self = _self;
 	const struct Classs *const _super = superclass(superclass(classOf(_self)));
 	
-	int result = _super->equals(_self, other);
+	bool result = _super->equals(_self, other);
 	if ( ! result) {
 		result = (self->count == getCollectionCount(other));
 		if ( result ) {
-			unsigned long size = self->count;
-			for (unsigned long i=0; i<size && (result != 0); i++) {
+			UInteger size = self->count;
+			for (UInteger i=0; i<size && (result != 0); i++) {
 				ObjectRef item1 = getObjectAtIndex(self, i);
 				ObjectRef item2 = getObjectAtIndex(other, i);
 				result = equals(item1, item2);
@@ -157,14 +157,14 @@ static void MutableArray_insertObject (void *const self, const void *const objec
 	super->count++;
 }
 
-static ObjectRef MutableArray_getObjectAtIndex(const void * const _self, unsigned long index) {
+static ObjectRef MutableArray_getObjectAtIndex(const void * const _self, UInteger index) {
 	const struct Array *self = _self;
 	struct StoreHead * store = getStore(self);
 	assert(0 <= index && ( self->count != 0 ) ? ((self->count - index) > 0) : 1 );
 	
 	if ( store == NULL || self->count <= 0 )
 		return NULL;
-	unsigned long result = 0;
+	UInteger result = 0;
 	struct _Item *it = NULL;
 	for (it = store->tqh_first; it != NULL && result != index ; it = it->items.tqe_next, result++);
 	if (NULL==it)
@@ -172,31 +172,31 @@ static ObjectRef MutableArray_getObjectAtIndex(const void * const _self, unsigne
 	return (void *)it->item;
 }
 
-static unsigned long MutableArray_indexOfObject(const void * const _self, const void * const object) {
+static UInteger MutableArray_indexOfObject(const void * const _self, const void * const object) {
 	const struct Array *self = _self;
 	struct StoreHead * store = getStore(self);
 	
 	if ( store == NULL || self->count <= 0 )
-		return CONotFound;
+		return NotFound;
 	
-	unsigned long result = 0;
+	UInteger result = 0;
 	struct _Item *it = NULL;
 //	for (it = store->tqh_first; it != NULL && it->item != object ; it = it->items.tqe_next, result++);
 	for (it = store->tqh_first; it != NULL && ! equals(it->item, object) ; it = it->items.tqe_next, result++);
 	if (result>=self->count)
-		result = CONotFound;
+		result = NotFound;
 	return result;
 }
 
 static int MutableArray_arrayContainsObject(const void * const self, const void * const object) {
-	unsigned long result = indexOfObject(self, object);
-	return (result != CONotFound);
+	UInteger result = indexOfObject(self, object);
+	return (result != NotFound);
 }
 
 static void MutableArray_removeAllObjects(void * const _self) {
 	struct Array *const self = _self;
-	unsigned long count = self->count;
-	for (unsigned long i=0; i<count; i++)
+	UInteger count = self->count;
+	for (UInteger i=0; i<count; i++)
 		removeFirstObject(self);
 }
 
@@ -232,7 +232,7 @@ static void MutableArray_removeFirstObject(void * const _self) {
 	removeObjectAtIndex(self, 0);
 }
 
-static void MutableArray_insertObjectAtIndex(void *const _self, void *const object, unsigned long index) {
+static void MutableArray_insertObjectAtIndex(void *const _self, void *const object, UInteger index) {
 	struct Array *const self = _self;
 	const struct StoreHead *const store = getStore(self);
 	assert(index <= self->count);
@@ -248,7 +248,7 @@ static void MutableArray_insertObjectAtIndex(void *const _self, void *const obje
 	
 	
 	struct _Item *it = NULL;
-	unsigned long result = 0;
+	UInteger result = 0;
 	for (it = store->tqh_first; it != NULL && (index != result); it = it->items.tqe_next, result++);
 	
 	
@@ -270,26 +270,26 @@ static void MutableArray_insertObjectAtIndex(void *const _self, void *const obje
 #endif
 }
 
-static struct _Item * MutableArray_ItemForIndex(const void *const _self, unsigned long index) {
+static struct _Item * MutableArray_ItemForIndex(const void *const _self, UInteger index) {
 	const struct Array *const self = _self;
 	const struct StoreHead *const store = getStore(self);
 	if (index >= self->count || self->count == 0)
 		return NULL;
 	
 	struct _Item *it = NULL;
-	unsigned long result = 0;
+	UInteger result = 0;
 	for (it = store->tqh_first; it != NULL && (index != result); it = it->items.tqe_next, result++);
 	return it;
 }
 
 static void MutableArray_removeObject(void *const _self, const void * const object) {
 	struct Array *const self = _self;
-	unsigned long index = indexOfObject(self, object);
-	if (index != CONotFound)
+	UInteger index = indexOfObject(self, object);
+	if (index != NotFound)
 		removeObjectAtIndex(self, index);
 }
 
-static void MutableArray_removeObjectAtIndex(void *const _self, unsigned long index) {
+static void MutableArray_removeObjectAtIndex(void *const _self, UInteger index) {
 	struct Array *const self = _self;
 	struct StoreHead *const store = getStore(self);
 	if ( self->count == 0 || index >= self->count )
@@ -304,15 +304,15 @@ static void MutableArray_removeObjectAtIndex(void *const _self, unsigned long in
 	}
 }
 
-static void MutableArray_removeObjectsInRange(void *const _self, CORange range) {
+static void MutableArray_removeObjectsInRange(void *const _self, Range range) {
 	struct Array *const self = _self;
-	if ( range.location >= self->count || COMaxRange(range) >= self->count ) return;
+	if ( range.location >= self->count || MaxRange(range) >= self->count ) return;
 	
-	for (unsigned long i=range.location; i<COMaxRange(range); i++)
+	for (UInteger i=range.location; i<MaxRange(range); i++)
 		removeObjectAtIndex(self, range.location);
 }
 
-static void MutableArray_replaceObjectAtIndexWithObject(void *const _self, unsigned long index, void *const other) {
+static void MutableArray_replaceObjectAtIndexWithObject(void *const _self, UInteger index, void *const other) {
 	struct Array *const self = _self;
 	if ( index > self->count ) return;
 	
@@ -428,7 +428,7 @@ void removeFirstObject(void *const self) {
 	class->removeFirstObject(self);
 }
 
-void insertObjectAtIndex(void *const self, void *const object, unsigned long index) {
+void insertObjectAtIndex(void *const self, void *const object, UInteger index) {
 	COAssertNoNullOrBailOut(self,EINVAL);
 	COAssertNoNullOrBailOut(object,EINVAL);
 	const struct MutableArrayClass *class = classOf(self);
@@ -446,7 +446,7 @@ void removeObject(void *const self, void * const object) {
 	class->removeObject(self, object);
 }
 
-void removeObjectAtIndex(void *const self, unsigned long index) {
+void removeObjectAtIndex(void *const self, UInteger index) {
 	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct MutableArrayClass *class = classOf(self);
 	COAssertNoNullOrBailOut(class,EINVAL);
@@ -456,11 +456,11 @@ void removeObjectAtIndex(void *const self, unsigned long index) {
 
 ArrayRef newArrayFromMutableArray(const void * const mutableArray) {
 	COAssertNoNullOrReturn(mutableArray,EINVAL,NULL);
-	const unsigned long count = getCollectionCount(mutableArray);
+	const UInteger count = getCollectionCount(mutableArray);
 	struct _Bucket *newBuckets = calloc(count, sizeof(struct _Bucket));
 	COAssertNoNullOrReturn(newBuckets,errno,NULL);
 	
-	for (unsigned long i=0; i<count; i++) {
+	for (UInteger i=0; i<count; i++) {
 		ObjectRef item = getObjectAtIndex(mutableArray, i);
 		retain(item);
 		newBuckets[i].item = item;
@@ -476,15 +476,15 @@ MutableArrayRef newMutableArrayFromArray(const void * const array) {
 	COAssertNoNullOrReturn(array,EINVAL,NULL);
 	MutableArrayRef mutableArray = new(MutableArray, NULL);
 	COAssertNoNullOrReturn(mutableArray,errno,NULL);
-	const unsigned long count = getCollectionCount(array);
-	for (unsigned long i=0; i<count; i++)
+	const UInteger count = getCollectionCount(array);
+	for (UInteger i=0; i<count; i++)
 		addObject(mutableArray, getObjectAtIndex(array, i));
 	return mutableArray;
 }
 
 /*
-static void __initializeBuckets(const struct _Bucket * oldStore, struct _Bucket * newStore, unsigned long count) {
-	for (unsigned long i=0; i<count; i++) {
+static void __initializeBuckets(const struct _Bucket * oldStore, struct _Bucket * newStore, UInteger count) {
+	for (UInteger i=0; i<count; i++) {
 		ObjectRef item = (ObjectRef)oldStore[i].item;
 		retain(item);
 		newStore[i].item = item;
@@ -497,7 +497,7 @@ ArrayRef newArrayWithArray(const void * const array) {
 	return copy(array);
 	/*
 	const struct _Bucket *const buckets = getStore(array);
-	const unsigned long count = getCollectionCount(array);
+	const UInteger count = getCollectionCount(array);
 	struct _Bucket *newBuckets = calloc(count, sizeof(struct _Bucket));
 	
 	__initializeBuckets(buckets, newBuckets, count);
@@ -509,7 +509,7 @@ ArrayRef newArrayWithArray(const void * const array) {
 	 */
 }
 
-void removeObjectsInRange(void *const self, CORange range) {
+void removeObjectsInRange(void *const self, Range range) {
 	COAssertNoNullOrBailOut(self,EINVAL);
 	
 	const struct MutableArrayClass *class = classOf(self);
@@ -518,7 +518,7 @@ void removeObjectsInRange(void *const self, CORange range) {
 	class->removeObjectsInRange(self, range);
 }
 
-void replaceObjectAtIndexWithObject(void *const self, unsigned long index, void *const other) {
+void replaceObjectAtIndexWithObject(void *const self, UInteger index, void *const other) {
 	COAssertNoNullOrBailOut(self,EINVAL);
 	COAssertNoNullOrBailOut(other,EINVAL);
 	

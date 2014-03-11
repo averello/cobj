@@ -28,7 +28,7 @@ static void * Array_constructor (void * _self, va_list * app) {
 	void *item = NULL;
 	va_list ap;
 	va_copy(ap, *app);
-	unsigned long itemsCount = 0;
+	UInteger itemsCount = 0;
 	while ( (item = va_arg(ap, void *)) )
 		itemsCount++;
 	va_end(ap);
@@ -42,7 +42,7 @@ static void * Array_constructor (void * _self, va_list * app) {
 	
 	self->count = itemsCount;
 	
-	unsigned long i=0;
+	UInteger i=0;
 	while ( (item = va_arg(*app, void *)) ) {
 		retain(item);
 		buckets[i++].item = item;
@@ -55,7 +55,7 @@ static void * Array_constructor (void * _self, va_list * app) {
 static void * Array_destructor (void * _self) {
 	struct Array *self = super_destructor(Array, _self);
 	struct _Bucket *store = (struct _Bucket *)self->store;
-	for (unsigned long i=0; i<self->count; i++)
+	for (UInteger i=0; i<self->count; i++)
 		release((void *)store[i].item);
 	free(store), self->store = NULL, self->count = 0;
 	return self;
@@ -86,13 +86,13 @@ static void * Array_copy (const void *const _self) {
 	if (getCollectionCount(self) ==0 || self->store == NULL)
 		return new(Array, NULL);
 	
-	size_t size = self->count * sizeof(struct _Bucket);
+	UInteger size = self->count * sizeof(struct _Bucket);
 	struct _Bucket *buckets = malloc(size);
 	assert(buckets != NULL);
 	if ( buckets == NULL ) return errno = ENOMEM, NULL;
 	
 	memcpy(buckets, self->store, size);
-	for (unsigned long i=0; i<getCollectionCount(self); i++)
+	for (UInteger i=0; i<getCollectionCount(self); i++)
 		retain((void *)buckets[i].item);
 	
 	struct Array * copyArray = new(Array, NULL);
@@ -106,7 +106,7 @@ static struct _Bucket * Array_getStore(const void * const _self) {
 	return (struct _Bucket *)self->store;
 }
 
-static ObjectRef Array_getObjectAtIndex(const void * const _self, unsigned long index) {
+static ObjectRef Array_getObjectAtIndex(const void * const _self, UInteger index) {
 	const struct Array *self = _self;
 	assert(0 <= index && index < self->count);
 	if (self->count == 0 || self->store == NULL) return NULL;
@@ -117,7 +117,7 @@ static ObjectRef Array_getObjectAtIndex(const void * const _self, unsigned long 
 	return NULL;
 }
 
-static unsigned long Array_getCollectionCount(const void * const _self) {
+static UInteger Array_getCollectionCount(const void * const _self) {
 	const struct Array *self = _self;
 	return self->count;
 }
@@ -125,18 +125,18 @@ static unsigned long Array_getCollectionCount(const void * const _self) {
 const void * Array = NULL;
 const void * ArrayClass = NULL;
 
-static int Array_equals (const void *const _self, const void *const _other) {
+static bool Array_equals (const void *const _self, const void *const _other) {
 	const struct Array *self = _self;
 	const struct Array *other = _other;
 	const struct Classs *const _super = (const struct Classs *const )super(_self);
 	
 	
-	int result = _super->equals(_self, _other);
+	bool result = _super->equals(_self, _other);
 	if ( ! result) {
 		result = (getCollectionCount(self) == getCollectionCount(other));
 		if ( result ) {
-			unsigned long size = getCollectionCount(self);
-			for (unsigned long i=0; i<size && (result != 0); i++) {
+			UInteger size = getCollectionCount(self);
+			for (UInteger i=0; i<size && (result != 0); i++) {
 				ObjectRef item1 = getObjectAtIndex(self, i);
 				ObjectRef item2 = getObjectAtIndex(other, i);
 				result = equals(item1, item2);
@@ -146,25 +146,25 @@ static int Array_equals (const void *const _self, const void *const _other) {
 	return result;
 }
 
-static int Array_arrayContainsObject(const void * const _self, const void * const _object) {
+static bool Array_arrayContainsObject(const void * const _self, const void * const _object) {
 	const struct Array *self = _self;
 	const struct Object *object = _object;
 	
-	int result = 0;
-	unsigned long size = getCollectionCount(self);
-	for (unsigned long i=0; i<size && (result == 0); i++) {
+	bool result = NO;
+	UInteger size = getCollectionCount(self);
+	for (UInteger i=0; i<size && (result == 0); i++) {
 		ObjectRef item = getObjectAtIndex(self, i);
 		result = (equals(item, object));
 	}
 	return result;
 }
 
-static unsigned long Array_indexOfObject(const void * const _self, const void * const _object) {
+static UInteger Array_indexOfObject(const void * const _self, const void * const _object) {
 	const struct Array *self = _self;
-	int result = 0;
-	unsigned long index = CONotFound;
-	unsigned long size = getCollectionCount(self);
-	for (unsigned long i=0; i<size && (result == 0); i++) {
+	bool result = NO;
+	UInteger index = NotFound;
+	UInteger size = getCollectionCount(self);
+	for (UInteger i=0; i<size && (result == 0); i++) {
 		ObjectRef item = getObjectAtIndex(self, i);
 		result = (equals(item, _object));
 		if (result)
@@ -181,8 +181,8 @@ static StringRef Array_copyDescription(const void * const _self) {
 	StringRef mycopyDescription = newStringWithFormat(String, "<%s {\n", getStringText(supercopyDescription), NULL);
 	release(supercopyDescription);
 	
-	unsigned long count = getCollectionCount(self);
-	for (unsigned long i=0; i<count; i++) {
+	UInteger count = getCollectionCount(self);
+	for (UInteger i=0; i<count; i++) {
 		ObjectRef item = getObjectAtIndex(self, i);
 		StringRef *string = copyDescription(item);
 		StringRef *tmp = newStringWithFormat(String, "%s%s,\n", getStringText(mycopyDescription), getStringText(string), NULL);
@@ -234,13 +234,11 @@ static void * Array_firstObject(const void * const _self) {
 //	return array;
 //};
 
-#define MIN(a,b) ((a)<(b)?(a):(b))
-
-static uint64_t Array_enumerateWithState(const void *const _self, FastEnumerationState *const state, void *iobuffer[], uint64_t length) {
+static UInteger Array_enumerateWithState(const void *const _self, FastEnumerationState *const state, void *iobuffer[], UInteger length) {
 	const struct Array *const self = _self;
-	uint64_t collectionCount = getCollectionCount(_self);
+	UInteger collectionCount = getCollectionCount(_self);
 	if (state->state == 0) {
-		state->mutationsPointer =(uint64_t *)self;
+		state->mutationsPointer =(UInteger *)self;
 		state->extra[0] = collectionCount;
 		state->state = 1;
 	}
@@ -249,16 +247,14 @@ static uint64_t Array_enumerateWithState(const void *const _self, FastEnumeratio
 			return state->mutationsPointer = NULL, 0;
 	
 	state->itemsPointer = iobuffer;
-	uint64_t count = 0;
-	uint64_t numberOfIter = MIN(collectionCount, length);
-	for (uint64_t i=(state->extra[1]), j=0; i<numberOfIter; i++, j++, count++)
+	UInteger count = 0;
+	UInteger numberOfIter = MIN(collectionCount, length);
+	for (UInteger i=(state->extra[1]), j=0; i<numberOfIter; i++, j++, count++)
 		iobuffer[j] = getObjectAtIndex(self, i);
 	if (count!=0)
 		state->extra[1] = count;
 	return count;
 }
-
-#undef MIN
 
 void initArray () {
 	initCollection();
@@ -308,7 +304,7 @@ void *getStore(const void * const self) {
 	return class->getStore(self);
 }
 
-ObjectRef getObjectAtIndex(const void * const self, unsigned long index) {
+ObjectRef getObjectAtIndex(const void * const self, UInteger index) {
 	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct ArrayClass *class = classOf(self);
 	COAssertNoNullOrReturn(class,EINVAL,NULL);
@@ -316,12 +312,12 @@ ObjectRef getObjectAtIndex(const void * const self, unsigned long index) {
 	return class->getObjectAtIndex(self, index);
 }
 
-unsigned long indexOfObject(const void * const self, const void * const object) {
-	COAssertNoNullOrReturn(self,EINVAL,CONotFound);
-	COAssertNoNullOrReturn(object,EINVAL,CONotFound);
+UInteger indexOfObject(const void * const self, const void * const object) {
+	COAssertNoNullOrReturn(self,EINVAL,NotFound);
+	COAssertNoNullOrReturn(object,EINVAL,NotFound);
 	const struct ArrayClass *class = classOf(self);
-	COAssertNoNullOrReturn(class,EINVAL,CONotFound);
-	COAssertNoNullOrReturn(class->indexOfObject,ENOTSUP,CONotFound);
+	COAssertNoNullOrReturn(class,EINVAL,NotFound);
+	COAssertNoNullOrReturn(class->indexOfObject,ENOTSUP,NotFound);
 	return class->indexOfObject(self, object);
 }
 

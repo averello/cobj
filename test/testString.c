@@ -41,7 +41,7 @@ int main(int argc, const char * argv[])
 
 	assert( characterAtIndex(string1, &fifthChar, 18) == -1 );
 	
-	CORange range = COMakeRange(3, 8);
+	Range range = MakeRange(3, 8);
 	char buffer[8];
 	assert ( getCharactersInRange(string3, buffer, range) != -1 );
 	assert( strncmp(buffer, "precious", range.length) == 0 );
@@ -76,13 +76,13 @@ int main(int argc, const char * argv[])
 	}
 	
 	{
-		unsigned long h1 = hash(string1);
-		unsigned long h2 = hash(string2);
-		unsigned long h3 = hash(string3);
-		unsigned long h4 = hash(string4);
-//		printf("%lu\n", sizeof(unsigned long));
-//		printf("%lu %lu %lu\n", h1, h1 >> (sizeof(unsigned long) * 8 / 2) , (h1 << (sizeof(unsigned long) * 8 / 2)) >> (sizeof(unsigned long) * 8 /2));
-//		printf("%lu %lu %lu\n", h2, h2 >> (sizeof(unsigned long) * 8 / 2) , (h2 << (sizeof(unsigned long) * 8 / 2)) >> (sizeof(unsigned long) * 8 /2));
+		UInteger h1 = hash(string1);
+		UInteger h2 = hash(string2);
+		UInteger h3 = hash(string3);
+		UInteger h4 = hash(string4);
+//		printf("%lu\n", sizeof(UInteger));
+//		printf("%lu %lu %lu\n", h1, h1 >> (sizeof(UInteger) * 8 / 2) , (h1 << (sizeof(UInteger) * 8 / 2)) >> (sizeof(UInteger) * 8 /2));
+//		printf("%lu %lu %lu\n", h2, h2 >> (sizeof(UInteger) * 8 / 2) , (h2 << (sizeof(UInteger) * 8 / 2)) >> (sizeof(UInteger) * 8 /2));
 		assert( h1 == h3 );
 		assert( h2 == h4 );
 	}

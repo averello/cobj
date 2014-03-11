@@ -17,17 +17,17 @@
 struct String {
 	const struct Object isa;
 	const void *text;
-	uint64_t length;
-	int _hash;
+	UInteger length;
+	UInteger _hash;
 };
 
 struct StringClass {
 	const struct Classs isa;
 	const char * (* getStringText)(const void *const self);
-	uint64_t (* getStringLength)(const void *const self);
+	UInteger (* getStringLength)(const void *const self);
 	
-	int (* characterAtIndex) (const void *const self, void *const character, uint64_t index);
-	int (* getCharactersInRange) (const void *const self, void *const buffer, CORange range);
+	int (* characterAtIndex) (const void *const self, void *const character, UInteger index);
+	int (* getCharactersInRange) (const void *const self, void *const buffer, Range range);
 
 	StringRef (* copyStringByAppendingString)(const void *restrict const self, const void *restrict const other);
 	StringRef (* newStringWithFormat)(const void *const _class, const char *format, va_list *ap);

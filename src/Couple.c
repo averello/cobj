@@ -62,13 +62,13 @@ static void * Couple_copy (const void * const _self) {
 	return new(Couple, getKey(self), getValue(self), NULL);
 }
 
-static int Couple_equals (const void * const _self, const void *const _other) {
+static bool Couple_equals (const void * const _self, const void *const _other) {
 	const struct Couple *const self = _self;
 	const struct Couple *const other = _other;
 	const struct Classs *const _super = (const struct Classs *const )super(_self);
 	
 	
-	int result = _super->equals(_self, _other);
+	bool result = _super->equals(_self, _other);
 	if ( ! result )
 		return (
 				equals(getKey(self), getKey(other))
@@ -78,10 +78,10 @@ static int Couple_equals (const void * const _self, const void *const _other) {
 	return result;
 }
 
-static int Couple_hash (const void *const _self) {
+static UInteger Couple_hash (const void *const _self) {
 	const struct Object *const self = _self;
-	int prime = 31;
-	int result = 1;
+	UInteger prime = 31;
+	UInteger result = 1;
 	result = prime * result + hash(getKey(self));
 	result = prime * result + hash(getValue(self));
 	return result;

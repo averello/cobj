@@ -25,10 +25,10 @@ static void * Class_constructor (void * _self, va_list * app) {
 	
 	self->class_name = va_arg( *app, const char *);
 	self->super = va_arg( *app, struct Classs *);
-	self->size = va_arg( *app, uint32_t);
+	self->size = va_arg( *app, UInteger);
 	
 	assert(self->super != NULL);
-	const size_t offset	 = sizeof(struct Object) + sizeof(char *) + sizeof(struct Class *) + sizeof(size_t);
+	const UInteger offset	 = sizeof(struct Object) + sizeof(char *) + sizeof(struct Class *) + sizeof(UInteger);
 	memcpy((char *)self  + offset, (char *)(self->super) + offset, sizeOf((void *)self->super) - offset);
 	{
 		typedef void (*voidf) ();
@@ -79,19 +79,19 @@ static void * Class_copy (const void *const _self) {
 	return NULL;
 }
 
-static int Class_hash (const void *const self) {
-	COAssertNoNullOrReturn(self,EINVAL,-1);
+static UInteger Class_hash (const void *const self) {
+	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct Classs *const class = classOf(self);
-	COAssertNoNullOrReturn(class,EINVAL,-1);
+	COAssertNoNullOrReturn(class,EINVAL,0);
 	const struct Classs *const _superclass = superclass(self);
-	COAssertNoNullOrReturn(_superclass,EINVAL,-1);
-	COAssertNoNullOrReturn(_superclass->hash,EINVAL,-1);
+	COAssertNoNullOrReturn(_superclass,EINVAL,0);
+	COAssertNoNullOrReturn(_superclass->hash,EINVAL,0);
 	
 	
-	int prime = 31;
-	int result = _superclass->hash(self);
-	result = prime * result  + (int)strlen(class->class_name);
-	result = prime * result + (int)class->size;
+	UInteger prime = 31;
+	UInteger result = _superclass->hash(self);
+	result = prime * result  + (UInteger)strlen(class->class_name);
+	result = prime * result + class->size;
 	return result;
 }
 static void * Class_retain (void *const _self) {

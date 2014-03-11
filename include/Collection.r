@@ -21,11 +21,11 @@ struct Collection {
 
 struct CollectionClass {
 	const struct Classs isa;
-	uint64_t (*getCollectionCount)(const void *const self);
+	UInteger (*getCollectionCount)(const void *const self);
 	void * (*lastObject)(const void * const self);
 	void * (*firstObject)(const void * const self);
 	int (*containsObject)(const void * const self, const void * const object);
-	uint64_t (*enumerateWithState)(const void *const collection, FastEnumerationState *const state, void *iobuffer[], uint64_t length);
+	UInteger (*enumerateWithState)(const void *const collection, FastEnumerationState *const state, void *iobuffer[], UInteger length);
 };
 
 #endif

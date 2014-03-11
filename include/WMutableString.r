@@ -17,7 +17,7 @@
 struct WMutableString {
 	struct MutableString isa;
 	off_t offset;
-	uint64_t capacity;
+	UInteger capacity;
 };
 
 struct WMutableStringClass {

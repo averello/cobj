@@ -22,7 +22,7 @@ static void * Dictionary_constructor (void * _self, va_list * app) {
 	va_list ap;
 	va_copy(ap, *app);
 	ObjectRef key = NULL, value = NULL;
-	unsigned long count = 0;
+	UInteger count = 0;
 	while ( (key = va_arg(ap, ObjectRef)) ) {
 		va_arg(ap, ObjectRef);
 		count++;
@@ -32,7 +32,7 @@ static void * Dictionary_constructor (void * _self, va_list * app) {
 	if (count!=0) {
 		MutableArrayRef keys = new(MutableArray, NULL);
 		MutableArrayRef values = new(MutableArray, NULL);
-		unsigned long *hashes = calloc(count, sizeof(unsigned long));
+		UInteger *hashes = calloc(count, sizeof(UInteger));
 		
 		count = 0;
 		while ( (key = va_arg(*app, ObjectRef)) ) {
@@ -87,8 +87,8 @@ static void * DictionaryClass_constructor (void * _self, va_list *app) {
 
 static ObjectRef Dictionary_objectForKey(const void *const _self, void *const _key) {
 	const struct Dictionary *const self = _self;
-	unsigned long keyhash = hash(_key);
-	unsigned long i;
+	UInteger keyhash = hash(_key);
+	UInteger i;
 	for (i=0; i<self->count && keyhash != self->hashes[i]; i++);
 	if (i < self->count)
 		return getObjectAtIndex(self->values, i);
@@ -115,24 +115,23 @@ static ObjectRef Dictionary_copy(const void *const _self) {
 	newDictionary->keys = copy(self->keys);
 	newDictionary->values = copy(self->values);
 	newDictionary->count = self->count;
-	unsigned long *hashes = calloc(self->count, sizeof(unsigned long));
+	UInteger *hashes = calloc(self->count, sizeof(UInteger));
 	newDictionary->hashes = hashes;
-	for (unsigned long i=0; i<self->count && (hashes[i] = self->hashes[i]); i++);
+	for (UInteger i=0; i<self->count && (hashes[i] = self->hashes[i]); i++);
 	return newDictionary;
 }
 
-static unsigned long Dictionary_getCount(const void *const _self) {
+static UInteger Dictionary_getCount(const void *const _self) {
 	const struct Dictionary *const self = _self;
 	return self->count;
 }
 
-#define MIN(a,b) ((a)<(b)?(a):(b))
-static uint64_t Dictionary_enumerateWithState(const void *const _self, FastEnumerationState *const state, void *iobuffer[], uint64_t length) {
+static UInteger Dictionary_enumerateWithState(const void *const _self, FastEnumerationState *const state, void *iobuffer[], UInteger length) {
 	
 	const struct Dictionary *const self = _self;
-	uint64_t collectionCount = getCollectionCount(_self);
+	UInteger collectionCount = getCollectionCount(_self);
 	if (state->state == 0) {
-		state->mutationsPointer =(uint64_t *)self;
+		state->mutationsPointer =(UInteger *)self;
 		state->extra[0] = collectionCount;
 		state->state = 1;
 	}
@@ -142,16 +141,15 @@ static uint64_t Dictionary_enumerateWithState(const void *const _self, FastEnume
 	
 	state->itemsPointer = iobuffer;
 	ArrayRef allKeys = getKeysCopy(self);
-	uint64_t count = 0;
-	uint64_t numberOfIter = MIN(collectionCount, length);
-	for (uint64_t i=(state->extra[1]), j=0; i<numberOfIter; i++, j++, count++)
+	UInteger count = 0;
+	UInteger numberOfIter = MIN(collectionCount, length);
+	for (UInteger i=(state->extra[1]), j=0; i<numberOfIter; i++, j++, count++)
 		iobuffer[j] = getObjectAtIndex(allKeys, i);
 	if (count!=0)
 		state->extra[1] = count;
 	release(allKeys);
 	return count;
 }
-#undef MIN
 
 const void *Dictionary = NULL;
 const void *DictionaryClass = NULL;

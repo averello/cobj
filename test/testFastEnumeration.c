@@ -13,7 +13,7 @@
 int main () {
 	{
 		MutableArrayRef strings = new(MutableArray, NULL);
-		for (unsigned long i=0; i<10; i++) {
+		for (UInteger i=0; i<10; i++) {
 			StringRef firstString = newStringWithFormat(String, "string %lu", i);
 			addObject(strings, firstString);
 			release(firstString);
