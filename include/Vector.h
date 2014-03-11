@@ -9,12 +9,7 @@
 #ifndef CObjects_Vector_h
 #define CObjects_Vector_h
 
-extern const void * Vector;
-extern const void * VectorClass;
-typedef void * VectorRef;
-
-void initVector() __attribute__ ((constructor));
-void deallocVector() __attribute__ ((destructor));
+CO_DECLARE_CLASS(Vector)
 
 UInteger getVectorCapacity(const void *const self);
 UInteger getVectorCapacityIncrement(const void *const self);

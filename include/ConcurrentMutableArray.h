@@ -12,12 +12,7 @@
 
 #include <MutableArray.h>
 
-extern const void * ConcurrentMutableArray;
-extern const void * ConcurrentMutableArrayClass;
-typedef void * ConcurrentMutableArrayRef;
-
-void initConcurrentMutableArray () __attribute__ ((constructor));
-void deallocConcurrentMutableArray () __attribute__ ((destructor));
+CO_DECLARE_CLASS(ConcurrentMutableArray)
 
 /* Synchrinized methods working so far
  copy,

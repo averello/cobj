@@ -9,12 +9,7 @@
 #ifndef CObjects_MutableDictionary_h
 #define CObjects_MutableDictionary_h
 
-extern const void * MutableDictionary;
-extern const void * MutableDictionaryClass;
-typedef void * MutableDictionaryRef;
-
-void initMutableDictionary() __attribute__ ((constructor));
-void deallocMutableDictionary() __attribute__ ((destructor));
+CO_DECLARE_CLASS(MutableDictionary)
 
 void setObjectForKey(void *const self, void *const object, void *const key);
 void setMutableDictionaryLoadFactor(void *const self, float loadFactor);

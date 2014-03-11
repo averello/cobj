@@ -113,17 +113,12 @@ void * AutoreleasePool_retain (void * const _self) {
 
 
 
-
-
-void initAutorelasePool() __attribute__ ((constructor));
-void deallocAutorelasePool() __attribute__ ((destructor));
-
 const void * AutoreleasePool = NULL;
 
 /*! A @ref StringClass type */
 const void * AutoreleasePoolClass = NULL;
 
-void initAutorelasePool() {
+void initAutoreleasePool() {
 	memset(&ThreadAutoreleasePools, 0, sizeof(ThreadAutoreleasePools));
 	if ( ! AutoreleasePoolClass )
 		AutoreleasePoolClass = new(Class, "AutoreleasePoolClass", Class, sizeof(struct AutoreleasePoolClass),
@@ -142,7 +137,7 @@ void initAutorelasePool() {
 							  NULL);
 }
 
-void deallocAutorelasePool() {
+void deallocAutoreleasePool() {
 	if (AutoreleasePool) release((void *)AutoreleasePool), AutoreleasePool = NULL;
 	if (AutoreleasePoolClass) release((void *)AutoreleasePoolClass), AutoreleasePool = NULL;
 }

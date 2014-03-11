@@ -15,6 +15,8 @@
 #undef release
 
 #include <coint.h>
+#include <codefinitions.h>
+
 
 /*! An @ref Object type. */
 extern const void *const Object;

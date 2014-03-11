@@ -12,20 +12,18 @@
 #include <cobj.h>
 #include <Object.r>
 
-struct Couple {
-	const struct Object isa;
+
+CO_BEGIN_CLASS_TYPE_DECL(Couple,Object)
 	void * key;
 	void * value;
-};
+CO_END_CLASS_TYPE_DECL
 
-struct CoupleClass {
-	const struct Classs isa;
+CO_BEGIN_CLASS_DECL(CoupleClass,Classs)
 	void * ( *getKey ) (const void * const self);
 	void * ( *getValue ) (const void * const self);
 	
 	void ( *setKey ) (void * const self, void * const key);
 	void ( *setValue ) (void * const self, void * const value);
-};
-
+CO_END_CLASS_DECL
 
 #endif

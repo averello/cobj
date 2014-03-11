@@ -9,12 +9,7 @@
 #ifndef CObjects_Buffer_h
 #define CObjects_Buffer_h
 
-extern const void * Buffer;
-extern const void * BufferClass;
-typedef void * BufferRef;
-
-void initBuffer() __attribute__ ((constructor));
-void deallocBuffer() __attribute__ ((destructor));
+CO_DECLARE_CLASS(Buffer)
 
 const void *getBufferBytes(const void *const self);
 void getBufferBytesOfLength(const void *const self, void *restrict buffer, UInteger length);

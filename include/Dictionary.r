@@ -14,21 +14,20 @@
 #include <Collection.h>
 #include <Collection.r>
 
-struct Dictionary {
-	const struct Collection isa;
+
+CO_BEGIN_CLASS_TYPE_DECL(Dictionary,Collection)
 	ArrayRef keys;
 	ArrayRef values;
 	UInteger *hashes;
 	UInteger count;
-};
+CO_END_CLASS_TYPE_DECL
 
-struct DictionaryClass {
-	const struct CollectionClass isa;
+CO_BEGIN_CLASS_DECL(DictionaryClass,CollectionClass)
 	ObjectRef ( *objectForKey) (const void *const self, void *const key);
 	ArrayRef ( *getKeysCopy) (const void *const self);
 	ArrayRef ( *getValuesCopy)(const void *const self);
 //	UInteger ( *getCount)(const void *const self);
-};
+CO_END_CLASS_DECL
 
 
 

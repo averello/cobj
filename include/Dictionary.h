@@ -11,12 +11,7 @@
 
 #include <Object.h>
 
-extern const void * Dictionary;
-extern const void * DictionaryClass;
-typedef void * DictionaryRef;
-
-void initDictionary() __attribute__ ((constructor));
-void deallocDictionary() __attribute__ ((destructor));
+CO_DECLARE_CLASS(Dictionary)
 
 ArrayRef getKeysCopy(const void *const self);
 ArrayRef getValuesCopy(const void *const self);

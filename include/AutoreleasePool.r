@@ -15,23 +15,18 @@
 #include <MutableArray.h>
 #include <sys/queue.h>
 
-
 struct AutoreleasePoolListItem {
 	void * object;
 	SLIST_ENTRY(AutoreleasePoolListItem) entry;
 };
 
-struct AutoreleasePool {
-	const struct Object isa;
+CO_BEGIN_CLASS_TYPE_DECL(AutoreleasePool,Object)
 	SLIST_HEAD(AutoreleasePoolListHead, AutoreleasePoolListItem) list;
-};
+CO_END_CLASS_TYPE_DECL
 
-
-
-struct AutoreleasePoolClass {
-	const struct Classs isa;
+CO_BEGIN_CLASS_DECL(AutoreleasePoolClass,Classs)
 	void (* addAutoreleaseObject)(const void *self, const void *object);
-};
+CO_END_CLASS_DECL
 
 
 #endif

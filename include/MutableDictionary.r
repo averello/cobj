@@ -13,8 +13,7 @@
 #include <Object.r>
 #include <Dictionary.r>
 
-struct MutableDictionary {
-	const struct Dictionary isa;
+CO_BEGIN_CLASS_TYPE_DECL(MutableDictionary,Dictionary)
 	VectorRef couples;
 	void **level1; /* */
 	
@@ -29,13 +28,12 @@ struct MutableDictionary {
 //	UInteger count;
 	UInteger size;
 	float loadFactor;
-};
+CO_END_CLASS_TYPE_DECL
 
-struct MutableDictionaryClass {
-	const struct DictionaryClass isa;
+CO_BEGIN_CLASS_DECL(MutableDictionaryClass,DictionaryClass)
 	void ( *setObjectForKey) (void *const self, void *const object, void *const key);
 	void ( *setMutableDictionaryLoadFactor) (void *const self, float loadFactor);
 	void ( *removeObjectForKey) (void *const self, void *const key);
-};
+CO_END_CLASS_DECL
 
 #endif

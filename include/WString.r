@@ -12,12 +12,10 @@
 #include <StringObject.h>
 #include <StringObject.r>
 
-struct WString {
-	struct String isa;
-};
+CO_BEGIN_CLASS_TYPE_DECL(WString,String)
+CO_END_CLASS_TYPE_DECL
 
-struct WStringClass {
-	struct StringClass isa;
-};
+CO_BEGIN_CLASS_DECL(WStringClass,StringClass)
+CO_END_CLASS_DECL
 
 #endif

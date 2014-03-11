@@ -20,12 +20,12 @@ struct _Item {
 	TAILQ_ENTRY(_Item) items;
 };
 
-struct MutableArray {
-	const struct Array isa;
-};
 
-struct MutableArrayClass {
-	const struct ArrayClass isa;
+CO_BEGIN_CLASS_TYPE_DECL(MutableArray,Array)
+CO_END_CLASS_TYPE_DECL
+
+
+CO_BEGIN_CLASS_DECL(MutableArrayClass,ArrayClass)
 	void (* insertObject) (void *const self, void * const object);
 	void (* addObject) (void *const self, void * const object);
 
@@ -42,7 +42,7 @@ struct MutableArrayClass {
 	void ( *replaceObjectAtIndexWithObject) (void *const self, UInteger index, void *const other);
 	
 	ObjectRef ( * popObject ) (void *const self);
-};
+CO_END_CLASS_DECL
 
 //static struct StoreHead * MutableArray_getStore(const void * const _self);
 

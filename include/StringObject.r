@@ -12,17 +12,17 @@
 #include <Object.h>
 #include <Object.r>
 #include <StringObject.h>
-#include <stdint.h>
+#include <codefinitions.h>
 
-struct String {
-	const struct Object isa;
+CO_BEGIN_CLASS_TYPE_DECL(String, Object)
 	const void *text;
 	UInteger length;
 	UInteger _hash;
-};
+CO_END_CLASS_TYPE_DECL
 
-struct StringClass {
-	const struct Classs isa;
+
+
+CO_BEGIN_CLASS_DECL(StringClass,Classs)
 	const char * (* getStringText)(const void *const self);
 	UInteger (* getStringLength)(const void *const self);
 	
@@ -36,7 +36,7 @@ struct StringClass {
 	SComparisonResult ( *compareWithOptions) (const void *const self, const void *const other, SStringComparingOptions options);
 	
 	StringRef ( * copyStringByTrimmingSpaces ) (const void *const self);
-};
+CO_END_CLASS_DECL
 
 
 #endif

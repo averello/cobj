@@ -9,12 +9,7 @@
 #ifndef CObjects_Value_h
 #define CObjects_Value_h
 
-extern const void * Value;
-extern const void * ValueClass;
-typedef void * ValueRef;
-
-void initValue() __attribute__ ((constructor));
-void deallocValue() __attribute__ ((destructor));
+CO_DECLARE_CLASS(Value)
 
 void *getValuePointer(const void *const self);
 void setValuePointer(void *const self, const void *const pointer);

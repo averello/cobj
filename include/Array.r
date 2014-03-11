@@ -13,31 +13,23 @@
 #include <Object.r>
 #include <Collection.h>
 #include <Collection.r>
-#include <stdint.h>
+#include <codefinitions.h>
 
 struct _Bucket {
 	const void *item;
 };
 
-struct Array {
-	const struct Collection isa;
+CO_BEGIN_CLASS_TYPE_DECL(Array,Collection)
 	UInteger count;
 	const void *store;
-};
+CO_END_CLASS_TYPE_DECL
 
-struct ArrayClass {
-	const struct CollectionClass isa;
-//	UInteger (* getCollectionCount)(const void * const _self);
+
+CO_BEGIN_CLASS_DECL(ArrayClass,CollectionClass)
 	ObjectRef (* getObjectAtIndex)(const void * const _self, UInteger index);
-	
-//	int ( *arrayContainsObject) (const void * const self, const void * const object);
 	UInteger (* indexOfObject) (const void * const self, const void * const object);
-//	ArrayRef (* newArrayWithItems) (const void * const _class, va_list *ap);
 	void * ( * getStore) (const void * const self);
-	
-//	void * (* lastObject) (const void * const self);
-//	void * (* firstObject) (const void * const self);
-};
+CO_END_CLASS_DECL
 
 void *getStore(const void * const self);
 

@@ -9,12 +9,7 @@
 #ifndef CObjects_MutableString_h
 #define CObjects_MutableString_h
 
-extern const void * MutableString;
-extern const void * MutableStringClass;
-typedef void * MutableStringRef;
-
-void initMutableString() __attribute__ ((constructor));
-void deallocMutableString() __attribute__ ((destructor));
+CO_DECLARE_CLASS(MutableString)
 
 void appendString(void *const self, const void *const other);
 void appendFormat(void *const self, char *format, ...);

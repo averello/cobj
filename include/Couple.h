@@ -9,12 +9,7 @@
 #ifndef CObjects_Couple_h
 #define CObjects_Couple_h
 
-extern const void * Couple;
-extern const void * CoupleClass;
-typedef void * CoupleRef;
-
-void initCouple() __attribute__ ((constructor));
-void deallocCouple() __attribute__ ((destructor));
+CO_DECLARE_CLASS(Couple)
 
 void * getKey(const void * const self);
 void * getValue(const void * const self);

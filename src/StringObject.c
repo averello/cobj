@@ -18,6 +18,7 @@
 
 #include <coassert.h>
 #include <corange.h>
+#include <codefinitions.h>
 
 #include <StringObject.h>
 #include <StringObject.r>

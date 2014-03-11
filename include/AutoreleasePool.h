@@ -9,13 +9,17 @@
 #ifndef CObjects_AutoreleasePool_h
 #define CObjects_AutoreleasePool_h
 
-/*! A @ref AutoreleasePool type. */
-extern const void * AutoreleasePool;
+#include <codefinitions.h>
 
-/*! A @ref AutoreleasePoolClass type */
-extern const void * AutoreleasePoolClass;
-/*! An @ref AutoreleasePool reference. */
-typedef void * AutoreleasePoolRef;
+///*! A @ref AutoreleasePool type. */
+//extern const void * AutoreleasePool;
+//
+///*! A @ref AutoreleasePoolClass type */
+//extern const void * AutoreleasePoolClass;
+///*! An @ref AutoreleasePool reference. */
+//typedef void * AutoreleasePoolRef;
+
+CO_DECLARE_CLASS(AutoreleasePool)
 
 void addAutoreleaseObject(const void *self, const void *object);
 void AutoreleasePoolAddObject(const void *object);

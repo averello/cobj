@@ -15,17 +15,15 @@
 
 #include <stdint.h>
 
-struct Collection {
-	const struct Object isa;
-};
+CO_BEGIN_CLASS_DECL(Collection,Object)
+CO_END_CLASS_TYPE_DECL
 
-struct CollectionClass {
-	const struct Classs isa;
+CO_BEGIN_CLASS_DECL(CollectionClass,Classs)
 	UInteger (*getCollectionCount)(const void *const self);
 	void * (*lastObject)(const void * const self);
 	void * (*firstObject)(const void * const self);
 	int (*containsObject)(const void * const self, const void * const object);
 	UInteger (*enumerateWithState)(const void *const collection, FastEnumerationState *const state, void *iobuffer[], UInteger length);
-};
+CO_END_CLASS_DECL
 
 #endif

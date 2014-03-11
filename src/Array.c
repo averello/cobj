@@ -14,6 +14,8 @@
 
 
 #include <coassert.h>
+#include <codefinitions.h>
+
 #include <new.h>
 #include <Array.h>
 #include <Array.r>
@@ -21,6 +23,8 @@
 
 
 extern int errno;
+
+static bool Array_equals (const void *const _self, const void *const _other) CO_VISIBILITY_INTERNAL;
 
 static void * Array_constructor (void * _self, va_list * app) {
 	struct Array *self = super_constructor(Array, _self, app);

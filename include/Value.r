@@ -14,17 +14,15 @@
 
 typedef void* (*voidf) (void *);
 
-struct Value {
-	const struct Object isa;
+CO_BEGIN_CLASS_TYPE_DECL(Value,Object)
 	const void * pointer;
 	voidf cleanup;
-};
+CO_END_CLASS_TYPE_DECL
 
-struct ValueClass {
-	const struct Classs isa;
+CO_BEGIN_CLASS_DECL(ValueClass,Classs)
 	void * ( *getValuePointer) (const void *const self);
 	void ( *setValuePointer) (void *const self, const void *const pointer);
 	void ( *setValuePointerCleanup )(const void *const self, void (*cleanup)(void *));
-};
+CO_END_CLASS_DECL
 
 #endif

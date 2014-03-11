@@ -13,14 +13,12 @@
 #include <Object.r>
 #include <StringObject.r>
 
-struct MutableString {
-	const struct String isa;
+CO_BEGIN_CLASS_TYPE_DECL(MutableString,String)
 	off_t offset;
 	UInteger capacity;
-};
+CO_END_CLASS_TYPE_DECL
 
-struct MutableStringClass {
-	const struct StringClass isa;
+CO_BEGIN_CLASS_DECL(MutableStringClass,StringClass)
 	void ( * appendString ) (void *const self, const void *const other);
 	void ( * appendFormat ) (void *const self, char *format, va_list *app);
 	void ( * setString ) (void *const self, const void *const other);
@@ -28,7 +26,6 @@ struct MutableStringClass {
 	
 	int ( * insertStringAtMutableStringIndex ) (void *const self, const void *const other, UInteger index);
 	int ( * deleteMutableStringCharactersInRange ) (void *const self, Range range);
-
-};
+CO_END_CLASS_DECL
 
 #endif

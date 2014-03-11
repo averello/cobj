@@ -14,14 +14,10 @@
 #include <Object.h>
 #include <coint.h>
 #include <corange.h>
+#include <codefinitions.h>
 
-/*! A @ref String type. */
-extern const void * String;
 
-/*! A @ref StringClass type */
-extern const void * StringClass;
-/*! An @ref String reference. */
-typedef void * StringRef;
+CO_DECLARE_CLASS(String)
 
 /*!
  *  @enum SComparisonResult
@@ -54,23 +50,6 @@ enum SStringComparingOptions {
 typedef enum SStringComparingOptions SStringComparingOptions;
 
 /* API */
-
-/*!
- *  @fn void initString()
- *  @relates String
- *  @brief A function that initializes @ref String and @ref StringClass.
- *  @details This function must be called once, before any instanciation of @ref String instance occur.
- */
-void initString() __attribute__ ((constructor));
-
-/*!
- *  @fn void deallocString()
- *  @relates String
- *  @brief A function that deallocates any memory used by @ref initString() counterpart.
- *  @details This function must be called once, after any instanciation of @ref String instances. After calling this method, instanciating a @ref String will terminate the application.
- */
-void deallocString() __attribute__ ((destructor));
-
 /*!
  *  @fn StringRef newStringWithFormat(const void *const _class, const void *format, ...)
  *  @relates String

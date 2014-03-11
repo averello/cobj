@@ -12,12 +12,7 @@
 #include <Array.h>
 #include <StringObject.h>
 
-extern const void * MutableArray;
-extern const void * MutableArrayClass;
-typedef void * MutableArrayRef;
-
-void initMutableArray () __attribute__ ((constructor));
-void deallocMutableArray () __attribute__ ((destructor));
+CO_DECLARE_CLASS(MutableArray)
 
 ArrayRef newArrayWithArray(const void * const array);
 ArrayRef newArrayFromMutableArray(const void * const mutableArray);

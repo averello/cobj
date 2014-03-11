@@ -12,7 +12,7 @@
 #include <coint.h>
 
 /*!
- *  @struct Range StringObject.h
+ *  @struct Range
  *  @relates String
  *  @brief A structure describing a range.
  *  @details This structure is used by @ref String instances to describe portions of a string or substrings.

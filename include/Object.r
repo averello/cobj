@@ -11,6 +11,7 @@
 
 #include <pthread.h>
 #include <coint.h>
+#include <codefinitions.h>
 
 /*!
  *  @class Object Object.r

@@ -12,12 +12,7 @@
 #include <MutableString.h>
 #include <wchar.h>
 
-extern const void * WMutableString;
-extern const void * WMutableStringClass;
-typedef void * WMutableStringRef;
-
-void initWMutableString() __attribute__ ((constructor));
-void deallocWMutableString() __attribute__ ((destructor));
+CO_DECLARE_CLASS(WMutableString)
 
 const wchar_t *getWText(const void *const self);
 

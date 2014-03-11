@@ -13,12 +13,7 @@
 #include <Collection.h>
 #include <limits.h>
 
-extern const void * Array;
-extern const void * ArrayClass;
-typedef void * ArrayRef;
-
-void initArray () __attribute__ ((constructor));
-void deallocArray () __attribute__ ((destructor));
+CO_DECLARE_CLASS(Array)
 
 //ArrayRef newArrayWithItems(const void * const _class, ...);
 ObjectRef getObjectAtIndex(const void * const self, UInteger index);

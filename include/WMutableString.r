@@ -12,17 +12,13 @@
 #include <MutableString.h>
 #include <MutableString.r>
 
-#include <stdint.h>
-
-struct WMutableString {
-	struct MutableString isa;
+CO_BEGIN_CLASS_TYPE_DECL(WMutableString,MutableString)
 	off_t offset;
 	UInteger capacity;
-};
+CO_END_CLASS_TYPE_DECL
 
-struct WMutableStringClass {
-	struct MutableStringClass isa;
-};
+CO_BEGIN_CLASS_DECL(WMutableStringClass,MutableStringClass)
+CO_END_CLASS_DECL
 
 
 #endif
