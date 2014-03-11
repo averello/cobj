@@ -22,7 +22,6 @@
 #include <Object.h>
 #include <Object.r>
 
-extern int errno;
 
 static void * Collection_constructor (void * _self, va_list * app) {
 	struct Collection *self = super_constructor(Collection, _self, app);
@@ -77,35 +76,24 @@ static UInteger Collection_enumerateWithState(ObjectRef collection, FastEnumerat
 	return 0;
 }
 
-const void * CollectionClass = NULL;
-const void * Collection = NULL;
 
-void initCollection() {
-	if ( ! CollectionClass )
-		CollectionClass = new(Class, "CollectionClass", Class, sizeof(struct CollectionClass),
-							  constructor, CollectionClass_constructor, NULL);
-	if ( ! Collection )
-		Collection = new(CollectionClass, "Collection", Object, sizeof(struct Collection),
-						 constructor, Collection_constructor,
-						 destructor, Collection_destructor,
-						 
-						 /* new */
-						 getCollectionCount, Collection_getCollectionCount,
-						 firstObject, Collection_firstObject,
-						 lastObject, Collection_lastObject,
-						 containsObject, Collection_containsObject,
-						 enumerateWithState, Collection_enumerateWithState,
-					 NULL);
-}
-
-void deallocCollection() {
-	if (Collection)
-		release((void*)Collection);
-	if (CollectionClass)
-		release((void*)CollectionClass);
-	Collection = NULL;
-	CollectionClass = NULL;
-}
+CO_CLASS_TYPE_INTERNAL_DECL_DEALLOC(
+									Collection,
+									Class,
+									Object,
+									CO_OVERRIDE(constructor, CollectionClass_constructor
+												),
+									CO_OVERRIDE(
+												constructor, Collection_constructor,
+												destructor, Collection_destructor,
+												/* new */
+												getCollectionCount, Collection_getCollectionCount,
+												firstObject, Collection_firstObject,
+												lastObject, Collection_lastObject,
+												containsObject, Collection_containsObject,
+												enumerateWithState, Collection_enumerateWithState
+												),
+									)
 
 UInteger getCollectionCount(const void * const self) {
 	COAssertNoNullOrReturn(self,EINVAL,0);

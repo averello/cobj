@@ -21,9 +21,6 @@
 #include <Array.r>
 #include <StringObject.h>
 
-
-extern int errno;
-
 static bool Array_equals (const void *const _self, const void *const _other) CO_VISIBILITY_INTERNAL;
 
 static void * Array_constructor (void * _self, va_list * app) {
@@ -125,9 +122,6 @@ static UInteger Array_getCollectionCount(const void * const _self) {
 	const struct Array *self = _self;
 	return self->count;
 }
-
-const void * Array = NULL;
-const void * ArrayClass = NULL;
 
 static bool Array_equals (const void *const _self, const void *const _other) {
 	const struct Array *self = _self;
@@ -260,45 +254,79 @@ static UInteger Array_enumerateWithState(const void *const _self, FastEnumeratio
 	return count;
 }
 
-void initArray () {
-	initCollection();
-	
-	if ( ! ArrayClass )
-		ArrayClass = new(CollectionClass, "ArrayClass", CollectionClass, sizeof(struct ArrayClass), constructor, ArrayClass_constructor, NULL);
-	if ( ! Array )
-		Array = new(ArrayClass, "Array", Collection, sizeof(struct Array),
-					constructor, Array_constructor,
-					destructor, Array_destructor,
-					
-					/* Overrides */
-					getCollectionCount, Array_getCollectionCount,
-					firstObject, Array_firstObject,
-					lastObject, Array_lastObject,
-					containsObject, Array_arrayContainsObject,
-					enumerateWithState, Array_enumerateWithState,
-					
-					/* new */
-					copy, Array_copy,
-					getObjectAtIndex,
-					Array_getObjectAtIndex,
-					equals, Array_equals,
-					indexOfObject, Array_indexOfObject,
-					copyDescription, Array_copyDescription,
-					getStore, Array_getStore,
-					NULL);
-}
+//const void * Array = NULL;
+//const void * ArrayClass = NULL;
 
-void deallocArray () {
-	if (Array)
-		release((void*)Array);
-	if (ArrayClass)
-		release((void*)ArrayClass);
-//	free((void*)Array);
-//	free((void*)ArrayClass);
-	Array = NULL;
-	ArrayClass = NULL;
-	deallocCollection();
-}
+CO_CLASS_TYPE_INTERNAL_DECL_INIT(
+								 Array,
+								 CollectionClass,
+								 Collection,
+								 CO_OVERRIDE(constructor, ArrayClass_constructor
+											 ),
+								 CO_OVERRIDE(
+											 constructor, Array_constructor,
+											 destructor, Array_destructor,
+											 
+											 /* Overrides */
+											 getCollectionCount, Array_getCollectionCount,
+											 firstObject, Array_firstObject,
+											 lastObject, Array_lastObject,
+											 containsObject, Array_arrayContainsObject,
+											 enumerateWithState, Array_enumerateWithState,
+											 
+											 /* new */
+											 copy, Array_copy,
+											 getObjectAtIndex,
+											 Array_getObjectAtIndex,
+											 equals, Array_equals,
+											 indexOfObject, Array_indexOfObject,
+											 copyDescription, Array_copyDescription,
+											 getStore, Array_getStore
+											 ),
+								 initCollection(),
+								 deallocCollection()
+								 )
+
+
+//void initArray () {
+//	initCollection();
+//	
+//	if ( ! ArrayClass )
+//		ArrayClass = new(CollectionClass, "ArrayClass", CollectionClass, sizeof(struct ArrayClass), constructor, ArrayClass_constructor, NULL);
+//	if ( ! Array )
+//		Array = new(ArrayClass, "Array", Collection, sizeof(struct Array),
+//					constructor, Array_constructor,
+//					destructor, Array_destructor,
+//					
+//					/* Overrides */
+//					getCollectionCount, Array_getCollectionCount,
+//					firstObject, Array_firstObject,
+//					lastObject, Array_lastObject,
+//					containsObject, Array_arrayContainsObject,
+//					enumerateWithState, Array_enumerateWithState,
+//					
+//					/* new */
+//					copy, Array_copy,
+//					getObjectAtIndex,
+//					Array_getObjectAtIndex,
+//					equals, Array_equals,
+//					indexOfObject, Array_indexOfObject,
+//					copyDescription, Array_copyDescription,
+//					getStore, Array_getStore,
+//					NULL);
+//}
+//
+//void deallocArray () {
+//	if (Array)
+//		release((void*)Array);
+//	if (ArrayClass)
+//		release((void*)ArrayClass);
+////	free((void*)Array);
+////	free((void*)ArrayClass);
+//	Array = NULL;
+//	ArrayClass = NULL;
+//	deallocCollection();
+//}
 
 void *getStore(const void * const self) {
 	COAssertNoNullOrReturn(self,EINVAL,NULL);
