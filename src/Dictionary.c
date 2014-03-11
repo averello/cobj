@@ -173,6 +173,7 @@ void initDictionary() {
 						 constructor, Dictionary_constructor,
 						 
 						 /* Overrides */
+						 copy, Dictionary_copy,
 						 getCollectionCount, Dictionary_getCount,
 						 enumerateWithState, Dictionary_enumerateWithState,
 						 

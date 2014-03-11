@@ -8,12 +8,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
-#include <errno.h>
 #include <stdarg.h>
 #include <math.h>
 
@@ -296,27 +290,30 @@ void deallocMutableDictionary() {
 }
 
 void setObjectForKey(void *const self, void *const object, void *const key) {
-	assert( self != NULL );
-	assert( object != NULL );
-	assert( key != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(object,EINVAL);
+	COAssertNoNullOrBailOut(key,EINVAL);
 	const struct MutableDictionaryClass *class = classOf(self);
-	assert(class != NULL && class->setObjectForKey != NULL);
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->setObjectForKey,EINVAL);
 	class->setObjectForKey(self, object, key);
 }
 
 void setMutableDictionaryLoadFactor(void *const self, float loadFactor) {
-	assert( self != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct MutableDictionaryClass *class = classOf(self);
-	assert(class != NULL && class->setMutableDictionaryLoadFactor != NULL);
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->setMutableDictionaryLoadFactor,EINVAL);
 	class->setMutableDictionaryLoadFactor(self, loadFactor);
 }
 
 void removeObjectForKey(void *const self, void *const key) {
-	assert( self != NULL );
-	assert( key != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(key,EINVAL);
 	
 	const struct MutableDictionaryClass *class = classOf(self);
-	assert(class != NULL && class->removeObjectForKey != NULL);
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->removeObjectForKey,EINVAL);
 	class->removeObjectForKey(self, key);
 }
 

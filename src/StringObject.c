@@ -16,11 +16,7 @@
 #include <errno.h>
 #include <ctype.h>
 
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
+#include <coassert.h>
 
 #include <StringObject.h>
 #include <StringObject.r>
@@ -214,8 +210,8 @@ static int String_characterAtIndex(const void * const _self, void *const charact
 static int String_getCharactersInRange(const void * const _self, void *const restrict buffer, SRange range) {
 	const struct String *self = _self;
 	int result = 0;
-	unsigned long maxRange = SMaxRange(range);
-	size_t length = getStringLength(self);
+	uint64_t maxRange = SMaxRange(range);
+	uint64_t length = getStringLength(self);
 	const char *text = getStringText(self);
 	if ( maxRange < length && buffer != NULL ) {
 		text = text + range.location;
@@ -232,18 +228,18 @@ static int String_getCharactersInRange(const void * const _self, void *const res
 
 /* API */
 
-inline unsigned long SMaxRange(SRange range) {
+inline uint64_t SMaxRange(SRange range) {
 	return (range.location + range.length);
 }
 
-inline SRange SMakeRange(unsigned long location, unsigned long length) {
+inline SRange SMakeRange(uint64_t location, uint64_t length) {
     SRange range;
     range.location = location;
     range.length = length;
     return range;
 }
 
-inline int SLocationInRange(unsigned long location, SRange range) {
+inline int SLocationInRange(uint64_t location, SRange range) {
     return (location - range.location < range.length);
 }
 
@@ -324,35 +320,37 @@ void deallocString() {
 }
 
 const char *getStringText(const void * const self) {
-	assert(self != NULL);
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct StringClass *class = classOf(self);
-	assert(class != NULL && class->getStringText != NULL);
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->getStringText,ENOTSUP,NULL);
 	return class->getStringText(self);
 }
 
-size_t getStringLength(const void * const self) {
-	assert(self != NULL);
+uint64_t getStringLength(const void * const self) {
+	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct StringClass *class = classOf(self);
-	assert(class->getStringLength != NULL);
+	COAssertNoNullOrReturn(class,EINVAL,0);
+	COAssertNoNullOrReturn(class->getStringLength,ENOTSUP,0);
 	return class->getStringLength(self);
 }
 
 StringRef copyStringByAppendingString(const void *restrict const self, const void *restrict const other) {
-	assert(self != NULL);
-	assert(other != NULL);
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
+	COAssertNoNullOrReturn(other,EINVAL,NULL);
 	const struct StringClass *class = classOf(self);
-	assert(class != NULL && class->copyStringByAppendingString != NULL);
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->copyStringByAppendingString,ENOTSUP,NULL);
 	return class->copyStringByAppendingString(self, other);
 }
 
 StringRef newStringWithFormat(const void *const _class, const void *format, ...) {
-	assert(_class != NULL);
-	assert(format != NULL);
-	if (_class == NULL) return  errno = EINVAL, (StringRef)NULL;
+	COAssertNoNullOrReturn(_class,EINVAL,NULL);
+	COAssertNoNullOrReturn(format,EINVAL,NULL);
 	
 	const struct StringClass *const class = _class;
-	assert(class != NULL && class->newStringWithFormat != NULL);
-	if (class->newStringWithFormat == NULL) return errno = ENOTSUP, (StringRef)NULL;
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->newStringWithFormat,ENOTSUP,NULL);
 	
 	va_list ap;
 	va_start(ap, format);
@@ -363,61 +361,53 @@ StringRef newStringWithFormat(const void *const _class, const void *format, ...)
 }
 
 SComparisonResult compare(const void *const self, const void *const other) {
-	assert(self != NULL);
-	assert(other != NULL);
+	COAssertNoNullOrReturn(self,EINVAL,-2);
+	COAssertNoNullOrReturn(other,EINVAL,-2);
 	const struct StringClass *const class = classOf(self);
 	const struct StringClass *const classOther = classOf(other);
-	assert(class != NULL && class->compare != NULL);
-	assert(classOther != NULL && classOther->compare != NULL);
+	COAssertNoNullOrReturn(class,EINVAL,-2);
+	COAssertNoNullOrReturn(classOther,EINVAL,-2);
+	COAssertNoNullOrReturn(class->compare,ENOTSUP,-2);
 	return class->compare(self, other);
 }
 
 SComparisonResult compareWithOptions(const void *const self, const void *const other, SStringComparingOptions options) {
-	assert(self != NULL);
-	assert(other != NULL);
+	COAssertNoNullOrReturn(self,EINVAL,-2);
+	COAssertNoNullOrReturn(other,EINVAL,-2);
 	const struct StringClass *const class = classOf(self);
 	const struct StringClass *const classOther = classOf(other);
-	assert(class != NULL && class->compareWithOptions != NULL);
-	assert(classOther != NULL && classOther->compareWithOptions != NULL);
+	COAssertNoNullOrReturn(class,EINVAL,-2);
+	COAssertNoNullOrReturn(classOther,EINVAL,-2);
+	COAssertNoNullOrReturn(class->compareWithOptions,ENOTSUP,-2);
 	return class->compareWithOptions(self, other, options);
 }
 
 
 int characterAtIndex(const void * const self, void *const character, unsigned long index) {
-	assert(self != NULL);
+	COAssertNoNullOrReturn(self,EINVAL,-1);
 	const struct StringClass *const class = classOf(self);
-	assert(class != NULL && class->characterAtIndex != NULL);
+	COAssertNoNullOrReturn(class,EINVAL,-1);
+	COAssertNoNullOrReturn(class->characterAtIndex,EINVAL,-1);
 	return class->characterAtIndex(self, character, index);
 }
 
 
 
 int getCharactersInRange(const void * const self, void *const restrict buffer, SRange range) {
-	assert(self != NULL);
-	assert(buffer != NULL);
+	COAssertNoNullOrReturn(self,EINVAL,-1);
+	COAssertNoNullOrReturn(buffer,EINVAL,-1);
 	const struct StringClass *const class = classOf(self);
-	assert(class != NULL && class->getCharactersInRange != NULL);
+	COAssertNoNullOrReturn(class,EINVAL,-1);
+	COAssertNoNullOrReturn(class->getCharactersInRange,ENOTSUP,-1);
 	return class->getCharactersInRange(self, buffer, range);
 }
 
 StringRef copyStringByTrimmingSpaces(const void *const self) {
-	assert(self != NULL);
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct StringClass *const class = classOf(self);
-	assert(class != NULL && class->copyStringByTrimmingSpaces != NULL);
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->copyStringByTrimmingSpaces,ENOTSUP,NULL);
 	return class->copyStringByTrimmingSpaces(self);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -57,7 +57,7 @@ static void * Collection_destructor (void * _self) {
 	return self;
 }
 
-static unsigned long Collection_getCollectionCount(const void * const self) {
+static uint64_t Collection_getCollectionCount(const void * const self) {
 	return 0;
 }
 
@@ -90,7 +90,7 @@ void initCollection() {
 						 destructor, Collection_destructor,
 						 
 						 /* new */
-						 getCollectionCount, getCollectionCount,
+						 getCollectionCount, Collection_getCollectionCount,
 						 firstObject, Collection_firstObject,
 						 lastObject, Collection_lastObject,
 						 containsObject, Collection_containsObject,

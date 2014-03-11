@@ -12,6 +12,7 @@
 #define CObjects_String_h
 
 #include <Object.h>
+#include <stdint.h>
 
 /*! A @ref String type. */
 extern const void * String;
@@ -28,38 +29,38 @@ typedef void * StringRef;
  *  @details This structure is used by @ref String instances to describe portions of a string or substrings.
  */
 typedef struct SRange {
-    unsigned long location; /*!< The start location of the range */
-    unsigned long length;	/*!< The length of the range begining from @a location */
+    uint64_t location; /*!< The start location of the range */
+    uint64_t length;	/*!< The length of the range begining from @a location */
 } SRange;
 
 /*!
- *  @fn SRange SMakeRange(unsigned long loc, unsigned long len)
+ *  @fn SRange SMakeRange(uint64_t loc, uint64_t len)
  *  @brief A helper function to create SRange structures.
  *  @relates String
  *  @param[in] location the starting location of the range.
  *  @param[in] length the length of the range.
  *  @returns a new @ref SRange with the specified attributes.
  */
-SRange SMakeRange(unsigned long location, unsigned long length);
+SRange SMakeRange(uint64_t location, uint64_t length);
 
 /*!
- *  @fn unsigned long SMaxRange(SRange range)
+ *  @fn uint64_t SMaxRange(SRange range)
  *  @brief A helper function that returns the end of the range (location + length).
  *  @relates String
  *  @param[in] range the range.
  *  @returns the max range (range.location + range.length).
  */
-unsigned long SMaxRange(SRange range);
+uint64_t SMaxRange(SRange range);
 
 /*!
- *  @fn int SLocationInRange(unsigned long location, SRange range)
+ *  @fn int SLocationInRange(uint64_t location, SRange range)
  *  @brief A helper function indiqating if the given location is in the given range.
  *  @relates String
  *  @param[in] location the location.
  *  @param[in] range the range.
  *  @returns a @a C boolean.
  */
-int SLocationInRange(unsigned long location, SRange range);
+int SLocationInRange(uint64_t location, SRange range);
 
 /*!
  *  @fn int SEqualRanges(SRange range1, SRange range2)
@@ -146,7 +147,7 @@ const char *getStringText(const void *const self);
  *  @param[in] self the @ref String (or a subclass) instace.
  *  @returns the number of characters in the receiver.
  */
-size_t getStringLength(const void *const self);
+uint64_t getStringLength(const void *const self);
 
 /*!
  *  @method
@@ -157,7 +158,7 @@ size_t getStringLength(const void *const self);
  *  @param[in] index the index of the character to retrieve. The index must not be outside the bounds of the receiver.
  *  @returns 0 on completion. If index lies outside the bounds of the receiver then -1 is returned and @a errno is positioned to @a EINVAL.
  */
-int characterAtIndex(const void *const self, void *const character, unsigned long index);
+int characterAtIndex(const void *const self, void *const character, uint64_t index);
 
 /*!
  *  @method

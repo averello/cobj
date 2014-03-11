@@ -10,12 +10,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
 #include <stdarg.h>
+
+#include <coassert.h>
+#include <errno.h>
 
 #include <Object.h>
 #include <Object.r>
@@ -82,9 +80,12 @@ static void * Class_copy (const void *const _self) {
 }
 
 static int Class_hash (const void *const self) {
+	COAssertNoNullOrReturn(self,EINVAL,-1);
 	const struct Classs *const class = classOf(self);
-	assert(class != NULL);
+	COAssertNoNullOrReturn(class,EINVAL,-1);
 	const struct Classs *const _superclass = superclass(self);
+	COAssertNoNullOrReturn(_superclass,EINVAL,-1);
+	COAssertNoNullOrReturn(_superclass->hash,EINVAL,-1);
 	
 	
 	int prime = 31;

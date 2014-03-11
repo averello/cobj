@@ -13,6 +13,7 @@
 
 #include <compilerDefs.h>
 #include <coassert.h>
+#include <errno.h>
 
 #include <colimits.h>
 

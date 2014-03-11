@@ -12,20 +12,21 @@
 #include <Object.h>
 #include <Object.r>
 #include <StringObject.h>
+#include <stdint.h>
 
 struct String {
 	const struct Object isa;
 	const void *text;
-	size_t length;
+	uint64_t length;
 	int _hash;
 };
 
 struct StringClass {
 	const struct Classs isa;
 	const char * (* getStringText)(const void *const self);
-	size_t (* getStringLength)(const void *const self);
+	uint64_t (* getStringLength)(const void *const self);
 	
-	int (* characterAtIndex) (const void *const self, void *const character, unsigned long index);
+	int (* characterAtIndex) (const void *const self, void *const character, uint64_t index);
 	int (* getCharactersInRange) (const void *const self, void *const buffer, SRange range);
 
 	StringRef (* copyStringByAppendingString)(const void *restrict const self, const void *restrict const other);

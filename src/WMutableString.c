@@ -12,11 +12,7 @@
 #include <string.h>
 #include <strings.h>
 #include <stdarg.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
+
 #include <locale.h>
 #include <errno.h>
 
@@ -26,17 +22,20 @@
 
 extern int errno;
 
-static int __grow(struct WMutableString *const self, ssize_t minCapacity) {
+static int __grow(struct WMutableString *const self, uint64_t minCapacity) {
 	// overflow-conscious code
+	// in this function minCapacity is always greater than self->capacity
 	struct String *stringSelf = (struct String *)self;
-	ssize_t newCapacity = self->capacity * 2;
-	if ( newCapacity - minCapacity < 0 )
-		newCapacity = minCapacity;
-	if ( newCapacity < 0 ) {
-		if ( minCapacity < 0 ) return errno = ENOMEM, -1; /* overflow */
-		newCapacity = ULONG_MAX;
+	uint64_t newCapacity = 0;
+	/* if doubling the capacity is impossible due to overflow */
+	if (UINT64_MAX - self->capacity < self->capacity) {
+		/* then use the max value */
+		newCapacity = UINT64_MAX;
 	}
-	
+	else {
+		newCapacity = self->capacity * 2;
+	}
+
 	const void *newText = realloc((void *)stringSelf->text, newCapacity * sizeof(char) );
 	if ( newText == NULL ) return -1;
 	self->capacity = newCapacity;
@@ -44,10 +43,8 @@ static int __grow(struct WMutableString *const self, ssize_t minCapacity) {
 	return 0;
 }
 
-inline static int __ensureCapacity(struct WMutableString *const self, ssize_t minCapacity) {
-	if ( (minCapacity > 0)
-		&& (minCapacity - self->capacity > 0)
-		)
+inline static int __ensureCapacity(struct WMutableString *const self, uint64_t minCapacity) {
+	if ( minCapacity > self->capacity )
 		return __grow(self, minCapacity);
 	return 0;
 }
@@ -298,8 +295,12 @@ void initWMutableString() {
 	if ( !WMutableString )
 		WMutableString = new(WMutableStringClass, "WMutableString", MutableString, sizeof(struct WMutableString),
 							 constructor, WMutableString_constructor,
+
 							 copy, WMutableString_copy,
 							 equals, WMutableString_equals,
+							 hash, WMutableString_hash,
+
+							 appendString, WMutableString_appendString,
 							 copyStringByAppendingString, WMutableString_copyStringByAppendingString,
 							 newStringWithFormat, WMutableString_newStringWithFormat,
 							 copyDescription, WMutableString_copyDescription,
@@ -307,7 +308,6 @@ void initWMutableString() {
 							 compareWithOptions, WMutableString_compareWithOptions,
 							 characterAtIndex, WMutableString_characterAtIndex,
 							 getCharactersInRange, WMutableString_getCharactersInRange,
-							 hash, WMutableString_hash,
 							 NULL);
 }
 
@@ -320,3 +320,4 @@ void deallocWMutableString() {
 	WMutableStringClass = NULL;
 	deallocMutableString();
 }
+

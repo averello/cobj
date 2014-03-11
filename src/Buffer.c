@@ -10,18 +10,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
 
 #include <cobj.h>
 #include <Buffer.r>
 
 const void * Buffer = NULL;
 const void * BufferClass = NULL;
-
 
 static void * Buffer_constructor (void * _self, va_list * app) {
 	struct Buffer *self = super_constructor(Buffer, _self, app);
@@ -141,31 +135,36 @@ void deallocBuffer() {
 /* API */
 
 const void *getBufferBytes(const void *const self) {
-	assert( self != NULL );
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct BufferClass *const class = classOf(self);
-	assert( class != NULL && class->getBufferBytes != NULL );
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->getBufferBytes,ENOTSUP,NULL);
 	return class->getBufferBytes(self);
 }
 
 void getBufferBytesOfLength(const void *const self, void *restrict buffer, size_t length) {
-	assert( self != NULL );
-	assert( buffer != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(buffer,EINVAL);
 	const struct BufferClass *const class = classOf(self);
-	assert( class != NULL && class->getBufferBytesOfLength != NULL );
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->getBufferBytesOfLength,ENOTSUP);
 	class->getBufferBytesOfLength(self, buffer, length);
 }
 
 void getBufferBytesInRange(const void *const self, void *restrict buffer, SRange range) {
-	assert( self != NULL );
-	assert( buffer != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(buffer,EINVAL);
 	const struct BufferClass *const class = classOf(self);
-	assert( class != NULL && class->getBufferBytesInRange != NULL );
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->getBufferBytesInRange,ENOTSUP);
 	class->getBufferBytesInRange(self, buffer, range);
 }
 
 size_t getBufferLength(const void *const self) {
-	assert( self != NULL );
+	COAssertNoNullOrReturn(self,EINVAL,0);
 	const struct BufferClass *const class = classOf(self);
-	assert( class != NULL && class->getBufferLength != NULL );
+	COAssertNoNullOrReturn(class,EINVAL,0);
+	COAssertNoNullOrReturn(class->getBufferLength,ENOTSUP,0);
 	return class->getBufferLength(self);
 }
+

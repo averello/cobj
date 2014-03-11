@@ -8,15 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
-#include <errno.h>
 #include <stdarg.h>
-
-extern int errno;
 
 #include <cobj.h>
 #include <Couple.r>
@@ -165,30 +157,34 @@ void deallocCouple() {
 /* API */
 
 void * getKey(const void * const self) {
-	assert( self != NULL );
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct CoupleClass *class = classOf(self);
-	assert( class != NULL && class->getKey != NULL );
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->getKey,ENOTSUP,NULL);
 	return class->getKey(self);
 }
 
 void * getValue(const void * const self) {
-	assert( self != NULL );
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct CoupleClass *class = classOf(self);
-	assert( class != NULL && class->getValue != NULL );
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->getValue,ENOTSUP,NULL);
 	return class->getValue(self);
 }
 
 void setKey(void * const self, void * const key) {
-	assert( self != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct CoupleClass *class = classOf(self);
-	assert( class != NULL && class->setKey != NULL );
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->setKey,ENOTSUP);
 	class->setKey(self, key);
 }
 
 void setValue(void * const self, void * const value) {
-	assert( self != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct CoupleClass *class = classOf(self);
-	assert( class != NULL && class->setValue != NULL );
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->getKey,ENOTSUP);
 	class->setValue(self, value);
 }
 
