@@ -37,7 +37,7 @@ int main () {
 	{
 		wchar_t buffer[9];
 		wmemset(buffer, L'\0', 9);
-		getCharactersInRange(w2, buffer, SMakeRange(6, 8));
+		getCharactersInRange(w2, buffer, COMakeRange(6, 8));
 		assert( wcscmp(buffer, L"και καλά") == 0 );
 	}
 	

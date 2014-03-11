@@ -90,7 +90,7 @@ static void Buffer_getBufferBytesOfLength (const void *const _self, void *restri
 	memcpy(buffer, self->buffer, length);
 }
 
-static void Buffer_getBufferBytesInRange (const void *const _self, void *restrict buffer, SRange range) {
+static void Buffer_getBufferBytesInRange (const void *const _self, void *restrict buffer, CORange range) {
 	const struct Buffer *self = _self;
 	if (buffer == NULL) return;
 	if ( range.location >= self->length || range.length > self->length ) return;
@@ -151,7 +151,7 @@ void getBufferBytesOfLength(const void *const self, void *restrict buffer, size_
 	class->getBufferBytesOfLength(self, buffer, length);
 }
 
-void getBufferBytesInRange(const void *const self, void *restrict buffer, SRange range) {
+void getBufferBytesInRange(const void *const self, void *restrict buffer, CORange range) {
 	COAssertNoNullOrBailOut(self,EINVAL);
 	COAssertNoNullOrBailOut(buffer,EINVAL);
 	const struct BufferClass *const class = classOf(self);

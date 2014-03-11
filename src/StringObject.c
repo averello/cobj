@@ -207,10 +207,10 @@ static int String_characterAtIndex(const void * const _self, void *const charact
 	return result;
 }
 
-static int String_getCharactersInRange(const void * const _self, void *const restrict buffer, SRange range) {
+static int String_getCharactersInRange(const void * const _self, void *const restrict buffer, CORange range) {
 	const struct String *self = _self;
 	int result = 0;
-	uint64_t maxRange = SMaxRange(range);
+	uint64_t maxRange = COMaxRange(range);
 	uint64_t length = getStringLength(self);
 	const char *text = getStringText(self);
 	if ( maxRange < length && buffer != NULL ) {
@@ -228,27 +228,27 @@ static int String_getCharactersInRange(const void * const _self, void *const res
 
 /* API */
 
-inline uint64_t SMaxRange(SRange range) {
+inline uint64_t COMaxRange(CORange range) {
 	return (range.location + range.length);
 }
 
-inline SRange SMakeRange(uint64_t location, uint64_t length) {
-    SRange range;
+inline CORange COMakeRange(uint64_t location, uint64_t length) {
+    CORange range;
     range.location = location;
     range.length = length;
     return range;
 }
 
-inline int SLocationInRange(uint64_t location, SRange range) {
+inline int COLocationInRange(uint64_t location, CORange range) {
     return (location - range.location < range.length);
 }
 
-inline int SEqualRanges(SRange range1, SRange range2) {
+inline int COEqualRanges(CORange range1, CORange range2) {
     return (range1.location == range2.location
 			&& range1.length == range2.length);
 }
 
-static inline void __ltrim(const char *restrict s, SRange *restrict ioRange) {
+static inline void __ltrim(const char *restrict s, CORange *restrict ioRange) {
 	if (ioRange->length==0) return;
 	
 	size_t i=0;
@@ -256,7 +256,7 @@ static inline void __ltrim(const char *restrict s, SRange *restrict ioRange) {
 	ioRange->location += --i;
 }
 
-static inline void __rtrim(const char *restrict s, SRange *restrict ioRange) {
+static inline void __rtrim(const char *restrict s, CORange *restrict ioRange) {
 	if (ioRange->length == 0) return;
 	
 	ssize_t i = ioRange->length;
@@ -264,10 +264,10 @@ static inline void __rtrim(const char *restrict s, SRange *restrict ioRange) {
 	ioRange->length -= ++i;
 }
 
-static inline void __trim(const char *restrict s, SRange *restrict ioRange) { __ltrim(s, ioRange), __rtrim(s, ioRange); }
+static inline void __trim(const char *restrict s, CORange *restrict ioRange) { __ltrim(s, ioRange), __rtrim(s, ioRange); }
 
 static StringRef String_copyStringByTrimmingSpaces(const void *const self) {
-	SRange range = SMakeRange(0, getStringLength(self));
+	CORange range = COMakeRange(0, getStringLength(self));
 	const char *text = getStringText(self);
 	if ( text == NULL ) return NULL;
 	
@@ -393,7 +393,7 @@ int characterAtIndex(const void * const self, void *const character, uint64_t in
 
 
 
-int getCharactersInRange(const void * const self, void *const restrict buffer, SRange range) {
+int getCharactersInRange(const void * const self, void *const restrict buffer, CORange range) {
 	COAssertNoNullOrReturn(self,EINVAL,-1);
 	COAssertNoNullOrReturn(buffer,EINVAL,-1);
 	const struct StringClass *const class = classOf(self);

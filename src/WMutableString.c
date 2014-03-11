@@ -97,8 +97,8 @@ static void * WMutableString_constructor (void * _self, va_list * app) {
 	assert(super->text != NULL);
 	if (super->text == NULL) return free(self), NULL;
 	super->length = wcslen(super->text);
-	ssize_t charContentSize = wcstombs(NULL, text, 0);
-	self->capacity = charContentSize;
+	size_t charContentSize = wcstombs(NULL, text, 0);
+	self->capacity = (uint64_t)charContentSize;
 	return self;
 }
 
@@ -230,10 +230,10 @@ static int WMutableString_characterAtIndex(const void * const _self, void *const
 	return result;
 }
 
-static int WMutableString_getCharactersInRange(const void * const _self, void *const restrict buffer, SRange range) {
+static int WMutableString_getCharactersInRange(const void * const _self, void *const restrict buffer, CORange range) {
 	const struct String *self = _self;
 	int result = 0;
-	unsigned long maxRange = SMaxRange(range);
+	unsigned long maxRange = COMaxRange(range);
 	size_t length = getStringLength(self);
 	const wchar_t *text = getWText(self);
 	if ( maxRange < length && buffer != NULL ) {
@@ -283,7 +283,7 @@ static void WMutableString_appendString(void *const _self, const void *const _ot
 //void setString(void *const self, const void *const other);
 //void setMutableStringLength(void *const self, size_t capacity);
 //int insertStringAtMutableStringIndex(void *const self, const void *const other, unsigned long index);
-//int deleteMutableStringCharactersInRange(void *const self, SRange range);
+//int deleteMutableStringCharactersInRange(void *const self, CORange range);
 
 const void * WMutableString = NULL;
 const void * WMutableStringClass = NULL;

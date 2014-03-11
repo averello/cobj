@@ -10,6 +10,7 @@
 #define CObjects_object_r
 
 #include <pthread.h>
+#include <stdint.h>
 
 /*!
  *  @class Object Object.r
@@ -137,7 +138,7 @@ struct Classs {
 	 *  @protected
 	 *  @brief The size for this class' instances.
 	 */
-	size_t size;
+	uint32_t size;
 	
 	/* 
 	 Methods 

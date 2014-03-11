@@ -117,9 +117,9 @@ int main ( int argc, char *argv[] ) {
 	
 	removeObjectAtIndex(addRemove, 1);
 	
-	assert( indexOfObject(addRemove, s2) == ANotFound );
+	assert( indexOfObject(addRemove, s2) == CONotFound );
 	removeObject(addRemove, s3);
-	assert( indexOfObject(addRemove, s3) == ANotFound );
+	assert( indexOfObject(addRemove, s3) == CONotFound );
 	
 	assert( indexOfObject(addRemove, s1) == 0 );
 	assert( containsObject(addRemove, s1) );
@@ -157,7 +157,7 @@ int main ( int argc, char *argv[] ) {
 			release(string);
 		}
 		
-		SRange range = SMakeRange(5, 4);
+		CORange range = COMakeRange(5, 4);
 		removeObjectsInRange(array, range);
 		
 		assert( getCollectionCount(array) == 6 );

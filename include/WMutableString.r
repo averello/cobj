@@ -12,10 +12,12 @@
 #include <MutableString.h>
 #include <MutableString.r>
 
+#include <stdint.h>
+
 struct WMutableString {
 	struct MutableString isa;
 	off_t offset;
-	ssize_t capacity;
+	uint64_t capacity;
 };
 
 struct WMutableStringClass {

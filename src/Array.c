@@ -162,7 +162,7 @@ static int Array_arrayContainsObject(const void * const _self, const void * cons
 static unsigned long Array_indexOfObject(const void * const _self, const void * const _object) {
 	const struct Array *self = _self;
 	int result = 0;
-	unsigned long index = ANotFound;
+	unsigned long index = CONotFound;
 	unsigned long size = getCollectionCount(self);
 	for (unsigned long i=0; i<size && (result == 0); i++) {
 		ObjectRef item = getObjectAtIndex(self, i);
@@ -317,11 +317,11 @@ ObjectRef getObjectAtIndex(const void * const self, unsigned long index) {
 }
 
 unsigned long indexOfObject(const void * const self, const void * const object) {
-	COAssertNoNullOrReturn(self,EINVAL,ANotFound);
-	COAssertNoNullOrReturn(object,EINVAL,ANotFound);
+	COAssertNoNullOrReturn(self,EINVAL,CONotFound);
+	COAssertNoNullOrReturn(object,EINVAL,CONotFound);
 	const struct ArrayClass *class = classOf(self);
-	COAssertNoNullOrReturn(class,EINVAL,ANotFound);
-	COAssertNoNullOrReturn(class->indexOfObject,ENOTSUP,ANotFound);
+	COAssertNoNullOrReturn(class,EINVAL,CONotFound);
+	COAssertNoNullOrReturn(class->indexOfObject,ENOTSUP,CONotFound);
 	return class->indexOfObject(self, object);
 }
 

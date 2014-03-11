@@ -41,7 +41,7 @@ int main(int argc, const char * argv[])
 
 	assert( characterAtIndex(string1, &fifthChar, 18) == -1 );
 	
-	SRange range = SMakeRange(3, 8);
+	CORange range = COMakeRange(3, 8);
 	char buffer[8];
 	assert ( getCharactersInRange(string3, buffer, range) != -1 );
 	assert( strncmp(buffer, "precious", range.length) == 0 );

@@ -16,9 +16,9 @@ typedef void * VectorRef;
 void initVector() __attribute__ ((constructor));
 void deallocVector() __attribute__ ((destructor));
 
-size_t getVectorCapacity(const void *const self);
-size_t getVectorCapacityIncrement(const void *const self);
-void setVectorCapacityIncrement(void *const self, size_t capacityIncrement);
-int setVectorSize(void *const self, size_t size);
+uint64_t getVectorCapacity(const void *const self);
+uint32_t getVectorCapacityIncrement(const void *const self);
+void setVectorCapacityIncrement(void *const self, uint32_t capacityIncrement);
+int setVectorSize(void *const self, uint64_t size);
 
 #endif

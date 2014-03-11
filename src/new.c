@@ -16,16 +16,11 @@
 #include <errno.h>
 #include <memory_management/memory_management.h>
 
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
+#include <coassert.h>
 
 /* Creates any Object */
 void * new (const void *const restrict _class, ...) {
-	assert( _class != NULL );
-	if ( _class == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(_class,EINVAL,NULL);
 	
 	
 	/* Get the type */
@@ -33,11 +28,10 @@ void * new (const void *const restrict _class, ...) {
 	struct Object * object;
 	va_list ap;
 	
-	if ( class->size <= 0 ) return  NULL;
+	if ( class->size == 0 ) return  NULL;
 	
 	object = MEMORY_MANAGEMENT_ALLOC(class->size);
-	assert(object != NULL);
-	if ( object == NULL ) return errno = ENOMEM, NULL;
+	COAssertNoNullOrReturn(object,ENOMEM,NULL);
 	object->class = class;
 	
 	va_start(ap, _class);

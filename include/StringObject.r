@@ -27,7 +27,7 @@ struct StringClass {
 	uint64_t (* getStringLength)(const void *const self);
 	
 	int (* characterAtIndex) (const void *const self, void *const character, uint64_t index);
-	int (* getCharactersInRange) (const void *const self, void *const buffer, SRange range);
+	int (* getCharactersInRange) (const void *const self, void *const buffer, CORange range);
 
 	StringRef (* copyStringByAppendingString)(const void *restrict const self, const void *restrict const other);
 	StringRef (* newStringWithFormat)(const void *const _class, const char *format, va_list *ap);

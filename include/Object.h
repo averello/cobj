@@ -14,6 +14,8 @@
 #undef retain
 #undef release
 
+#include <stdint.h>
+
 /*! An @ref Object type. */
 extern const void *const Object;
 /*! An @ref Object reference. */
@@ -41,7 +43,7 @@ const void * superclass (const void * self);
  *  @param[in] self the instance of type @ref Object.
  *  @return the size (in bytes) as an size_t type.
  */
-size_t sizeOf(const void * self);
+uint32_t sizeOf(const void * self);
 
 /*! 
  *  @method

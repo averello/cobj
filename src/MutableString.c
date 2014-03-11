@@ -204,16 +204,16 @@ static int MutableString_insertStringAtMutableStringIndex(void *const _self, con
 	return 0;
 }
 
-static int MutableString_deleteMutableStringCharactersInRange(void *const _self, SRange range) {
+static int MutableString_deleteMutableStringCharactersInRange(void *const _self, CORange range) {
 	struct MutableString *self = _self;
 	struct String *stringSelf = _self;
 	
-	if ( SMaxRange(range) > stringSelf->length ) return errno = EINVAL, -1;
+	if ( COMaxRange(range) > stringSelf->length ) return errno = EINVAL, -1;
 	
 	size_t selfLength = getStringLength(self);
 	char *selfText = (char *)getStringText(self);
 	
-	memmove(selfText+range.location, selfText+SMaxRange(range), selfLength-SMaxRange(range)+1);
+	memmove(selfText+range.location, selfText+COMaxRange(range), selfLength-COMaxRange(range)+1);
 	stringSelf->length -= range.length;
 	
 	return -1;
@@ -312,7 +312,7 @@ int insertStringAtMutableStringIndex(void *const self, const void *const other, 
 	return class->insertStringAtMutableStringIndex(self, other, index);
 }
 
-int deleteMutableStringCharactersInRange(void *const self, SRange range) {
+int deleteMutableStringCharactersInRange(void *const self, CORange range) {
 	COAssertNoNullOrReturn(self,EINVAL,-1);
 	
 	const struct MutableStringClass *const class = classOf(self);

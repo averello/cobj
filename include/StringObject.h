@@ -23,54 +23,54 @@ extern const void * StringClass;
 typedef void * StringRef;
 
 /*!
- *  @struct SRange StringObject.h
+ *  @struct CORange StringObject.h
  *  @relates String
  *  @brief A structure describing a range.
  *  @details This structure is used by @ref String instances to describe portions of a string or substrings.
  */
-typedef struct SRange {
+typedef struct CORange {
     uint64_t location; /*!< The start location of the range */
     uint64_t length;	/*!< The length of the range begining from @a location */
-} SRange;
+} CORange;
 
 /*!
- *  @fn SRange SMakeRange(uint64_t loc, uint64_t len)
- *  @brief A helper function to create SRange structures.
+ *  @fn CORange COMakeRange(uint64_t loc, uint64_t len)
+ *  @brief A helper function to create CORange structures.
  *  @relates String
  *  @param[in] location the starting location of the range.
  *  @param[in] length the length of the range.
- *  @returns a new @ref SRange with the specified attributes.
+ *  @returns a new @ref CORange with the specified attributes.
  */
-SRange SMakeRange(uint64_t location, uint64_t length);
+CORange COMakeRange(uint64_t location, uint64_t length);
 
 /*!
- *  @fn uint64_t SMaxRange(SRange range)
+ *  @fn uint64_t COMaxRange(CORange range)
  *  @brief A helper function that returns the end of the range (location + length).
  *  @relates String
  *  @param[in] range the range.
  *  @returns the max range (range.location + range.length).
  */
-uint64_t SMaxRange(SRange range);
+uint64_t COMaxRange(CORange range);
 
 /*!
- *  @fn int SLocationInRange(uint64_t location, SRange range)
+ *  @fn int COLocationInRange(uint64_t location, CORange range)
  *  @brief A helper function indiqating if the given location is in the given range.
  *  @relates String
  *  @param[in] location the location.
  *  @param[in] range the range.
  *  @returns a @a C boolean.
  */
-int SLocationInRange(uint64_t location, SRange range);
+int COLocationInRange(uint64_t location, CORange range);
 
 /*!
- *  @fn int SEqualRanges(SRange range1, SRange range2)
+ *  @fn int COEqualRanges(CORange range1, CORange range2)
  *  @brief A helper function indiqating if two given ranges are equal.
  *  @relates String
  *  @param[in] range1 the first range.
  *  @param[in] range2 the second range.
  *  @returns a @a C boolean.
  */
-int SEqualRanges(SRange range1, SRange range2);
+int COEqualRanges(CORange range1, CORange range2);
 
 /*!
  *  @enum SComparisonResult
@@ -170,7 +170,7 @@ int characterAtIndex(const void *const self, void *const character, uint64_t ind
  *  @param[in] range the range of characters to retrieve. The range must not exceed the bounds of the receiver.
  *  @returns 0 on completion. If range lies outside the bounds of the receiver then -1 is returned and @a errno is positioned to @a EINVAL.
  */
-int getCharactersInRange(const void *const self, void *const restrict buffer, SRange range);
+int getCharactersInRange(const void *const self, void *const restrict buffer, CORange range);
 
 /*!
  *  @method

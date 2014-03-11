@@ -8,11 +8,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
 #include <stdarg.h>
 #include <pthread.h>
 
@@ -122,23 +117,26 @@ void deallocThread() {
 /* API */
 
 void startThread(const void *const self) {
-	assert( self != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct ThreadClass *const class = classOf(self);
-	assert( class != NULL && class->startThread );
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->startThread,ENOTSUP);
 	class->startThread(self);
 }
 
 void joinThread(const void *const self, void **exit) {
-	assert( self != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct ThreadClass *const class = classOf(self);
-	assert( class != NULL && class->joinThread );
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->joinThread,ENOTSUP);
 	class->joinThread(self, exit);
 }
 
 pthread_t * getPthread(const void *const self) {
-	assert( self != NULL );
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct ThreadClass *const class = classOf(self);
-	assert( class != NULL && class->getPthread );
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->getPthread,ENOTSUP,NULL);
 	return class->getPthread(self);
 }
 

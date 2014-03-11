@@ -11,13 +11,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
-#include <errno.h>
 
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
 #include <sys/queue.h>
 
 #include <cobj.h>
@@ -216,7 +210,7 @@ void * lastObject(const void * const self);
 void * firstObject(const void * const self);
 
 void removeObject(void *const self, void * const object);
-void removeObjectsInRange(void *const self, SRange range);
+void removeObjectsInRange(void *const self, CORange range);
 
 void removeFirstObject(void *const self);
 void removeLastObject(void *const self);

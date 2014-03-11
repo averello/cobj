@@ -23,7 +23,7 @@ struct BufferClass {
 
 	const void * ( * getBufferBytes ) (const void *const self);
 	void ( * getBufferBytesOfLength ) (const void *const self, void *restrict buffer, size_t length);
-	void ( * getBufferBytesInRange ) (const void *const self, void *restrict buffer, SRange range);
+	void ( * getBufferBytesInRange ) (const void *const self, void *restrict buffer, CORange range);
 	size_t ( * getBufferLength ) (const void *const self);
 };
 

@@ -33,7 +33,7 @@ static int __addCoupleWithHash(struct MutableDictionary *const self, int hash, C
 static void __emptyLevel1(struct MutableDictionary *const self);
 static CoupleRef __findCoupleInArrayForKey(const struct MutableDictionary *const self, VectorRef array, const void *const key);
 inline static unsigned int __hash(int h) {
-#define triple_shift(n,s) (int)((unsigned int)(h) >> (s))
+#define triple_shift(n,s) (int)((unsigned int)(n) >> (s))
 	// This function ensures that hashCodes that differ only by
 	// constant multiples at each bit position have a bounded
 	// number of collisions (approximately 8 at default load factor).

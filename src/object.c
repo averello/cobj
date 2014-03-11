@@ -43,26 +43,23 @@ void * destructor(void * self) {
 }
 
 void * super_constructor(const void *const class, void * self, va_list * app) {
-	assert( self != NULL );
-	if ( self == NULL ) return errno = EINVAL, NULL;
-	assert( class != NULL );
-	if ( class == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
 	
 	const struct Classs * _superclass = superclass(class);
 	assert(self != NULL && _superclass->constructor != NULL);
-	if ( _superclass->constructor == NULL ) return errno = ENOTSUP, self;
+	COAssertNoNullOrReturn(_superclass,EINVAL,NULL);
+	COAssertNoNullOrReturn(_superclass->constructor,ENOTSUP,NULL);
 	return _superclass->constructor(self, app);
 }
 
 void * super_destructor(const void *const class, void * self) {
-	if ( self == NULL ) return errno = EINVAL, NULL;
-	assert( self != NULL );
-	if ( class == NULL ) return errno = EINVAL, NULL;
-	assert( class != NULL );
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
 	
 	const struct Classs * _superclass = superclass(class);
-	assert(self != NULL && _superclass->destructor != NULL);
-	if ( _superclass->destructor == NULL ) return errno = ENOTSUP, self;
+	COAssertNoNullOrReturn(_superclass,EINVAL,NULL);
+	COAssertNoNullOrReturn(_superclass->destructor,ENOTSUP,NULL);
 	return _superclass->destructor(self);
 }
 
@@ -131,91 +128,79 @@ StringRef Object_copyDescription (const void * const _self) {
 /* */
 
 const char *getClassName(const void *const self) {
-	assert( self != NULL);
-	if ( self == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	
 	const struct Classs *class = classOf(self);
-	assert( class != NULL );
-	if ( class == NULL ) return errno = ENOTSUP, NULL;
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
 	return class->class_name;
 }
 
 void * copy(const void *const self) {
-	assert( self != NULL);
-	if ( self == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	
 	const struct Classs *class = classOf(self);
-	assert(class->copy != NULL);
-	if ( class->copy == NULL ) return errno = ENOTSUP, NULL;
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->copy,ENOTSUP,NULL);
 	
 	return class->copy(self);
 }
 
 int equals(const void *const self, const void *const other) {
-	assert( self != NULL);
-	if ( self == NULL ) return errno = EINVAL, 0;
+	COAssertNoNullOrReturn(self,EINVAL,-1);
 	
 	const struct Classs *class = classOf(self);
-	assert(class->equals != NULL);
-	if ( class->equals == NULL ) return errno = ENOTSUP, 0;
+	COAssertNoNullOrReturn(class,EINVAL,-1);
+	COAssertNoNullOrReturn(class->equals,ENOTSUP,-1);
 	
 	return class->equals(self, other);
 }
 
 int hash (const void *const self) {
-	assert( self != NULL);
-	if ( self == NULL ) return errno = EINVAL, -1;
+	COAssertNoNullOrReturn(self,EINVAL,-1);
 	
 	const struct Classs *class = classOf(self);
-	assert(class->hash != NULL);
-	if ( class->hash == NULL ) return errno = ENOTSUP, -1;
+	COAssertNoNullOrReturn(class,EINVAL,-1);
+	COAssertNoNullOrReturn(class->hash,ENOTSUP,-1);
 	
 	return class->hash(self);
 }
 
 void * retain (void *const self) {
-	assert( self != NULL);
-	if ( self == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	
 	const struct Classs *class = classOf(self);
-	assert(class->retain != NULL);
-	if ( class->retain == NULL ) return errno = ENOTSUP, NULL;
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->retain,ENOTSUP,NULL);
 	
 	return class->retain(self);
 }
 
 void release (void *const self) {
-	assert( self != NULL);
-	if ( self == NULL ) { errno = EINVAL; return; };
+	COAssertNoNullOrBailOut(self,EINVAL);
 	
 	const struct Classs *class = classOf(self);
-	assert(class->release != NULL);
-	if ( class->release == NULL ) { errno = ENOTSUP; return; }
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->release,ENOTSUP);
 	
 	class->release(self);
 }
 
 unsigned long retainCount (const void *const self) {
-	assert( self != NULL);
-	if ( self == NULL ) return errno = EINVAL, 0;
+	COAssertNoNullOrReturn(self,EINVAL,0);
 	
 	const struct Classs *class = classOf(self);
-	assert(class->retainCount != NULL);
-	if ( class->retainCount == NULL ) return errno = ENOTSUP, 0;
+	COAssertNoNullOrReturn(class,EINVAL,0);
+	COAssertNoNullOrReturn(class->retainCount,ENOTSUP,0);
 	
 	return class->retainCount(self);
 }
 
 int instanceOf (const void * const self, const void *const _class) {
-	assert( self != NULL);
-	if ( self == NULL ) return errno = EINVAL, -1;
-	
-	assert( _class != NULL);
-	if ( _class == NULL ) return errno = EINVAL, -1;
+	COAssertNoNullOrReturn(self,EINVAL,-1);
+	COAssertNoNullOrReturn(_class,EINVAL,-1);
 	
 	const struct Classs *class = classOf(self);
-	assert(class != NULL);
-	if ( class == NULL ) return errno = EINVAL, -1;
+	COAssertNoNullOrReturn(class,EINVAL,-1);
 	
 	/* Get the type */
 	const struct Classs *const mclass = _class;
@@ -229,63 +214,55 @@ int isSubclassOf (const void *const self, const void * const _class) {
 	return result;
 }
 
-size_t sizeOf(const void *const self) {
-	assert( self != NULL);
-	if ( self == NULL ) return errno = EINVAL, 0;
+uint32_t sizeOf(const void *const self) {
+	COAssertNoNullOrReturn(self,EINVAL,0);
 	
 	const struct Classs *const class = classOf(self);
-	assert(class != NULL);
-	if ( class == NULL ) return errno = EINVAL -1;
+	COAssertNoNullOrReturn(class,EINVAL,0);
 	
 	return class->size;
 }
 
 const void * classOf(const void * const _self) {
-	assert( _self != NULL );
-	if ( _self == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(_self,EINVAL,NULL);
 	
 	const struct Object *const self = _self;
-	assert( self->class != NULL );
-	if ( self->class == NULL ) return errno = EINVAL, NULL;
-	
+	COAssertNoNullOrReturn(self->class,EINVAL,NULL);
 	return (const void *)self->class;
 }
 
 const void * superclass (const void *const _class) {
-	assert( _class != NULL );
-	if ( _class == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(_class,EINVAL,NULL);
 	
 	const struct Classs * self = _class;
-	assert( self->super != NULL);
-	if ( self->super == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self->super,EINVAL,NULL);
 	
 	return self->super;
 }
 
 const void * super(const void *const _self) {
-	assert( _self != NULL );
-	if ( _self == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(_self,EINVAL,NULL);
 	
 	const struct Classs * self = classOf(_self);
-	assert( self->super != NULL);
-	if ( self->super == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
+	COAssertNoNullOrReturn(self->super,ENOTSUP,NULL);
 	
 	return (const void *)self->super;
 }
 
 void * copyDescription (const void *const self) {
-	assert(self!=NULL);
-	if ( self == NULL ) return errno = EINVAL, NULL;
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	
 	const struct Classs *class = classOf(self);
-	assert(class->copyDescription != NULL);
-	if ( class->copyDescription == NULL ) return errno = ENOTSUP, NULL;
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->copyDescription,ENOTSUP,NULL);
 	
 	return class->copyDescription(self);
 }
 
 
 void *autorelease (void *const self) {
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	AutoreleasePoolAddObject(self);
 	return self;
 //	assert(self!=NULL);

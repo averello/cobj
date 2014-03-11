@@ -177,20 +177,20 @@ static unsigned long MutableArray_indexOfObject(const void * const _self, const 
 	struct StoreHead * store = getStore(self);
 	
 	if ( store == NULL || self->count <= 0 )
-		return ANotFound;
+		return CONotFound;
 	
 	unsigned long result = 0;
 	struct _Item *it = NULL;
 //	for (it = store->tqh_first; it != NULL && it->item != object ; it = it->items.tqe_next, result++);
 	for (it = store->tqh_first; it != NULL && ! equals(it->item, object) ; it = it->items.tqe_next, result++);
 	if (result>=self->count)
-		result = ANotFound;
+		result = CONotFound;
 	return result;
 }
 
 static int MutableArray_arrayContainsObject(const void * const self, const void * const object) {
 	unsigned long result = indexOfObject(self, object);
-	return (result != ANotFound);
+	return (result != CONotFound);
 }
 
 static void MutableArray_removeAllObjects(void * const _self) {
@@ -285,7 +285,7 @@ static struct _Item * MutableArray_ItemForIndex(const void *const _self, unsigne
 static void MutableArray_removeObject(void *const _self, const void * const object) {
 	struct Array *const self = _self;
 	unsigned long index = indexOfObject(self, object);
-	if (index != ANotFound)
+	if (index != CONotFound)
 		removeObjectAtIndex(self, index);
 }
 
@@ -304,11 +304,11 @@ static void MutableArray_removeObjectAtIndex(void *const _self, unsigned long in
 	}
 }
 
-static void MutableArray_removeObjectsInRange(void *const _self, SRange range) {
+static void MutableArray_removeObjectsInRange(void *const _self, CORange range) {
 	struct Array *const self = _self;
-	if ( range.location >= self->count || SMaxRange(range) >= self->count ) return;
+	if ( range.location >= self->count || COMaxRange(range) >= self->count ) return;
 	
-	for (unsigned long i=range.location; i<SMaxRange(range); i++)
+	for (unsigned long i=range.location; i<COMaxRange(range); i++)
 		removeObjectAtIndex(self, range.location);
 }
 
@@ -509,7 +509,7 @@ ArrayRef newArrayWithArray(const void * const array) {
 	 */
 }
 
-void removeObjectsInRange(void *const self, SRange range) {
+void removeObjectsInRange(void *const self, CORange range) {
 	COAssertNoNullOrBailOut(self,EINVAL);
 	
 	const struct MutableArrayClass *class = classOf(self);

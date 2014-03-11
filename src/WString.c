@@ -12,13 +12,7 @@
 #include <string.h>
 #include <strings.h>
 #include <stdarg.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
 #include <locale.h>
-#include <errno.h>
 
 #include <cobj.h>
 #include <WString.r>
@@ -207,10 +201,10 @@ static int WString_characterAtIndex(const void * const _self, void *const charac
 	return result;
 }
 
-static int WString_getCharactersInRange(const void * const _self, void *const restrict buffer, SRange range) {
+static int WString_getCharactersInRange(const void * const _self, void *const restrict buffer, CORange range) {
 	const struct String *self = _self;
 	int result = 0;
-	unsigned long maxRange = SMaxRange(range);
+	unsigned long maxRange = COMaxRange(range);
 	size_t length = getStringLength(self);
 	const wchar_t *text = getWText(self);
 	if ( maxRange < length && buffer != NULL ) {
@@ -261,8 +255,9 @@ void deallocWString() {
 }
 
 const wchar_t *getWText(const void *const self) {
-	assert(self);
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	const struct StringClass *const class = classOf(self);
-	assert(class != NULL && class->getStringText != NULL);
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->getStringText,ENOTSUP,NULL);
 	return (const wchar_t *)class->getStringText(self);
 }

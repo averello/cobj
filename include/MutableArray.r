@@ -37,7 +37,7 @@ struct MutableArrayClass {
 	
 	void (* removeObject) (void *const self, void * const object);
 	void (* removeObjectAtIndex) (void *const self, unsigned long index);
-	void ( *removeObjectsInRange )(void *const self, SRange range);
+	void ( *removeObjectsInRange )(void *const self, CORange range);
 	
 	void ( *replaceObjectAtIndexWithObject) (void *const self, unsigned long index, void *const other);
 	

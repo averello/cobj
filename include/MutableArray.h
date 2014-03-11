@@ -29,7 +29,7 @@ void insertObjectAtIndex(void *const self, void *const object, unsigned long ind
 
 void removeObject(void *const self, void * const object);
 void removeObjectAtIndex(void *const self, unsigned long index);
-void removeObjectsInRange(void *const self, SRange range);
+void removeObjectsInRange(void *const self, CORange range);
 
 void removeFirstObject(void *const self);
 void removeLastObject(void *const self);

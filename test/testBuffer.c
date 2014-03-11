@@ -51,12 +51,12 @@ int main () {
 		assert( strncmp(buf, bufferToFill, strlen(buf)/2 ) == 0 );
 		
 		memset(bufferToFill, '\0', BUFSIZ);
-		SRange range = SMakeRange(5, 9);
+		CORange range = COMakeRange(5, 9);
 		getBufferBytesInRange(buffer, bufferToFill, range);
 		assert( strncmp(buf+range.location, bufferToFill, range.length ) == 0 );
 		
 		{
-			range = SMakeRange(INT_MAX, 9);
+			range = COMakeRange(INT_MAX, 9);
 			memset(bufferToFill, '\0', BUFSIZ);
 			getBufferBytesInRange(buffer, bufferToFill, range);
 			

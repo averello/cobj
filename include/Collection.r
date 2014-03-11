@@ -13,17 +13,19 @@
 #include <Object.r>
 #include <foreach.h>
 
+#include <stdint.h>
+
 struct Collection {
 	const struct Object isa;
 };
 
 struct CollectionClass {
 	const struct Classs isa;
-	unsigned long (*getCollectionCount)(const void *const self);
+	uint64_t (*getCollectionCount)(const void *const self);
 	void * (*lastObject)(const void * const self);
 	void * (*firstObject)(const void * const self);
 	int (*containsObject)(const void * const self, const void * const object);
-	unsigned long (*enumerateWithState)(const void *const collection, FastEnumerationState *const state, void *iobuffer[], unsigned long length);
+	uint64_t (*enumerateWithState)(const void *const collection, FastEnumerationState *const state, void *iobuffer[], uint64_t length);
 };
 
 #endif

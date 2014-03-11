@@ -27,11 +27,11 @@ struct Array {
 
 struct ArrayClass {
 	const struct CollectionClass isa;
-	unsigned long (* getCollectionCount)(const void * const _self);
+	uint64_t (* getCollectionCount)(const void * const _self);
 	ObjectRef (* getObjectAtIndex)(const void * const _self, unsigned long index);
 	
 	int ( *arrayContainsObject) (const void * const self, const void * const object);
-	unsigned long (* indexOfObject) (const void * const self, const void * const object);
+	uint64_t (* indexOfObject) (const void * const self, const void * const object);
 //	ArrayRef (* newArrayWithItems) (const void * const _class, va_list *ap);
 	void * ( * getStore) (const void * const self);
 	

@@ -8,11 +8,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
 #include <stdarg.h>
 #include <string.h>
 #include <errno.h>
@@ -199,25 +194,28 @@ void deallocDictionary() {
 /* API */
 
 ObjectRef objectForKey(const void *const self, void *const key) {
-	assert( self != NULL );
-	assert( key != NULL );
+	COAssertNoNullOrReturn(self, EINVAL, NULL);
+	COAssertNoNullOrReturn(key, EINVAL, NULL);
 	const struct DictionaryClass *class = classOf(self);
-	assert( class != NULL && class->objectForKey != NULL );
+	COAssertNoNullOrReturn(class, EINVAL, NULL);
+	COAssertNoNullOrReturn(class->objectForKey, ENOTSUP, NULL);
 	return class->objectForKey(self, key);
 }
 
 
 ArrayRef getKeysCopy(const void *const self) {
-	assert(self);
+	COAssertNoNullOrReturn(self, EINVAL, NULL);
 	const struct DictionaryClass *class = classOf(self);
-	assert( class != NULL && class->getKeysCopy != NULL );
+	COAssertNoNullOrReturn(class, EINVAL, NULL);
+	COAssertNoNullOrReturn(class->getKeysCopy, ENOTSUP, NULL);
 	return class->getKeysCopy(self);
 }
 
 ArrayRef getValuesCopy(const void *const self) {
-	assert(self);
+	COAssertNoNullOrReturn(self, EINVAL, NULL);
 	const struct DictionaryClass *class = classOf(self);
-	assert( class != NULL && class->getValuesCopy != NULL );
+	COAssertNoNullOrReturn(class, EINVAL, NULL);
+	COAssertNoNullOrReturn(class->getValuesCopy, ENOTSUP, NULL);
 	return class->getValuesCopy(self);
 }
 

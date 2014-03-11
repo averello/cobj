@@ -25,7 +25,7 @@ static void * Class_constructor (void * _self, va_list * app) {
 	
 	self->class_name = va_arg( *app, const char *);
 	self->super = va_arg( *app, struct Classs *);
-	self->size = va_arg( *app, size_t);
+	self->size = va_arg( *app, uint32_t);
 	
 	assert(self->super != NULL);
 	const size_t offset	 = sizeof(struct Object) + sizeof(char *) + sizeof(struct Class *) + sizeof(size_t);

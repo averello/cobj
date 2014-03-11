@@ -9,11 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#if DEBUG
-#include <assert.h>
-#else
-#define assert(e)
-#endif /* DEBUG */
 
 #include <cobj.h>
 #include <Value.r>
@@ -130,24 +125,28 @@ void deallocValue() {
 /* API */
 
 void *getValuePointer(const void *const self) {
+	COAssertNoNullOrReturn(self,EINVAL,NULL);
 	assert( self != NULL );
 	const struct ValueClass *const class = classOf(self);
-	assert( class != NULL && class->getValuePointer != NULL );
+	COAssertNoNullOrReturn(class,EINVAL,NULL);
+	COAssertNoNullOrReturn(class->getValuePointer,ENOTSUP,NULL);
 	return class->getValuePointer(self);
 }
 
 void setValuePointer(void *const self, const void *const pointer) {
-	assert( self != NULL );
-	assert( pointer != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
+	COAssertNoNullOrBailOut(pointer,EINVAL);
 	const struct ValueClass *const class = classOf(self);
-	assert( class != NULL && class->setValuePointer != NULL );
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->setValuePointer,ENOTSUP);
 	class->setValuePointer(self, pointer);
 }
 
 void setValuePointerCleanup(const void *const self, void (*cleanup)(void *)) {
-	assert( self != NULL );
+	COAssertNoNullOrBailOut(self,EINVAL);
 	const struct ValueClass *const class = classOf(self);
-	assert( class != NULL && class->setValuePointerCleanup != NULL );
+	COAssertNoNullOrBailOut(class,EINVAL);
+	COAssertNoNullOrBailOut(class->setValuePointerCleanup,ENOTSUP);
 	class->setValuePointerCleanup(self, cleanup);
 }
 
