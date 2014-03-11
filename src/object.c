@@ -47,7 +47,6 @@ void * super_constructor(const void *const class, void * self, va_list * app) {
 	COAssertNoNullOrReturn(class,EINVAL,NULL);
 	
 	const struct Classs * _superclass = superclass(class);
-	assert(self != NULL && _superclass->constructor != NULL);
 	COAssertNoNullOrReturn(_superclass,EINVAL,NULL);
 	COAssertNoNullOrReturn(_superclass->constructor,ENOTSUP,NULL);
 	return _superclass->constructor(self, app);
