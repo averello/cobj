@@ -236,11 +236,11 @@ static void * Array_firstObject(const void * const _self) {
 
 #define MIN(a,b) ((a)<(b)?(a):(b))
 
-static unsigned long Array_enumerateWithState(const void *const _self, FastEnumerationState *const state, void *iobuffer[], unsigned long length) {
+static uint64_t Array_enumerateWithState(const void *const _self, FastEnumerationState *const state, void *iobuffer[], uint64_t length) {
 	const struct Array *const self = _self;
-	unsigned long collectionCount = getCollectionCount(_self);
+	uint64_t collectionCount = getCollectionCount(_self);
 	if (state->state == 0) {
-		state->mutationsPointer =(unsigned long *)self;
+		state->mutationsPointer =(uint64_t *)self;
 		state->extra[0] = collectionCount;
 		state->state = 1;
 	}
@@ -249,9 +249,9 @@ static unsigned long Array_enumerateWithState(const void *const _self, FastEnume
 			return state->mutationsPointer = NULL, 0;
 	
 	state->itemsPointer = iobuffer;
-	unsigned long count = 0;
-	unsigned long numberOfIter = MIN(collectionCount, length);
-	for (unsigned long i=(state->extra[1]), j=0; i<numberOfIter; i++, j++, count++)
+	uint64_t count = 0;
+	uint64_t numberOfIter = MIN(collectionCount, length);
+	for (uint64_t i=(state->extra[1]), j=0; i<numberOfIter; i++, j++, count++)
 		iobuffer[j] = getObjectAtIndex(self, i);
 	if (count!=0)
 		state->extra[1] = count;

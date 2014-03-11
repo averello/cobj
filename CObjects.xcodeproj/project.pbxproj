@@ -29,6 +29,8 @@
 		DE31087D172B362B00661007 /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DE310884172B364600661007 /* testConcurrentMutableArray.c in Sources */ = {isa = PBXBuildFile; fileRef = DE310883172B364600661007 /* testConcurrentMutableArray.c */; };
 		DE310885172B3EBC00661007 /* ConcurrentMutableArray.c in Sources */ = {isa = PBXBuildFile; fileRef = DE310875172B35F700661007 /* ConcurrentMutableArray.c */; };
+		DE3B456418CEA207002A6C30 /* coassert.h in Headers */ = {isa = PBXBuildFile; fileRef = DE3B456318CEA207002A6C30 /* coassert.h */; };
+		DE3B456718CEA218002A6C30 /* colimits.h in Headers */ = {isa = PBXBuildFile; fileRef = DE3B456618CEA218002A6C30 /* colimits.h */; };
 		DE46F527185685F700753047 /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DE46F5281856860700753047 /* testFastEnumeration.c in Sources */ = {isa = PBXBuildFile; fileRef = DE46F516185685BB00753047 /* testFastEnumeration.c */; };
 		DE7D7E271715BFF000531D27 /* testValue.c in Sources */ = {isa = PBXBuildFile; fileRef = DE05E37316F0BEDD0079DF5C /* testValue.c */; };
@@ -381,6 +383,8 @@
 		DE310875172B35F700661007 /* ConcurrentMutableArray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ConcurrentMutableArray.c; path = src/ConcurrentMutableArray.c; sourceTree = SOURCE_ROOT; };
 		DE310882172B362B00661007 /* testMutableString copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "testMutableString copy"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE310883172B364600661007 /* testConcurrentMutableArray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = testConcurrentMutableArray.c; path = test/testConcurrentMutableArray.c; sourceTree = SOURCE_ROOT; };
+		DE3B456318CEA207002A6C30 /* coassert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = coassert.h; path = include/coassert.h; sourceTree = SOURCE_ROOT; };
+		DE3B456618CEA218002A6C30 /* colimits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = colimits.h; path = include/colimits.h; sourceTree = SOURCE_ROOT; };
 		DE46F51418567C9800753047 /* foreach.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = foreach.h; path = include/foreach.h; sourceTree = SOURCE_ROOT; };
 		DE46F516185685BB00753047 /* testFastEnumeration.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = testFastEnumeration.c; path = test/testFastEnumeration.c; sourceTree = SOURCE_ROOT; };
 		DE46F51C185685E800753047 /* testFastEnumerator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testFastEnumerator; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -595,6 +599,8 @@
 				DE05E38416F0BEF10079DF5C /* Buffer.r */,
 				DE05E38516F0BEF10079DF5C /* cobj.h */,
 				DEF915D3187E0C9B00CA5644 /* cobj_main.h */,
+				DE3B456318CEA207002A6C30 /* coassert.h */,
+				DE3B456618CEA218002A6C30 /* colimits.h */,
 				DE05E38616F0BEF10079DF5C /* Couple.h */,
 				DE05E38716F0BEF10079DF5C /* Couple.r */,
 				DE05E38816F0BEF10079DF5C /* Dictionary.h */,
@@ -696,6 +702,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE3B456718CEA218002A6C30 /* colimits.h in Headers */,
+				DE3B456418CEA207002A6C30 /* coassert.h in Headers */,
 				DEE2F3DF185B52A500408B06 /* cobj.h in Headers */,
 				DEF915D4187E0C9B00CA5644 /* cobj_main.h in Headers */,
 				DEFB710C185BBBA800DC4DD5 /* AutoreleasePool.h in Headers */,

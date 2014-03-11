@@ -383,7 +383,7 @@ SComparisonResult compareWithOptions(const void *const self, const void *const o
 }
 
 
-int characterAtIndex(const void * const self, void *const character, unsigned long index) {
+int characterAtIndex(const void * const self, void *const character, uint64_t index) {
 	COAssertNoNullOrReturn(self,EINVAL,-1);
 	const struct StringClass *const class = classOf(self);
 	COAssertNoNullOrReturn(class,EINVAL,-1);

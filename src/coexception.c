@@ -92,7 +92,8 @@ void COExceptionUnlink(struct exception_handler_context_t *econtext) {
 		}
 		/* Remove the handler */
 		else {
-			release(econtext->exception);
+			if (econtext->exception)
+				release(econtext->exception);
 			econtext->exception = NULL;
 			struct exception_context_list_head_t *list = &(COExceptionThreadContext.list);
 			struct exception_handler_context_t *item =  list->tail;
