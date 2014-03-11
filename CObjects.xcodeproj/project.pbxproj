@@ -56,6 +56,7 @@
 		DEE2F3DA185B527C00408B06 /* testException.c in Sources */ = {isa = PBXBuildFile; fileRef = DEE2F3D9185B527C00408B06 /* testException.c */; };
 		DEE2F3DE185B528200408B06 /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DEE2F3DF185B52A500408B06 /* cobj.h in Headers */ = {isa = PBXBuildFile; fileRef = DE05E38516F0BEF10079DF5C /* cobj.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DEF915D4187E0C9B00CA5644 /* cobj_main.h in Headers */ = {isa = PBXBuildFile; fileRef = DEF915D3187E0C9B00CA5644 /* cobj_main.h */; };
 		DEFB710C185BBBA800DC4DD5 /* AutoreleasePool.h in Headers */ = {isa = PBXBuildFile; fileRef = DEFB710B185BBBA800DC4DD5 /* AutoreleasePool.h */; };
 		DEFB710E185BBBBD00DC4DD5 /* AutoreleasePool.c in Sources */ = {isa = PBXBuildFile; fileRef = DEFB710D185BBBBD00DC4DD5 /* AutoreleasePool.c */; };
 		DEFB7120185BC85D00DC4DD5 /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
@@ -405,6 +406,7 @@
 		DECAAF32185732BC0018231F /* testDictionary */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testDictionary; sourceTree = BUILT_PRODUCTS_DIR; };
 		DECAAF44185738DE0018231F /* testBuffer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = testBuffer; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEE2F3D9185B527C00408B06 /* testException.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = testException.c; path = test/testException.c; sourceTree = SOURCE_ROOT; };
+		DEF915D3187E0C9B00CA5644 /* cobj_main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cobj_main.h; path = include/cobj_main.h; sourceTree = SOURCE_ROOT; };
 		DEFB710B185BBBA800DC4DD5 /* AutoreleasePool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AutoreleasePool.h; path = include/AutoreleasePool.h; sourceTree = SOURCE_ROOT; };
 		DEFB710D185BBBBD00DC4DD5 /* AutoreleasePool.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = AutoreleasePool.c; path = src/AutoreleasePool.c; sourceTree = SOURCE_ROOT; };
 		DEFB710F185BBBC600DC4DD5 /* AutoreleasePool.r */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.rez; name = AutoreleasePool.r; path = include/AutoreleasePool.r; sourceTree = SOURCE_ROOT; };
@@ -592,6 +594,7 @@
 				DE05E38316F0BEF10079DF5C /* Buffer.h */,
 				DE05E38416F0BEF10079DF5C /* Buffer.r */,
 				DE05E38516F0BEF10079DF5C /* cobj.h */,
+				DEF915D3187E0C9B00CA5644 /* cobj_main.h */,
 				DE05E38616F0BEF10079DF5C /* Couple.h */,
 				DE05E38716F0BEF10079DF5C /* Couple.r */,
 				DE05E38816F0BEF10079DF5C /* Dictionary.h */,
@@ -694,6 +697,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DEE2F3DF185B52A500408B06 /* cobj.h in Headers */,
+				DEF915D4187E0C9B00CA5644 /* cobj_main.h in Headers */,
 				DEFB710C185BBBA800DC4DD5 /* AutoreleasePool.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

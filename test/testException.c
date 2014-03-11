@@ -11,10 +11,11 @@
 #include <setjmp.h>
 #include <pthread.h>
 
+#define ExceptionDivideByZeroCode 42
 struct exception_t ExceptionDivideByZero = {
 	"ExceptionDivideByZero",
 	"You made a division by zero",
-	42
+	ExceptionDivideByZeroCode
 };
 
 void *threadf(void *arg);
@@ -34,6 +35,14 @@ int main () {
 	
 	for (size_t i=0; i<threads; i++)
 		pthread_join(pthreads[i], NULL);
+	
+	COTRY {
+		
+	}
+	COOTHER {
+		
+	}
+	COEND;
 	return 0;
 }
 
@@ -61,7 +70,7 @@ void *threadf(void *arg) {
 		printf("Outher handled exception %x\n", (int)pthread_self());
 		COHANDLE();
 	}
-	COCATCH(42) {
+	COCATCH(ExceptionDivideByZeroCode) {
 		printf("Outer catch by %x\n", (int)pthread_self());
 		COExceptionLog(COCurrentException());
 		COHANDLE();

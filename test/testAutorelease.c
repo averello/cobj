@@ -8,12 +8,14 @@
 
 #include <stdio.h>
 #include <cobj.h>
+#include <memory_management/memory_management.h>
 
 int main () {
-	AutoreleasePoolRef autoreleasePool = new(AutoreleasePool, NULL);
+	COBJ_MAIN_BEGIN()
+//	AutoreleasePoolRef autoreleasePool = new(AutoreleasePool, NULL);
 	AutoreleasePoolRef autoreleasePool2 = new(AutoreleasePool, NULL);
 	StringRef string = new(String, "Test String", NULL);
 	autorelease(string);
-//	release(autoreleasePool2);
-	release(autoreleasePool);
+	COBJ_MAIN_END()
+	return 0;
 }

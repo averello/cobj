@@ -163,4 +163,5 @@ doc/Doxyfile.warnings
 *.a
 *.so
 bin/*
-*.xcuserdatad
+*.xcodeproj/project.xcworkspace/xcuserdata/*.xcuserdatad/*.xcuserstate
+CObjects.xcodeproj/project.xcworkspace/xcshareddata/CObjects.xccheckout

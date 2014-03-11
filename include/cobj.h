@@ -17,6 +17,7 @@
 #include <colimits.h>
 
 #include <foreach.h>
+#include <cobj_main.h>
 
 #include <Object.h>
 #include <new.h>
