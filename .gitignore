@@ -159,9 +159,30 @@ xcuserdata
 
 doc/html
 doc/Doxyfile.warnings
-*.o
-*.a
-*.so
 bin/*
 *.xcodeproj/project.xcworkspace/xcuserdata/*.xcuserdatad/*.xcuserstate
 CObjects.xcodeproj/project.xcworkspace/xcshareddata/CObjects.xccheckout
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
