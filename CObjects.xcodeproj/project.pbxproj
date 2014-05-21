@@ -48,7 +48,7 @@
 		DE89857F184AA01A006C371B /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DE898589184AA3AB006C371B /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DE898592184AA3D0006C371B /* testWMutableString.c in Sources */ = {isa = PBXBuildFile; fileRef = DE898590184AA3C3006C371B /* testWMutableString.c */; };
-		DEAFA85F185B479C005FA407 /* coexception.c in Sources */ = {isa = PBXBuildFile; fileRef = DEAFA85E185B479C005FA407 /* coexception.c */; settings = {COMPILER_FLAGS = "-Wall -Wextra -pendantic"; }; };
+		DEAFA85F185B479C005FA407 /* coexception.c in Sources */ = {isa = PBXBuildFile; fileRef = DEAFA85E185B479C005FA407 /* coexception.c */; settings = {COMPILER_FLAGS = "-Wall -Wextra -pedantic"; }; };
 		DEB02E22171B053600BE3F3D /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DEB02E28171B054A00BE3F3D /* testArray.c in Sources */ = {isa = PBXBuildFile; fileRef = DE05E36B16F0BEDD0079DF5C /* testArray.c */; };
 		DEB02E2F171B069B00BE3F3D /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };

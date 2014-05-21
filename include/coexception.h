@@ -1,11 +1,3 @@
-//
-//  coexception.h
-//  CObjects
-//
-//  Created by George Boumis on 13/12/13.
-//  Copyright (c) 2013 George Boumis. All rights reserved.
-//
-
 /*!
  *  @file coexception.h
  *  @brief Exception Handling Module.
@@ -50,7 +42,10 @@ typedef struct exception_t COException;
 struct exception_t {
 	const char *name; /*!< the exception's name */
 	const char *reason; /*!< the exception's reason */
-	const int exception; /*!< the exception's number */
+	const int exception; /*!< the exception's number. @warning it should never 
+						  be 0 or -1. These values are reserved values and will 
+						  provoke a crash by the exception handling module.
+						  */
 };
 
 /*!
@@ -85,6 +80,7 @@ struct exception_handler_context_t {
 	} entry; /*!< the entry in the exception handlers' chain */
 };
 
+/* Each thread needs to have its own context */
 extern __thread struct exception_handlers_thread_context_t COExceptionThreadContext;
 
 #define COFINALLYCASE -1
@@ -155,10 +151,13 @@ extern __thread struct exception_handlers_thread_context_t COExceptionThreadCont
  *  @define COTHROW
  *  @brief Creates and throws/raises an exception with the given parameters.
  *  @ingroup ehm
- *	@param[in] exception the exception number to throw
- *	@param[in] name the name of the exception. This parameter is copied.
- *	@param[in] reason the reason this exception was thrown. This parameter is copied
- *	@warning This function **never** returns. As a consequence if you allocated the `name` and `reason` parameters with malloc your code can leak.
+ *	@param[in] exception the exception number to throw. Must be a value other than 0 or -1.
+ *	@param[in] name the name of the exception. This parameter is copied. It can be `NULL`.
+ *	@param[in] reason the reason this exception was thrown. This parameter is copied. It can be `NULL`.
+ *	@warning This function **never** returns. As a consequence if you allocated 
+ *	the `name` and `reason` parameters with malloc your code can leak. The best 
+ *	place to release your memory is in the catch-clause after marking the exception
+ *	as handled with @ref COHANDLE().
  */
 #define COTHROW(exception, name, reason) CORaise(COExceptionAllocate(exception, name, reason))
 
@@ -167,7 +166,9 @@ extern __thread struct exception_handlers_thread_context_t COExceptionThreadCont
  *  @brief Throws/raises an exception
  *  @ingroup ehm
  *	@param[in] exception the exception number to throw
- *	@warning If the exception is not `NULL` then this function **never** returns. As a consequence if you allocated the `name` and `reason` parameters with malloc your code can leak.
+ *	@warning If the exception is not `NULL` then this function **never** returns.
+ *	As a consequence if you allocated the `name` and `reason` parameters with 
+ *	malloc your code can leak.
  */
 #define CORAISE(exception) CORaise(exception)
 
@@ -181,10 +182,50 @@ extern __thread struct exception_handlers_thread_context_t COExceptionThreadCont
 #define COHANDLE() COHandle(&econtext)
 
 
+/*!
+ *  @fn void COExceptionLink(struct exception_handler_context_t *econtext);
+ *  @brief Use @ref COTRY instead.
+ *  @ingroup ehm
+ *	@details Puts in place an exception handler, extendind the handlers chain.
+ *	@private
+ */
 void COExceptionLink(struct exception_handler_context_t *econtext);
+
+/*!
+ *  @fn void COExceptionUnlink(struct exception_handler_context_t *econtext)
+ *  @brief Use @ref COEND instead.
+ *  @ingroup ehm
+ *	@details Removes a handler from the handlers chain.
+ *	@private
+ */
 void COExceptionUnlink(struct exception_handler_context_t *econtext);
-void CORaise(COException *exception);
+
+/*!
+ *  @fn void CORaise(COException *exception)
+ *  @brief Use @ref CORAISE instead.
+ *  @ingroup ehm
+ *	@details Raises an exception.
+ *	@private
+ */
+void CORaise(COException *exception) __attribute__((noreturn));
+
+/*!
+ *  @fn void COHandle(struct exception_handler_context_t *econtext)
+ *  @brief Use @ref COHANDLE instead.
+ *  @ingroup ehm
+ *	@details Marks the exception of the current context as handled.
+ *	@private
+ */
 void COHandle(struct exception_handler_context_t *econtext);
+
+
+/*!
+ *  @fn COException *COExceptionAllocate(const int exception, const char *name, const char *reason)
+ *  @brief Use @ref COTHROW instead.
+ *  @ingroup ehm
+ *	@details Allocates an exception. If the exception
+ *	@private
+ */
 COException *COExceptionAllocate(const int exception, const char *name, const char *reason);
 
 /* Public API */
