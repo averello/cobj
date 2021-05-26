@@ -28,4 +28,6 @@ GCC_DIAG_PRAGMA(ignored GCC_DIAG_JOINSTR(-W,x))
 # define GCC_DIAG_ON(x)
 #endif
 
+#define COVersionNumber1 1
+
 #endif

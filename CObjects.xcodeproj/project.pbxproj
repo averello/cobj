@@ -48,7 +48,7 @@
 		DE89857F184AA01A006C371B /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DE898589184AA3AB006C371B /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DE898592184AA3D0006C371B /* testWMutableString.c in Sources */ = {isa = PBXBuildFile; fileRef = DE898590184AA3C3006C371B /* testWMutableString.c */; };
-		DEAFA85F185B479C005FA407 /* coexception.c in Sources */ = {isa = PBXBuildFile; fileRef = DEAFA85E185B479C005FA407 /* coexception.c */; settings = {COMPILER_FLAGS = "-Wall -Wextra -pendantic"; }; };
+		DEAFA85F185B479C005FA407 /* coexception.c in Sources */ = {isa = PBXBuildFile; fileRef = DEAFA85E185B479C005FA407 /* coexception.c */; settings = {COMPILER_FLAGS = "-Wall -Wextra -pedantic"; }; };
 		DEB02E22171B053600BE3F3D /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
 		DEB02E28171B054A00BE3F3D /* testArray.c in Sources */ = {isa = PBXBuildFile; fileRef = DE05E36B16F0BEDD0079DF5C /* testArray.c */; };
 		DEB02E2F171B069B00BE3F3D /* libcobj.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E7A4AFF16C957B200F6D578 /* libcobj.dylib */; };
@@ -594,52 +594,8 @@
 		5E7A4ADB16C956F100F6D578 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				DE12771F170241AA0076F7C2 /* Object.h */,
-				DE127720170241AA0076F7C2 /* Object.r */,
-				DEA9588316F271A5009D3152 /* compilerDefs.h */,
-				DE46F52B1856897200753047 /* Collection.h */,
-				DE46F52D18568D6900753047 /* Collection.r */,
-				DE05E38116F0BEF10079DF5C /* Array.h */,
-				DE05E38216F0BEF10079DF5C /* Array.r */,
-				DE05E38316F0BEF10079DF5C /* Buffer.h */,
-				DE05E38416F0BEF10079DF5C /* Buffer.r */,
-				DE05E38516F0BEF10079DF5C /* cobj.h */,
-				DEF915D3187E0C9B00CA5644 /* cobj_main.h */,
-				DE3B456318CEA207002A6C30 /* coassert.h */,
-				DE3B456618CEA218002A6C30 /* colimits.h */,
-				DE05E38616F0BEF10079DF5C /* Couple.h */,
-				DE05E38716F0BEF10079DF5C /* Couple.r */,
-				DE05E38816F0BEF10079DF5C /* Dictionary.h */,
-				DE05E38916F0BEF10079DF5C /* Dictionary.r */,
-				DE05E38A16F0BEF10079DF5C /* MutableArray.h */,
-				DE05E38B16F0BEF10079DF5C /* MutableArray.r */,
-				DE310873172B359F00661007 /* ConcurrentMutableArray.h */,
-				DE310874172B35E400661007 /* ConcurrentMutableArray.r */,
-				DE05E38C16F0BEF10079DF5C /* MutableDictionary.h */,
-				DE05E38D16F0BEF10079DF5C /* MutableDictionary.r */,
-				DE05E38E16F0BEF10079DF5C /* MutableString.h */,
-				DE05E38F16F0BEF10079DF5C /* MutableString.r */,
-				DE05E39016F0BEF10079DF5C /* new.h */,
-				DE05E39316F0BEF10079DF5C /* StringObject.h */,
-				DE05E39416F0BEF10079DF5C /* StringObject.r */,
-				DE05E39516F0BEF10079DF5C /* Thread.h */,
-				DE05E39616F0BEF10079DF5C /* Thread.r */,
-				DE05E39716F0BEF10079DF5C /* Value.h */,
-				DE05E39816F0BEF10079DF5C /* Value.r */,
-				DE05E39916F0BEF10079DF5C /* Vector.h */,
-				DE05E39A16F0BEF10079DF5C /* Vector.r */,
-				DE05E39B16F0BEF10079DF5C /* WString.h */,
-				DE05E39C16F0BEF10079DF5C /* WString.r */,
-				DE89856C184A9967006C371B /* WMutableString.h */,
-				DE89856E184A9A74006C371B /* WMutableString.r */,
-				DE46F51418567C9800753047 /* foreach.h */,
-				DEAFA85C185B3C18005FA407 /* coassert.h */,
-				DEAFA85D185B4159005FA407 /* coexception.h */,
-				DEFB710B185BBBA800DC4DD5 /* AutoreleasePool.h */,
-				DEFB710F185BBBC600DC4DD5 /* AutoreleasePool.r */,
-				DE373EF018CF242100B0E3C7 /* coint.h */,
-				DE373EF218CF3DFC00B0E3C7 /* corange.h */,
-				DE373EF418CF507100B0E3C7 /* codefinitions.h */,
+				DEFC96BB18D39ADE0089B50C /* classes */,
+				DEFC96B918D39AD20089B50C /* etc */,
 			);
 			name = include;
 			sourceTree = "<group>";
@@ -702,6 +658,66 @@
 				DE372714184CD45B00AA586C /* testMemoryManagement */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		DEFC96B918D39AD20089B50C /* etc */ = {
+			isa = PBXGroup;
+			children = (
+				DE05E38516F0BEF10079DF5C /* cobj.h */,
+				DE05E39016F0BEF10079DF5C /* new.h */,
+				DEA9588316F271A5009D3152 /* compilerDefs.h */,
+				DEF915D3187E0C9B00CA5644 /* cobj_main.h */,
+				DE3B456318CEA207002A6C30 /* coassert.h */,
+				DE3B456618CEA218002A6C30 /* colimits.h */,
+				DE46F51418567C9800753047 /* foreach.h */,
+				DEAFA85C185B3C18005FA407 /* coassert.h */,
+				DEAFA85D185B4159005FA407 /* coexception.h */,
+				DE373EF018CF242100B0E3C7 /* coint.h */,
+				DE373EF218CF3DFC00B0E3C7 /* corange.h */,
+				DE373EF418CF507100B0E3C7 /* codefinitions.h */,
+			);
+			name = etc;
+			sourceTree = "<group>";
+		};
+		DEFC96BB18D39ADE0089B50C /* classes */ = {
+			isa = PBXGroup;
+			children = (
+				DE12771F170241AA0076F7C2 /* Object.h */,
+				DE127720170241AA0076F7C2 /* Object.r */,
+				DE46F52B1856897200753047 /* Collection.h */,
+				DE46F52D18568D6900753047 /* Collection.r */,
+				DE05E38116F0BEF10079DF5C /* Array.h */,
+				DE05E38216F0BEF10079DF5C /* Array.r */,
+				DE05E38316F0BEF10079DF5C /* Buffer.h */,
+				DE05E38416F0BEF10079DF5C /* Buffer.r */,
+				DE05E38616F0BEF10079DF5C /* Couple.h */,
+				DE05E38716F0BEF10079DF5C /* Couple.r */,
+				DE05E38816F0BEF10079DF5C /* Dictionary.h */,
+				DE05E38916F0BEF10079DF5C /* Dictionary.r */,
+				DE05E38A16F0BEF10079DF5C /* MutableArray.h */,
+				DE05E38B16F0BEF10079DF5C /* MutableArray.r */,
+				DE310873172B359F00661007 /* ConcurrentMutableArray.h */,
+				DE310874172B35E400661007 /* ConcurrentMutableArray.r */,
+				DE05E38C16F0BEF10079DF5C /* MutableDictionary.h */,
+				DE05E38D16F0BEF10079DF5C /* MutableDictionary.r */,
+				DE05E38E16F0BEF10079DF5C /* MutableString.h */,
+				DE05E38F16F0BEF10079DF5C /* MutableString.r */,
+				DE05E39316F0BEF10079DF5C /* StringObject.h */,
+				DE05E39416F0BEF10079DF5C /* StringObject.r */,
+				DE05E39516F0BEF10079DF5C /* Thread.h */,
+				DE05E39616F0BEF10079DF5C /* Thread.r */,
+				DE05E39716F0BEF10079DF5C /* Value.h */,
+				DE05E39816F0BEF10079DF5C /* Value.r */,
+				DE05E39916F0BEF10079DF5C /* Vector.h */,
+				DE05E39A16F0BEF10079DF5C /* Vector.r */,
+				DE05E39B16F0BEF10079DF5C /* WString.h */,
+				DE05E39C16F0BEF10079DF5C /* WString.r */,
+				DE89856C184A9967006C371B /* WMutableString.h */,
+				DE89856E184A9A74006C371B /* WMutableString.r */,
+				DEFB710B185BBBA800DC4DD5 /* AutoreleasePool.h */,
+				DEFB710F185BBBC600DC4DD5 /* AutoreleasePool.r */,
+			);
+			name = classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

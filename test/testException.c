@@ -11,6 +11,7 @@
 #include <setjmp.h>
 #include <pthread.h>
 
+/* A way to create some a persistent exception */
 #define ExceptionDivideByZeroCode 42
 struct exception_t ExceptionDivideByZero = {
 	"ExceptionDivideByZero",
@@ -18,18 +19,27 @@ struct exception_t ExceptionDivideByZero = {
 	ExceptionDivideByZeroCode
 };
 
+#define ExceptionNoReasonCode 1
+struct exception_t ExceptionNoReason = {
+	"COTestException",
+	"there is no reason",
+	ExceptionNoReasonCode
+};
+
+
+
 void *threadf(void *arg);
 
 struct thread_data {
 	size_t id;
 };
 
-int main () {	
+int main () {
 	size_t threads = 10;
 	pthread_t pthreads[threads];
 	struct  thread_data pthreadsData[threads];
 	for (size_t i=0; i<threads; i++) {
-		pthreadsData[i].id = i;
+		pthreadsData[i].id = i+1;
 		pthread_create(&pthreads[i], NULL, threadf, (void *)&pthreadsData[i]);
 	}
 	
@@ -50,10 +60,13 @@ void *threadf(void *arg) {
 	struct thread_data *data = (struct thread_data *)arg;
 	COTRY {
 		COTRY {
-			puts("Throw");
+			printf("Throw %d by %x\n", (int)data->id, (int)pthread_self());
 			COTHROW((int)data->id, "COTestException", "there is no reason");
 		}
-		COCATCH(1) {
+		COCATCH(ExceptionNoReasonCode) {
+			COException *exception = COCurrentException();
+			assert(exception != &ExceptionNoReason);
+			assert(exception->exception == ExceptionNoReason.exception);
 			printf("Nested catch by %x\n", (int)pthread_self());
 			COHANDLE();
 			CORAISE(&ExceptionDivideByZero);
@@ -67,11 +80,13 @@ void *threadf(void *arg) {
 		COEND
 	}
 	COCATCH(1) {
-		printf("Outher handled exception %x\n", (int)pthread_self());
+		printf("Outer handled exception %x\n", (int)pthread_self());
 		COHANDLE();
 	}
 	COCATCH(ExceptionDivideByZeroCode) {
 		printf("Outer catch by %x\n", (int)pthread_self());
+		COException *exception = COCurrentException();
+		assert(exception == &ExceptionDivideByZero);
 		COExceptionLog(COCurrentException());
 		COHANDLE();
 	}
